@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Control the Raspberry PI through email, in Java</title>
+    <link rel="stylesheet" href="./stylesheet.css" type="text/css"/>   
+    <style type="text/css">
+<!--
+#body {color: #000000; background-color: #ffffff}
+.s0 {color: #000000; background-color: transparent}
+.s1 {color: #000000; background-color: transparent}
+.s2 {color: #808080; background-color: transparent}
+.s3 {color: #336699; background-color: transparent; font-weight: bold}
+.s4 {color: #0033cc; background-color: transparent}
+.s5 {color: #006600; background-color: transparent}
+.s6 {color: #000000; background-color: transparent}
+.s7 {color: #000000; background-color: transparent}
+.s8 {color: #000000; background-color: transparent}
+.s9 {color: #006699; background-color: transparent}
+.s10 {color: #006699; background-color: transparent; font-weight: bold}
+.s11 {color: #990000; background-color: transparent}
+.s12 {color: #0033cc; background-color: transparent}
+.s13 {color: #39396b; background-color: transparent}
+.s14 {color: #008000; background-color: transparent}
+.s15 {color: #800000; background-color: transparent}
+.s16 {color: #808080; background-color: transparent}
+.s17 {color: #0033cc; background-color: transparent}
+.s18 {color: #336699; background-color: transparent; font-weight: bold}
+.s19 {color: #996600; background-color: transparent}
+.s20 {color: #006600; background-color: transparent}
+.s21 {color: #000000; background-color: transparent}
+.s22 {color: #000000; background-color: transparent}
+.s23 {color: #000000; background-color: transparent}
+.s24 {color: #009900; background-color: transparent}
+.s25 {color: #0033cc; background-color: transparent}
+.s26 {color: #0033cc; background-color: transparent}
+.s27 {color: #0033cc; background-color: transparent; font-weight: bold}
+.s28 {color: #808080; background-color: transparent}
+.s29 {color: #006699; background-color: transparent}
+.s30 {color: #006699; background-color: transparent; font-weight: bold}
+.s31 {color: #990000; background-color: transparent}
+.s32 {color: #0033cc; background-color: transparent}
+.s33 {color: #808080; background-color: transparent}
+.s34 {color: #663300; background-color: transparent; font-weight: bold; font-style: italic}
+.s35 {color: #006699; background-color: transparent; font-weight: bold}
+.s36 {color: #006699; background-color: transparent}
+.s37 {color: #ff0000; background-color: transparent; font-style: italic}
+.s38 {color: #0000ff; background-color: transparent; font-weight: bold}
+.s39 {color: #006600; background-color: transparent}
+.s40 {color: #0033cc; background-color: transparent}
+.s41 {color: #9933cc; background-color: transparent}
+.s42 {color: #ff0000; background-color: transparent; font-weight: bold}
+.s43 {color: #006699; background-color: transparent}
+.s44 {color: #9933cc; background-color: transparent}
+.s45 {color: #808080; background-color: transparent}
+.s46 {color: #0033cc; background-color: transparent}
+.s47 {color: #336699; background-color: transparent; font-weight: bold}
+.s48 {color: #000000; background-color: transparent}
+.s49 {color: #006600; background-color: transparent}
+.s50 {color: #000000; background-color: transparent}
+.s51 {color: #000000; background-color: transparent}
+.s52 {color: #808080; background-color: transparent}
+.s53 {color: #990000; background-color: transparent}
+.s54 {color: #0033cc; background-color: transparent}
+.s55 {color: #808080; background-color: transparent}
+.s56 {color: #0033cc; background-color: transparent}
+.s57 {color: #336699; background-color: transparent; font-weight: bold}
+.s58 {color: #000000; background-color: transparent}
+.s59 {color: #006600; background-color: transparent}
+.s60 {color: #000000; background-color: transparent}
+.s61 {color: #000000; background-color: transparent}
+.s62 {color: #808080; background-color: transparent}
+.s63 {color: #0033cc; background-color: transparent}
+.s64 {color: #336699; background-color: transparent; font-weight: bold}
+.s65 {color: #000000; background-color: transparent}
+.s66 {color: #006600; background-color: transparent}
+.s67 {color: #000000; background-color: transparent}
+.s68 {color: #000000; background-color: transparent}
+.s69 {color: #39396b; background-color: transparent}
+.s70 {color: #008000; background-color: transparent}
+.s71 {color: #800000; background-color: transparent}
+.s72 {color: #808080; background-color: transparent}
+.s73 {color: #404040; background-color: transparent}
+.s74 {color: #000000; background-color: transparent}
+.s75 {color: #000000; background-color: transparent}
+.s76 {color: #808080; background-color: transparent}
+.s77 {color: #006699; background-color: transparent}
+.s78 {color: #006699; background-color: transparent; font-weight: bold}
+.s79 {color: #990000; background-color: transparent}
+.s80 {color: #0033cc; background-color: transparent}
+.s81 {color: #808080; background-color: transparent}
+.s82 {color: #0033cc; background-color: transparent}
+.s83 {color: #336699; background-color: transparent; font-weight: bold}
+.s84 {color: #000000; background-color: transparent}
+.s85 {color: #006600; background-color: transparent}
+.s86 {color: #000000; background-color: transparent}
+.s87 {color: #000000; background-color: transparent}
+.s88 {color: #006600; background-color: transparent}
+.s89 {color: #808080; background-color: transparent}
+.s90 {color: #990000; background-color: transparent}
+.s91 {color: #0033cc; background-color: transparent}
+.s92 {color: #006600; background-color: transparent}
+.s93 {color: #000000; background-color: transparent}
+.s94 {color: #336699; background-color: transparent; font-weight: bold}
+.s95 {color: #000000; background-color: transparent}
+.s96 {color: #000000; background-color: transparent}
+.s97 {color: #000000; background-color: transparent}
+.s98 {color: #000000; background-color: transparent}
+.s99 {color: #000000; background-color: transparent}
+.s100 {color: #000000; background-color: transparent}
+.s101 {color: #000000; background-color: transparent}
+.s102 {color: #000000; background-color: transparent}
+.s103 {color: #000000; background-color: transparent}
+-->
+    </style>
+  </head>
+  <body>
+    <h1>Control the Raspberry PI through email, in Java <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShXziEYSrwRD_qhgn29_PZsGBBTcrqty5O3dTViH1OpylgCpiQBg" alt="Raspberry PI" style="vertical-align:middle;" width="51" height="62"></h1>
+    <p>
+      <h2>Content</h2>
+      <ul>
+        <li type="disc"><a href="#01">The problem</a></li>
+        <li type="disc"><a href="#02">A solution</a></li>
+        <li type="disc"><a href="#03">Required Components</a></li>
+        <li type="disc"><a href="#04">The Java code</a></li>
+        <li type="disc"><a href="#05">Wiring</a></li>
+        <li type="disc"><a href="#06">Demonstration</a></li>
+        <li type="disc"><a href="#07">Resources</a></li>
+      </ul>
+    </p>
+    <table style="width:100%;"><tr><td><h2><a name="01">The Problem</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>
+    You'll find many articles showing how to use a web server like Apache to control your Raspberry PI over the Internet.
+    <br>
+    What they don't say - or don't say loud enough - is that to do so, your web server needs to be visible to (and from) the outside world.
+    <br>
+    Otherwise, you cannot access it outside of your home or ad-hoc network.
+    <br>
+    What those articles present is a nice way to:
+    <ul>
+      <li style="list-style-type: disc;">Know what the conditions are on the Raspberry PI</li>
+      <li style="list-style-type: disc;">Ask remotely to the Raspberry PI to take some action</li>
+    </ul>
+    <dl>
+      <dt><i>For example</i></dt>
+      <dd>
+        You are at work, the Raspberry PI is at home.<br>
+        Your Raspberry PI has a temperature sensor connected to it, and it is also connected to some heater switch.
+        <ul>
+          <li style="list-style-type: disc;">When the temperature in the home drops below a given threshold, it sends you a message (through whatever channel, WebSocket or so)</li>
+          <li style="list-style-type: disc;">On reception of the message, you - wherever you are - decide to ask the Raspberry PI to turn the heater on</li>
+        </ul>
+        To do so, you need to be on the same network as the Raspberry PI, or the network the Raspberry PI is on needs to 
+        be visible from your location.
+      </dd>
+    </dl>
+    This does not happen if you don't have a registered IP address for your Raspberry PI.
+    <br>
+    It kind of kills the story...
+    <table style="width:100%;"><tr><td><h2><a name="02">A Solution</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>    A way to address this problem is to use emails.
+    <br>
+    This will <i>not</i> implement real-time messaging - like WebSocket - but this will allow a form of communication,
+    only relying on email service - like Yahoo! or Google. Those providers offer free email accounts, which is all you 
+    would need.    
+    <table style="width:100%;"><tr><td><h2><a name="03">Required Components</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>    
+    A way to address this problem is to     All you need on the client side (ie <b>you</b>, at work) is a browser, from which you can send and receive emails.
+    <br>
+    On the server side (ie <b>the Raspberry PI</b>, at home) you will need:
+    <ul>
+      <li style="list-style-type: disc;"><a href="http://www.oracle.com/technetwork/java/javamail/index.html" target="JavaMail">JavaMail</a></li>
+      <li style="list-style-type: disc;"><a href="http://pi4j.com" target="PI4J">PI4J</a></li>
+      <li style="list-style-type: disc;">A json parser</li>
+    </ul>
+    The json parser is used to parse the content of the email messages. We choosed this technology in this example; others can be used as well, like XML, plain text messages, etc. Your call.    
+    <table style="width:100%;"><tr><td><h2><a name="04">The Java code</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>    
+    All the sources are available in an archive you can get at the bottom of this document.
+    <dl>
+      <dt>email.properties</dt>
+      <dd>
+        All properties concerning the emails accounts are externalized in this properties file.
+        <br>
+        Lines 1 to 5 concern the origins, and the destinations of the emails going back and forth, as well as the subjects used 
+        for the emails (events, acknowledgements, and requests).
+        <br>
+        Notice the URL at the top of the file (line 7), it could help you to find the servers you are interested in.
+      </dd>
+    </dl>
+    <div id="div-01" style="padding:5px; background:#ddd; border-radius:5px; overflow-x: scroll; overflow-y: scroll;border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre>
+
+<a name="1"><font class="s1"> 1  </font><font class="s53">pi.accept.emails.from</font>=<font class="s54">olivier.lediouris@gmail.com, olivier.lediouris@yahoo.com, olivier@lediouris.net</font></a>
+<a name="2"><font class="s1"> 2  </font><font class="s53">pi.send.emails.to</font>=<font class="s54">olivier.lediouris@gmail.com, olivier.lediouris@yahoo.com, olivier@lediouris.net</font></a>
+<a name="3"><font class="s1"> 3  </font><font class="s53">pi.email.subject</font>=<font class="s54">PI Request</font></a>
+<a name="4"><font class="s1"> 4  </font><font class="s53">pi.ack.subject</font>=<font class="s54">PI Robot Ack</font></a>
+<a name="5"><font class="s1"> 5  </font><font class="s53">pi.event.subject</font>=<font class="s54">PI Event</font></a>
+<a name="6"><font class="s1"> 6  </font><font class="s52">#</font></a>
+<a name="7"><font class="s1"> 7  </font><font class="s52"># See http://www.arclab.com/products/amlc/list-of-smtp-and-pop3-servers-mailserver-list.html</font></a>
+<a name="8"><font class="s1"> 8  </font><font class="s52">#</font></a>
+<a name="9"><font class="s1"> 9  </font><font class="s53">pi.yahoo.mail.protocol</font>=<font class="s54">pop3</font></a>
+<a name="10"><font class="s1">10  </font><font class="s53">pi.yahoo.incoming.server</font>=<font class="s54">pop.mail.yahoo.com</font></a>
+<a name="11"><font class="s1">11  </font><font class="s53">pi.yahoo.outgoing.server</font>=<font class="s54">smtp.mail.yahoo.com</font></a>
+<a name="12"><font class="s1">12  </font><font class="s53">pi.yahoo.mail.smtpauth</font>=<font class="s54">true</font></a>
+<a name="13"><font class="s1">13  </font><font class="s53">pi.yahoo.outgoing.server.port</font>=<font class="s54">587</font></a>
+<a name="14"><font class="s1">14  </font><font class="s53">pi.yahoo.mail.username</font>=<font class="s54">olivier.lediouris</font></a>
+<a name="15"><font class="s1">15  </font><font class="s53">pi.yahoo.mail.password</font>=<font class="s54">XXXXXX</font></a>
+<a name="16"><font class="s1">16  </font><font class="s53">pi.yahoo.mail.replyto</font>=<font class="s54">olivier@lediouris.net</font></a>
+<a name="17"><font class="s1">17  </font><font class="s52">#</font></a>
+<a name="18"><font class="s1">18  </font><font class="s53">pi.google.mail.protocol</font>=<font class="s54">pop3</font></a>
+<a name="19"><font class="s1">19  </font><font class="s53">pi.google.incoming.server</font>=<font class="s54">pop.gmail.com</font></a>
+<a name="20"><font class="s1">20  </font><font class="s53">pi.google.outgoing.server</font>=<font class="s54">smtp.gmail.com</font></a>
+<a name="21"><font class="s1">21  </font><font class="s53">pi.google.mail.smtpauth</font>=<font class="s54">true</font></a>
+<a name="22"><font class="s1">22  </font><font class="s53">pi.google.outgoing.server.port</font>=<font class="s54">465</font></a>
+<a name="23"><font class="s1">23  </font><font class="s53">pi.google.incoming.server.port</font>=<font class="s54">995</font></a>
+<a name="24"><font class="s1">24  </font><font class="s53">pi.google.mail.username</font>=<font class="s54">olivier.lediouris@gmail.com</font></a>
+<a name="25"><font class="s1">25  </font><font class="s53">pi.google.mail.password</font>=<font class="s54">XXXXXX</font></a>
+<a name="26"><font class="s1">26  </font><font class="s53">pi.google.mail.replyto</font>=<font class="s54">olivier.lediouris@gmail.com</font></a>
+<a name="27"><font class="s1">27  </font><font class="s52">#</font></a>
+<a name="28"><font class="s1">28  </font><font class="s53">pi.oracle.mail.protocol</font>=<font class="s54">imap</font></a>
+<a name="29"><font class="s1">29  </font><font class="s53">pi.oracle.incoming.server</font>=<font class="s54">stbeehive.oracle.com</font></a>
+<a name="30"><font class="s1">30  </font><font class="s53">pi.oracle.outgoing.server</font>=<font class="s54">stbeehive.oracle.com</font></a>
+<a name="31"><font class="s1">31  </font><font class="s53">pi.oracle.mail.smtpauth</font>=<font class="s54">true</font></a>
+<a name="32"><font class="s1">32  </font><font class="s53">pi.oracle.outgoing.server.port</font>=<font class="s54">465</font></a>
+<a name="33"><font class="s1">33  </font><font class="s53">pi.oracle.incoming.server.port</font>=<font class="s54">993</font></a>
+<a name="34"><font class="s1">34  </font><font class="s53">pi.oracle.mail.username</font>=<font class="s54">olivier.lediouris@oracle.com</font></a>
+<a name="35"><font class="s1">35  </font><font class="s53">pi.oracle.mail.password</font>=<font class="s54">XXXXXX</font></a>
+<a name="36"><font class="s1">36  </font><font class="s53">pi.oracle.mail.replyto</font>=<font class="s54">olivier.lediouris@oracle.com</font></a>
+<a name="37"><font class="s1">37  </font><font class="s52">#</font></a>
+      </pre>
+    </div>
+    <dl>
+      <dt>pi4j.gpio.RaspberryPIEventListener.java</dt>
+      <dd>
+        This is the interface used for the callback invoked when an event is triggered on the Reaspberry Pi's side.
+        Namely, when the button will be pressed.
+      </dd>
+    </dl>
+    <div id="div-02" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.gpio;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.event.GpioPinDigitalStateChangeEvent;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;public interface RaspberryPIEventListener
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> manageEvent(GpioPinDigitalStateChangeEvent event);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+      </pre>
+    </div>
+    <dl>
+      <dt>pi4j.email.EmailReceiver.java</dt>
+      <dd>
+        This is the utility class used to receive emails. Its behavior heavily depends on the values
+        set in <code>email.properties</code>.
+        <br>
+        Do check out the method named <code>setProps()</code> (line 119). It might need to be tweaked to fit your 
+        email environment.
+      </dd>
+    </dl>
+    <div id="div-03" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.email;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;import java.io.BufferedReader;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;import java.io.File;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;import java.io.FileInputStream;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;import java.io.FileOutputStream;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;import java.io.IOException;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;import java.io.InputStream;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;</font>&nbsp;import java.io.InputStreamReader;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;10&nbsp;</font>&nbsp;import java.io.OutputStream;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;11&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;12&nbsp;</font>&nbsp;import java.util.ArrayList;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;13&nbsp;</font>&nbsp;import java.util.List;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;14&nbsp;</font>&nbsp;import java.util.Properties;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;15&nbsp;</font>&nbsp;import java.util.Set;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;16&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;17&nbsp;</font>&nbsp;import javax.mail.Address;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;18&nbsp;</font>&nbsp;import javax.mail.Flags;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;19&nbsp;</font>&nbsp;import javax.mail.Folder;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;20&nbsp;</font>&nbsp;import javax.mail.Message;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;21&nbsp;</font>&nbsp;import javax.mail.Multipart;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;22&nbsp;</font>&nbsp;import javax.mail.Part;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;23&nbsp;</font>&nbsp;import javax.mail.PasswordAuthentication;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;24&nbsp;</font>&nbsp;import javax.mail.Session;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;25&nbsp;</font>&nbsp;import javax.mail.Store;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;26&nbsp;</font>&nbsp;import javax.mail.internet.InternetAddress;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;27&nbsp;</font>&nbsp;import javax.mail.search.AndTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;28&nbsp;</font>&nbsp;import javax.mail.search.FlagTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;29&nbsp;</font>&nbsp;import javax.mail.search.FromStringTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;30&nbsp;</font>&nbsp;import javax.mail.search.OrTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;31&nbsp;</font>&nbsp;import javax.mail.search.SearchTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;32&nbsp;</font>&nbsp;import javax.mail.search.SubjectTerm;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;33&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;34&nbsp;</font>&nbsp;public class EmailReceiver
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;35&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;36&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> protocol;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;37&nbsp;</font>&nbsp;  private static int outgoingPort;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;38&nbsp;</font>&nbsp;  private static int incomingPort;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;39&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> username;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;40&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> password;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;41&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> outgoing;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;42&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> incoming;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;43&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> replyto;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;44&nbsp;</font>&nbsp;  private static boolean smtpauth;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;45&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;46&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> sendEmailsTo;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;47&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> acceptEmailsFrom;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;48&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> acceptSubject;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;49&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> ackSubject;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;50&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;51&nbsp;</font>&nbsp;  private static boolean verbose = <font color='orange'><i>"true"</i></font>.equals(System.getProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"false"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;52&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;53&nbsp;</font>&nbsp;  private EmailSender emailSender = null; <font color='gray'><i>// For Ack</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;54&nbsp;</font>&nbsp;  private <font color='cyan'><b><i>String</i></b></font> provider = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;55&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;56&nbsp;</font>&nbsp;  public EmailReceiver(<font color='cyan'><b><i>String</i></b></font> provider) throws RuntimeException
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;57&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;58&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.provider = provider;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;59&nbsp;</font>&nbsp;    EmailReceiver.protocol = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;60&nbsp;</font>&nbsp;    EmailReceiver.outgoingPort = <font color='cyan'>0</font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;61&nbsp;</font>&nbsp;    EmailReceiver.incomingPort = <font color='cyan'>0</font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;62&nbsp;</font>&nbsp;    EmailReceiver.username = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;63&nbsp;</font>&nbsp;    EmailReceiver.password = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;64&nbsp;</font>&nbsp;    EmailReceiver.outgoing = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;65&nbsp;</font>&nbsp;    EmailReceiver.incoming = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;66&nbsp;</font>&nbsp;    EmailReceiver.replyto = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;67&nbsp;</font>&nbsp;    EmailReceiver.smtpauth = <font color='pink'><b><i>false</i></b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;68&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;69&nbsp;</font>&nbsp;    EmailReceiver.sendEmailsTo = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;70&nbsp;</font>&nbsp;    EmailReceiver.acceptEmailsFrom = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;71&nbsp;</font>&nbsp;    EmailReceiver.acceptSubject = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;72&nbsp;</font>&nbsp;    EmailReceiver.ackSubject = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;73&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;74&nbsp;</font>&nbsp;    Properties props = <font color='#ffff66'><b>new</b></font> Properties();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;75&nbsp;</font>&nbsp;    <font color='cyan'><b><i>String</i></b></font> propFile = <font color='orange'><i>"email.properties"</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;76&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;77&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;78&nbsp;</font>&nbsp;      FileInputStream fis = <font color='#ffff66'><b>new</b></font> FileInputStream(propFile);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;79&nbsp;</font>&nbsp;      props.load(fis);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;80&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;81&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font> (Exception e)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;82&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;83&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"email.properies file problem..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;84&nbsp;</font>&nbsp;      <font color='#ffff66'><b>throw</b></font> <font color='#ffff66'><b>new</b></font> RuntimeException(<font color='orange'><i>"File not found:email.properies"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;85&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;86&nbsp;</font>&nbsp;    EmailReceiver.sendEmailsTo     = props.getProperty(<font color='orange'><i>"pi.send.emails.to"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;87&nbsp;</font>&nbsp;    EmailReceiver.acceptEmailsFrom = props.getProperty(<font color='orange'><i>"pi.accept.emails.from"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;88&nbsp;</font>&nbsp;    EmailReceiver.acceptSubject    = props.getProperty(<font color='orange'><i>"pi.email.subject"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;89&nbsp;</font>&nbsp;    EmailReceiver.ackSubject       = props.getProperty(<font color='orange'><i>"pi.ack.subject"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;90&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;91&nbsp;</font>&nbsp;    EmailReceiver.protocol     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.protocol"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;92&nbsp;</font>&nbsp;    EmailReceiver.outgoingPort = Integer.parseInt(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"outgoing.server.port"</i></font>, <font color='orange'><i>"0"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;93&nbsp;</font>&nbsp;    EmailReceiver.incomingPort = Integer.parseInt(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"incoming.server.port"</i></font>, <font color='orange'><i>"0"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;94&nbsp;</font>&nbsp;    EmailReceiver.username     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.username"</i></font>,   <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;95&nbsp;</font>&nbsp;    EmailReceiver.password     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.password"</i></font>,   <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;96&nbsp;</font>&nbsp;    EmailReceiver.outgoing     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"outgoing.server"</i></font>, <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;97&nbsp;</font>&nbsp;    EmailReceiver.incoming     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"incoming.server"</i></font>, <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;98&nbsp;</font>&nbsp;    EmailReceiver.replyto      = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.replyto"</i></font>,    <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;99&nbsp;</font>&nbsp;    EmailReceiver.smtpauth     = <font color='orange'><i>"true"</i></font>.equals(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.smtpauth"</i></font>, <font color='orange'><i>"false"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;100&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;101&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (verbose)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;102&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;103&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Protocol:"</i></font> + EmailReceiver.protocol);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;104&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Usr/pswd:"</i></font> + EmailReceiver.username + <font color='orange'><i>"/"</i></font> + EmailReceiver.password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;105&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;106&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;107&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;108&nbsp;</font>&nbsp;  private static SearchTerm[] buildSearchTerm(<font color='cyan'><b><i>String</i></b></font> str)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;109&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;110&nbsp;</font>&nbsp;    <font color='cyan'><b><i>String</i></b></font>[] sa = str.split(<font color='orange'><i>","</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;111&nbsp;</font>&nbsp;    List&lt;SearchTerm> lst = <font color='#ffff66'><b>new</b></font> ArrayList&lt;SearchTerm>();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;112&nbsp;</font>&nbsp;    <font color='#ffff66'><b>for</b></font> (<font color='cyan'><b><i>String</i></b></font> s : sa)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;113&nbsp;</font>&nbsp;      lst.add(<font color='#ffff66'><b>new</b></font> FromStringTerm(s.trim()));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;114&nbsp;</font>&nbsp;    SearchTerm[] sta = <font color='#ffff66'><b>new</b></font> SearchTerm[lst.size()];
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;115&nbsp;</font>&nbsp;    sta = lst.toArray(sta);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;116&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> sta;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;117&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;118&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;119&nbsp;</font>&nbsp;  private Properties setProps()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;120&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;121&nbsp;</font>&nbsp;    Properties props = <font color='#ffff66'><b>new</b></font> Properties();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;122&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.debug"</i></font>, verbose?<font color='orange'><i>"true"</i></font>:<font color='orange'><i>"false"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;123&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;124&nbsp;</font>&nbsp;    <font color='gray'><i>// TASK smtp should be irrelevant for a receiver</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;125&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.host"</i></font>, EmailReceiver.outgoing);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;126&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.port"</i></font>, Integer.toString(EmailReceiver.outgoingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;127&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;128&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.auth"</i></font>, <font color='orange'><i>"true"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;129&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.starttls.enable"</i></font>, <font color='orange'><i>"true"</i></font>); <font color='gray'><i>//  See http://www.oracle.com/technetwork/java/faq-135477.html#yahoomail</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;130&nbsp;</font>&nbsp;  <font color='orange'><i>//  props.put("mail.smtp.starttls.required", "true");</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;131&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.ssl.enable"</i></font>, <font color='orange'><i>"true"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;132&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;133&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"pop3"</i></font>.equals(EmailReceiver.protocol))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;134&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;135&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.pop3.socketFactory.class"</i></font>, <font color='orange'><i>"javax.net.ssl.SSLSocketFactory"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;136&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.pop3.socketFactory.fallback"</i></font>, <font color='orange'><i>"false"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;137&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.pop3.port"</i></font>, Integer.toString(EmailReceiver.incomingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;138&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.pop3.socketFactory.port"</i></font>, Integer.toString(EmailReceiver.incomingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;139&nbsp;</font>&nbsp;    }            
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;140&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;141&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"imap"</i></font>.equals(protocol))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;142&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;143&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imap.starttls.enable"</i></font>, <font color='orange'><i>"false"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;144&nbsp;</font>&nbsp;      <font color='gray'><i>// Use SSL</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;145&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imap.socketFactory.class"</i></font>, <font color='orange'><i>"javax.net.ssl.SSLSocketFactory"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;146&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imap.socketFactory.fallback"</i></font>, <font color='orange'><i>"false"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;147&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;148&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imap.port"</i></font>, Integer.toString(EmailReceiver.incomingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;149&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imap.socketFactory.port"</i></font>, Integer.toString(EmailReceiver.incomingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;150&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;151&nbsp;</font>&nbsp;      props.setProperty(<font color='orange'><i>"mail.imaps.class"</i></font>, <font color='orange'><i>"com.sun.mail.imap.IMAPSSLStore"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;152&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;153&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> props;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;154&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;155&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;156&nbsp;</font>&nbsp;  public boolean isAuthRequired()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;157&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;158&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.smtpauth;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;159&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;160&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;161&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getUserName()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;162&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;163&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.username;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;164&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;165&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;166&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getPassword()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;167&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;168&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.password;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;169&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;170&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;171&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getReplyTo()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;172&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;173&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.replyto;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;174&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;175&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;176&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getIncomingServer()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;177&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;178&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.incoming;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;179&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;180&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;181&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getOutgoingServer()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;182&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;183&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailReceiver.outgoing;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;184&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;185&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;186&nbsp;</font>&nbsp;  public List&lt;<font color='cyan'><b><i>String</i></b></font>> receive()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;187&nbsp;</font>&nbsp;    throws Exception
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;188&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;189&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> receive(null);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;190&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;191&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;192&nbsp;</font>&nbsp;  public List&lt;<font color='cyan'><b><i>String</i></b></font>> receive(<font color='cyan'><b><i>String</i></b></font> dir)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;193&nbsp;</font>&nbsp;    throws Exception
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;194&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;195&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Receiving..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;196&nbsp;</font>&nbsp;    List&lt;<font color='cyan'><b><i>String</i></b></font>> messList = <font color='#ffff66'><b>new</b></font> ArrayList&lt;<font color='cyan'><b><i>String</i></b></font>>();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;197&nbsp;</font>&nbsp;    Store store = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;198&nbsp;</font>&nbsp;    Folder folder = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;199&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;200&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;201&nbsp;</font>&nbsp;  <font color='gray'><i>//  Properties props = System.getProperties();</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;202&nbsp;</font>&nbsp;      Properties props = setProps();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;203&nbsp;</font>&nbsp;      
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;204&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;205&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;206&nbsp;</font>&nbsp;        Set&lt;Object> keys = props.keySet();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;207&nbsp;</font>&nbsp;        <font color='#ffff66'><b>for</b></font> (Object o : keys)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;208&nbsp;</font>&nbsp;          System.out.println(o.toString() + <font color='orange'><i>":"</i></font> + props.get(o).toString());
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;209&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;210&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Getting session..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;211&nbsp;</font>&nbsp;<font color='gray'><i>//    Session session = Session.getInstance(props, null);</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;212&nbsp;</font>&nbsp;      Session session = Session.getInstance(props,
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;213&nbsp;</font>&nbsp;                        <font color='#ffff66'><b>new</b></font> javax.mail.Authenticator() 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;214&nbsp;</font>&nbsp;                        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;215&nbsp;</font>&nbsp;                          protected PasswordAuthentication getPasswordAuthentication() 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;216&nbsp;</font>&nbsp;                          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;217&nbsp;</font>&nbsp;                            <font color='#ffff66'><b>return</b></font> <font color='#ffff66'><b>new</b></font> PasswordAuthentication(username, password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;218&nbsp;</font>&nbsp;                          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;219&nbsp;</font>&nbsp;                        });    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;220&nbsp;</font>&nbsp;      session.setDebug(verbose);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;221&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Session established."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;222&nbsp;</font>&nbsp;      store = session.getStore(EmailReceiver.protocol);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;223&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (EmailReceiver.incomingPort == <font color='cyan'>0</font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;224&nbsp;</font>&nbsp;        store.connect(EmailReceiver.incoming, EmailReceiver.username, EmailReceiver.password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;225&nbsp;</font>&nbsp;      <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;226&nbsp;</font>&nbsp;        store.connect(EmailReceiver.incoming, EmailReceiver.incomingPort, EmailReceiver.username, EmailReceiver.password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;227&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Connected to store"</i></font>);        
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;228&nbsp;</font>&nbsp;      folder = store.getDefaultFolder();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;229&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (folder == null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;230&nbsp;</font>&nbsp;        <font color='#ffff66'><b>throw</b></font> <font color='#ffff66'><b>new</b></font> RuntimeException(<font color='orange'><i>"No default folder"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;231&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;232&nbsp;</font>&nbsp;      folder = store.getFolder(<font color='orange'><i>"INBOX"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;233&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (folder == null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;234&nbsp;</font>&nbsp;        <font color='#ffff66'><b>throw</b></font> <font color='#ffff66'><b>new</b></font> RuntimeException(<font color='orange'><i>"No INBOX"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;235&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;236&nbsp;</font>&nbsp;      folder.open(Folder.READ_WRITE);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;237&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Connected... filtering, please wait."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;238&nbsp;</font>&nbsp;      SearchTerm st = <font color='#ffff66'><b>new</b></font> AndTerm(<font color='#ffff66'><b>new</b></font> SearchTerm[] { <font color='#ffff66'><b>new</b></font> OrTerm(buildSearchTerm(sendEmailsTo)), 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;239&nbsp;</font>&nbsp;                                                     <font color='#ffff66'><b>new</b></font> SubjectTerm(acceptSubject),
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;240&nbsp;</font>&nbsp;                                                     <font color='#ffff66'><b>new</b></font> FlagTerm(<font color='#ffff66'><b>new</b></font> Flags(Flags.Flag.SEEN), <font color='pink'><b><i>false</i></b></font>) });
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;241&nbsp;</font>&nbsp;   <font color='orange'><i>// st = new SubjectTerm("PI Request");</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;242&nbsp;</font>&nbsp;      Message msgs[] = folder.search(st);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;243&nbsp;</font>&nbsp;<font color='gray'><i>//    Message msgs[] = folder.getMessages();</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;244&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;245&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Search completed, "</i></font> + msgs.length + <font color='orange'><i>" message(s)."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;246&nbsp;</font>&nbsp;      <font color='#ffff66'><b>for</b></font> (int msgNum=<font color='cyan'>0</font>; msgNum&lt;msgs.length; msgNum++)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;247&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;248&nbsp;</font>&nbsp;        <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;249&nbsp;</font>&nbsp;        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;250&nbsp;</font>&nbsp;          Message mess = msgs[msgNum];
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;251&nbsp;</font>&nbsp;          Address from[] = mess.getFrom();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;252&nbsp;</font>&nbsp;          <font color='cyan'><b><i>String</i></b></font> sender = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;253&nbsp;</font>&nbsp;          <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;254&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;255&nbsp;</font>&nbsp;            sender = from[<font color='cyan'>0</font>].toString();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;256&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;257&nbsp;</font>&nbsp;          <font color='#ffff66'><b>catch</b></font>(Exception exception) 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;258&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;259&nbsp;</font>&nbsp;            exception.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;260&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;261&nbsp;</font>&nbsp;<font color='orange'><i>//        System.out.println("Message from [" + sender + "], subject [" + subject + "], content [" + mess.getContent().toString().trim() + "]");</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;262&nbsp;</font>&nbsp;          
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;263&nbsp;</font>&nbsp;          <font color='#ffff66'><b>if</b></font> (<font color='pink'><b><i>true</i></b></font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;264&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;265&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (!mess.isSet(javax.mail.Flags.Flag.SEEN) &amp;&amp; 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;266&nbsp;</font>&nbsp;                !mess.isSet(javax.mail.Flags.Flag.DELETED))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;267&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;268&nbsp;</font>&nbsp;              <font color='cyan'><b><i>String</i></b></font> txtMess = printMessage(mess, dir);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;269&nbsp;</font>&nbsp;              messList.add(txtMess);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;270&nbsp;</font>&nbsp;              mess.setFlag(javax.mail.Flags.Flag.SEEN, <font color='pink'><b><i>true</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;271&nbsp;</font>&nbsp;              mess.setFlag(javax.mail.Flags.Flag.DELETED, <font color='pink'><b><i>true</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;272&nbsp;</font>&nbsp;              <font color='gray'><i>// Send an ack - by email.</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;273&nbsp;</font>&nbsp;              <font color='#ffff66'><b>if</b></font> (<font color='#ffff66'><b>this</b></font>.emailSender == null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;274&nbsp;</font>&nbsp;                <font color='#ffff66'><b>this</b></font>.emailSender = <font color='#ffff66'><b>new</b></font> EmailSender(<font color='#ffff66'><b>this</b></font>.provider);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;275&nbsp;</font>&nbsp;              <font color='#ffff66'><b>this</b></font>.emailSender.send(<font color='#ffff66'><b>new</b></font> <font color='cyan'><b><i>String</i></b></font>[] { sender }, 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;276&nbsp;</font>&nbsp;                                    ackSubject, 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;277&nbsp;</font>&nbsp;                                    <font color='orange'><i>"Your request ["</i></font> + txtMess.trim() + <font color='orange'><i>"] is being taken care of."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;278&nbsp;</font>&nbsp;              <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Sent an ack to "</i></font> + sender);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;279&nbsp;</font>&nbsp;            } 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;280&nbsp;</font>&nbsp;            <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;281&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;282&nbsp;</font>&nbsp;              <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Old message in your inbox..., received "</i></font> + mess.getReceivedDate().toString());
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;283&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;284&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;285&nbsp;</font>&nbsp;        }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;286&nbsp;</font>&nbsp;        <font color='#ffff66'><b>catch</b></font>(Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;287&nbsp;</font>&nbsp;        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;288&nbsp;</font>&nbsp;<font color='gray'><i>//        System.err.println(ex.getMessage());</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;289&nbsp;</font>&nbsp;          ex.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;290&nbsp;</font>&nbsp;        }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;291&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;292&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;293&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font>(Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;294&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;295&nbsp;</font>&nbsp;      <font color='#ffff66'><b>throw</b></font> ex;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;296&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;297&nbsp;</font>&nbsp;    <font color='#ffff66'><b>finally</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;298&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;299&nbsp;</font>&nbsp;      <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;300&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;301&nbsp;</font>&nbsp;        <font color='#ffff66'><b>if</b></font> (folder != null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;302&nbsp;</font>&nbsp;          folder.close(<font color='pink'><b><i>true</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;303&nbsp;</font>&nbsp;        <font color='#ffff66'><b>if</b></font> (store != null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;304&nbsp;</font>&nbsp;          store.close();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;305&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;306&nbsp;</font>&nbsp;      <font color='#ffff66'><b>catch</b></font>(Exception <font color='cyan'>ex2</font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;307&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;308&nbsp;</font>&nbsp;        System.err.println(<font color='orange'><i>"Finally ..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;309&nbsp;</font>&nbsp;        <font color='cyan'>ex2</font>.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;310&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;311&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;312&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> messList;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;313&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;314&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;315&nbsp;</font>&nbsp;  public static <font color='cyan'><b><i>String</i></b></font> printMessage(Message message, <font color='cyan'><b><i>String</i></b></font> dir)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;316&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;317&nbsp;</font>&nbsp;    <font color='cyan'><b><i>String</i></b></font> ret = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;318&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;319&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;320&nbsp;</font>&nbsp;      <font color='cyan'><b><i>String</i></b></font> from = ((InternetAddress)message.getFrom()[<font color='cyan'>0</font>]).getPersonal();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;321&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font>(from == null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;322&nbsp;</font>&nbsp;        from = ((InternetAddress)message.getFrom()[<font color='cyan'>0</font>]).getAddress();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;323&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"From: "</i></font> + from);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;324&nbsp;</font>&nbsp;      <font color='cyan'><b><i>String</i></b></font> subject = message.getSubject();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;325&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Subject: "</i></font> + subject);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;326&nbsp;</font>&nbsp;      Part messagePart = message;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;327&nbsp;</font>&nbsp;      Object content = messagePart.getContent();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;328&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (content <font color='#ffff66'><b>instanceof</b></font> Multipart)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;329&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;330&nbsp;</font>&nbsp;<font color='gray'><i>//      messagePart = ((Multipart)content).getBodyPart(0);</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;331&nbsp;</font>&nbsp;        int nbParts = ((Multipart)content).getCount();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;332&nbsp;</font>&nbsp;        <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"[ Multipart Message ], "</i></font> + nbParts + <font color='orange'><i>" part(s)."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;333&nbsp;</font>&nbsp;        <font color='#ffff66'><b>for</b></font> (int i=<font color='cyan'>0</font>; i&lt;nbParts; i++)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;334&nbsp;</font>&nbsp;        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;335&nbsp;</font>&nbsp;          messagePart = ((Multipart)content).getBodyPart(i);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;336&nbsp;</font>&nbsp;          <font color='#ffff66'><b>if</b></font> (messagePart.getContentType().toUpperCase().startsWith(<font color='orange'><i>"APPLICATION/OCTET-STREAM"</i></font>))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;337&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;338&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(messagePart.getContentType() + <font color='orange'><i>":"</i></font> + messagePart.getFileName());
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;339&nbsp;</font>&nbsp;            InputStream is = messagePart.getInputStream();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;340&nbsp;</font>&nbsp;            <font color='cyan'><b><i>String</i></b></font> newFileName = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;341&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (dir != null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;342&nbsp;</font>&nbsp;              newFileName = dir + File.separator;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;343&nbsp;</font>&nbsp;            newFileName += messagePart.getFileName();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;344&nbsp;</font>&nbsp;            FileOutputStream fos = <font color='#ffff66'><b>new</b></font> FileOutputStream(newFileName);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;345&nbsp;</font>&nbsp;            ret = messagePart.getFileName();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;346&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"Downloading "</i></font> + messagePart.getFileName() + <font color='orange'><i>"..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;347&nbsp;</font>&nbsp;            copy(is, fos);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;348&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"...done."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;349&nbsp;</font>&nbsp;          } 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;350&nbsp;</font>&nbsp;          <font color='#ffff66'><b>else</b></font> <font color='gray'><i>// text/plain, text/html</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;351&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;352&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"-- Part #"</i></font> + i + <font color='orange'><i>" --, "</i></font> + messagePart.getContentType().replace(<font color='orange'><i>'\n'</i></font>, <font color='orange'><i>' '</i></font>).replace(<font color='orange'><i>'\r'</i></font>, <font color='orange'><i>' '</i></font>).replace(<font color='orange'><i>"\b"</i></font>, <font color='orange'><i>""</i></font>).trim());
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;353&nbsp;</font>&nbsp;            InputStream is = messagePart.getInputStream();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;354&nbsp;</font>&nbsp;            BufferedReader br = <font color='#ffff66'><b>new</b></font> BufferedReader(<font color='#ffff66'><b>new</b></font> InputStreamReader(is));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;355&nbsp;</font>&nbsp;            <font color='cyan'><b><i>String</i></b></font> line = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;356&nbsp;</font>&nbsp;            <font color='#ffff66'><b>while</b></font> (line != null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;357&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;358&nbsp;</font>&nbsp;              line = br.readLine();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;359&nbsp;</font>&nbsp;              <font color='#ffff66'><b>if</b></font> (line != null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;360&nbsp;</font>&nbsp;              {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;361&nbsp;</font>&nbsp;                <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"["</i></font> + line + <font color='orange'><i>"]"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;362&nbsp;</font>&nbsp;                <font color='#ffff66'><b>if</b></font> (messagePart.getContentType().toUpperCase().startsWith(<font color='orange'><i>"TEXT/PLAIN"</i></font>))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;363&nbsp;</font>&nbsp;                  ret += line;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;364&nbsp;</font>&nbsp;              }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;365&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;366&nbsp;</font>&nbsp;            br.close();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;367&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"-------------------"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;368&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;369&nbsp;</font>&nbsp;        }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;370&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;371&nbsp;</font>&nbsp;      <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;372&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;373&nbsp;</font>&nbsp;<font color='orange'><i>//      System.out.println("  .Message is a " + content.getClass().getName());</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;374&nbsp;</font>&nbsp;<font color='orange'><i>//      System.out.println("Content:");</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;375&nbsp;</font>&nbsp;<font color='gray'><i>//      System.out.println(content.toString());</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;376&nbsp;</font>&nbsp;        ret = content.toString();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;377&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;378&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"-----------------------------"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;379&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;380&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font>(Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;381&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;382&nbsp;</font>&nbsp;      ex.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;383&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;384&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> ret;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;385&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;386&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;387&nbsp;</font>&nbsp;  private static <font color='#ffff66'><b>void</b></font> copy(InputStream <font color='#ffff66'><b>in</b></font>, OutputStream out)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;388&nbsp;</font>&nbsp;    throws IOException
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;389&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;390&nbsp;</font>&nbsp;    synchronized(<font color='#ffff66'><b>in</b></font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;391&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;392&nbsp;</font>&nbsp;      synchronized(out)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;393&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;394&nbsp;</font>&nbsp;        byte buffer[] = <font color='#ffff66'><b>new</b></font> byte[<font color='cyan'>256</font>];
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;395&nbsp;</font>&nbsp;        <font color='#ffff66'><b>while</b></font> (<font color='pink'><b><i>true</i></b></font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;396&nbsp;</font>&nbsp;        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;397&nbsp;</font>&nbsp;          int bytesRead = <font color='#ffff66'><b>in</b></font>.read(buffer);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;398&nbsp;</font>&nbsp;          <font color='#ffff66'><b>if</b></font>(bytesRead == -<font color='cyan'>1</font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;399&nbsp;</font>&nbsp;            <font color='#ffff66'><b>break</b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;400&nbsp;</font>&nbsp;          out.write(buffer, <font color='cyan'>0</font>, bytesRead);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;401&nbsp;</font>&nbsp;        }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;402&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;403&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;404&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;405&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+        </pre>
+      </div>
+    <dl>
+      <dt>pi4j.email.EmailSender.java</dt>
+      <dd>
+        Same as the previous, but for outgoing emails. Notice that the two can be different.
+        You might very well send emails using Yahoo! and receive others using Google.
+        <br>
+        This way, the Raspberry PI and you would have your own email addresses.
+        <br>
+        As before, check out the method named <code>setProps()</code> (line 164). It might need to be tweaked to fit your 
+        email environment.
+      </dd>
+    </dl>
+    <div id="div-04" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.email;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;import com.sun.mail.smtp.SMTPTransport;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;import java.io.FileInputStream;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;import java.util.Properties;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;</font>&nbsp;import javax.mail.Message;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;10&nbsp;</font>&nbsp;import javax.mail.MessagingException;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;11&nbsp;</font>&nbsp;import javax.mail.PasswordAuthentication;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;12&nbsp;</font>&nbsp;import javax.mail.Session;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;13&nbsp;</font>&nbsp;import javax.mail.Transport;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;14&nbsp;</font>&nbsp;import javax.mail.internet.AddressException;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;15&nbsp;</font>&nbsp;import javax.mail.internet.InternetAddress;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;16&nbsp;</font>&nbsp;import javax.mail.internet.MimeMessage;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;17&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;18&nbsp;</font>&nbsp;public class EmailSender
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;19&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;20&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> protocol;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;21&nbsp;</font>&nbsp;  private static int outgoingPort;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;22&nbsp;</font>&nbsp;  private static int incomingPort;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;23&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> username;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;24&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> password;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;25&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> outgoing;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;26&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> incoming;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;27&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> replyto;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;28&nbsp;</font>&nbsp;  private static boolean smtpauth;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;29&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;30&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> sendEmailsTo;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;31&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> eventSubject;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;32&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;33&nbsp;</font>&nbsp;  private static boolean verbose = <font color='orange'><i>"true"</i></font>.equals(System.getProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"false"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;34&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;35&nbsp;</font>&nbsp;  public EmailSender(<font color='cyan'><b><i>String</i></b></font> provider) throws RuntimeException
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;36&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;37&nbsp;</font>&nbsp;    EmailSender.protocol = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;38&nbsp;</font>&nbsp;    EmailSender.outgoingPort = <font color='cyan'>0</font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;39&nbsp;</font>&nbsp;    EmailSender.incomingPort = <font color='cyan'>0</font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;40&nbsp;</font>&nbsp;    EmailSender.username = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;41&nbsp;</font>&nbsp;    EmailSender.password = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;42&nbsp;</font>&nbsp;    EmailSender.outgoing = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;43&nbsp;</font>&nbsp;    EmailSender.incoming = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;44&nbsp;</font>&nbsp;    EmailSender.replyto = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;45&nbsp;</font>&nbsp;    EmailSender.smtpauth = <font color='pink'><b><i>false</i></b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;46&nbsp;</font>&nbsp;    EmailSender.sendEmailsTo = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;47&nbsp;</font>&nbsp;    EmailSender.eventSubject = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;48&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;49&nbsp;</font>&nbsp;    Properties props = <font color='#ffff66'><b>new</b></font> Properties();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;50&nbsp;</font>&nbsp;    <font color='cyan'><b><i>String</i></b></font> propFile = <font color='orange'><i>"email.properties"</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;51&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;52&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;53&nbsp;</font>&nbsp;      FileInputStream fis = <font color='#ffff66'><b>new</b></font> FileInputStream(propFile);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;54&nbsp;</font>&nbsp;      props.load(fis);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;55&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;56&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font> (Exception e)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;57&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;58&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"email.properies file problem..."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;59&nbsp;</font>&nbsp;      <font color='#ffff66'><b>throw</b></font> <font color='#ffff66'><b>new</b></font> RuntimeException(<font color='orange'><i>"File not found:email.properies"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;60&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;61&nbsp;</font>&nbsp;    EmailSender.sendEmailsTo = props.getProperty(<font color='orange'><i>"pi.send.emails.to"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;62&nbsp;</font>&nbsp;    EmailSender.eventSubject = props.getProperty(<font color='orange'><i>"pi.event.subject"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;63&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;64&nbsp;</font>&nbsp;    EmailSender.protocol     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.protocol"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;65&nbsp;</font>&nbsp;    EmailSender.outgoingPort = Integer.parseInt(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"outgoing.server.port"</i></font>, <font color='orange'><i>"0"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;66&nbsp;</font>&nbsp;    EmailSender.incomingPort = Integer.parseInt(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"incoming.server.port"</i></font>, <font color='orange'><i>"0"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;67&nbsp;</font>&nbsp;    EmailSender.username     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.username"</i></font>,   <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;68&nbsp;</font>&nbsp;    EmailSender.password     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.password"</i></font>,   <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;69&nbsp;</font>&nbsp;    EmailSender.outgoing     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"outgoing.server"</i></font>, <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;70&nbsp;</font>&nbsp;    EmailSender.incoming     = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"incoming.server"</i></font>, <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;71&nbsp;</font>&nbsp;    EmailSender.replyto      = props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.replyto"</i></font>,    <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;72&nbsp;</font>&nbsp;    EmailSender.smtpauth     = <font color='orange'><i>"true"</i></font>.equals(props.getProperty(<font color='orange'><i>"pi."</i></font> + (provider != null ? (provider + <font color='orange'><i>"."</i></font>) : <font color='orange'><i>""</i></font>) + <font color='orange'><i>"mail.smtpauth"</i></font>, <font color='orange'><i>"false"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;73&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;74&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (verbose)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;75&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;76&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"-------------------------------------"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;77&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Protocol       : "</i></font> + EmailSender.protocol);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;78&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Usr/pswd       : "</i></font> + EmailSender.username + <font color='orange'><i>"/"</i></font> + EmailSender.password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;79&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Incoming server: "</i></font> + EmailSender.incoming + <font color='orange'><i>":"</i></font> + EmailSender.incomingPort);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;80&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Outgoing server: "</i></font> + EmailSender.outgoing + <font color='orange'><i>":"</i></font> + EmailSender.outgoingPort);      
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;81&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"replyto        : "</i></font> + EmailSender.replyto);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;82&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"SMTPAuth       : "</i></font> + EmailSender.smtpauth);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;83&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"-------------------------------------"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;84&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;85&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;86&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;87&nbsp;</font>&nbsp;  public boolean isAuthRequired()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;88&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;89&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.smtpauth;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;90&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;91&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;92&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getUserName()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;93&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;94&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.username;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;95&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;96&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;97&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getPassword()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;98&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;99&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.password;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;100&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;101&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;102&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getReplyTo()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;103&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;104&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.replyto;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;105&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;106&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;107&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getIncomingServer()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;108&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;109&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.incoming;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;110&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;111&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;112&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getOutgoingServer()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;113&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;114&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.outgoing;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;115&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;116&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;117&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getEmailDest()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;118&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;119&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.sendEmailsTo;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;120&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;121&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;122&nbsp;</font>&nbsp;  public <font color='cyan'><b><i>String</i></b></font> getEventSubject()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;123&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;124&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> EmailSender.eventSubject;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;125&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;126&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;127&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> send(<font color='cyan'><b><i>String</i></b></font>[] dest, 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;128&nbsp;</font>&nbsp;                   <font color='cyan'><b><i>String</i></b></font> subject, 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;129&nbsp;</font>&nbsp;                   <font color='cyan'><b><i>String</i></b></font> content)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;130&nbsp;</font>&nbsp;    throws MessagingException, AddressException
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;131&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;132&nbsp;</font>&nbsp;    Properties props = setProps();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;133&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;134&nbsp;</font>&nbsp;<font color='gray'><i>//  Session session = Session.getDefaultInstance(props, auth);</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;135&nbsp;</font>&nbsp;    Session session = Session.getInstance(props,
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;136&nbsp;</font>&nbsp;                                          <font color='#ffff66'><b>new</b></font> javax.mail.Authenticator() 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;137&nbsp;</font>&nbsp;                                          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;138&nbsp;</font>&nbsp;                                            protected PasswordAuthentication getPasswordAuthentication() 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;139&nbsp;</font>&nbsp;                                            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;140&nbsp;</font>&nbsp;                                              <font color='#ffff66'><b>return</b></font> <font color='#ffff66'><b>new</b></font> PasswordAuthentication(username, password);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;141&nbsp;</font>&nbsp;                                            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;142&nbsp;</font>&nbsp;                                          });    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;143&nbsp;</font>&nbsp;    session.setDebug(verbose);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;144&nbsp;</font>&nbsp;    Transport tr = session.getTransport(<font color='orange'><i>"smtp"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;145&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (!(tr <font color='#ffff66'><b>instanceof</b></font> SMTPTransport))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;146&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"This is NOT an SMTPTransport:["</i></font> + tr.getClass().getName() + <font color='orange'><i>"]"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;147&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;148&nbsp;</font>&nbsp;    Message msg = <font color='#ffff66'><b>new</b></font> MimeMessage(session);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;149&nbsp;</font>&nbsp;    msg.setFrom(<font color='#ffff66'><b>new</b></font> InternetAddress(EmailSender.replyto));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;150&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (dest == null || dest.length == <font color='cyan'>0</font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;151&nbsp;</font>&nbsp;      <font color='#ffff66'><b>throw</b></font> <font color='#ffff66'><b>new</b></font> RuntimeException(<font color='orange'><i>"Need at least one recipient."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;152&nbsp;</font>&nbsp;    msg.setRecipient(javax.mail.Message.RecipientType.TO, <font color='#ffff66'><b>new</b></font> InternetAddress(dest[<font color='cyan'>0</font>]));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;153&nbsp;</font>&nbsp;    <font color='#ffff66'><b>for</b></font> (int i=<font color='cyan'>1</font>; i&lt;dest.length; i++)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;154&nbsp;</font>&nbsp;      msg.addRecipient(javax.mail.Message.RecipientType.CC, <font color='#ffff66'><b>new</b></font> InternetAddress(dest[i]));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;155&nbsp;</font>&nbsp;    msg.setSubject(subject);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;156&nbsp;</font>&nbsp;    msg.setText(content != null ? content : <font color='orange'><i>""</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;157&nbsp;</font>&nbsp;    msg.setContent(content, <font color='orange'><i>"text/plain"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;158&nbsp;</font>&nbsp;    msg.saveChanges();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;159&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (verbose) System.out.println(<font color='orange'><i>"sending:["</i></font> + content + <font color='orange'><i>"], "</i></font> + Integer.toString(content.length()) + <font color='orange'><i>" characters"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;160&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;161&nbsp;</font>&nbsp;    Transport.send(msg);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;162&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;163&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;164&nbsp;</font>&nbsp;  private Properties setProps()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;165&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;166&nbsp;</font>&nbsp;    Properties props = <font color='#ffff66'><b>new</b></font> Properties();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;167&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.debug"</i></font>, verbose?<font color='orange'><i>"true"</i></font>:<font color='orange'><i>"false"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;168&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.host"</i></font>, EmailSender.outgoing);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;169&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.port"</i></font>, Integer.toString(EmailSender.outgoingPort));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;170&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;171&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.auth"</i></font>, <font color='orange'><i>"true"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;172&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.starttls.enable"</i></font>, <font color='orange'><i>"true"</i></font>); <font color='gray'><i>//  See http://www.oracle.com/technetwork/java/faq-135477.html#yahoomail</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;173&nbsp;</font>&nbsp;<font color='orange'><i>//  props.put("mail.smtp.starttls.required", "true");</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;174&nbsp;</font>&nbsp;    props.put(<font color='orange'><i>"mail.smtp.ssl.enable"</i></font>, <font color='orange'><i>"true"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;175&nbsp;</font>&nbsp;    <font color='#ffff66'><b>return</b></font> props;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;176&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;177&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+      </pre>
+    </div>
+    <dl>
+      <dt>pi4j.gpio.GPIOController.java</dt>
+      <dd>
+        Interaction with the GPIO on the Raspberry PI.
+        <br>
+        Notice the pins we use:
+        <ul>
+          <li>Yellow led on pin #01 (line 23)</li>
+          <li>Green led on pin #04 (line 24)</li>
+          <li>Button on pin #02 (line 25)</li>
+        </ul>
+        We will need to make sure the wiring matches this setup.
+      </dd>
+    </dl>
+    <div id="div-05" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.gpio;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.GpioController;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.GpioFactory;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.GpioPinDigitalInput;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.PinPullResistance;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.RaspiPin;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.event.GpioPinDigitalStateChangeEvent;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.event.GpioPinListenerDigital;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;10&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;11&nbsp;</font>&nbsp;public class GPIOController
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;12&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;13&nbsp;</font>&nbsp;  private GpioController gpio = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;14&nbsp;</font>&nbsp;  private OneLed yellowLed = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;15&nbsp;</font>&nbsp;  private OneLed greenLed  = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;16&nbsp;</font>&nbsp;  private GpioPinDigitalInput button = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;17&nbsp;</font>&nbsp;  private RaspberryPIEventListener caller = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;18&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;19&nbsp;</font>&nbsp;  public GPIOController(RaspberryPIEventListener listener)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;20&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;21&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.caller = listener;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;22&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.gpio = GpioFactory.getInstance();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;23&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.yellowLed = <font color='#ffff66'><b>new</b></font> OneLed(<font color='#ffff66'><b>this</b></font>.gpio, RaspiPin.<font color='cyan'>GPIO_01</font>, <font color='orange'><i>"yellow"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;24&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.greenLed  = <font color='#ffff66'><b>new</b></font> OneLed(<font color='#ffff66'><b>this</b></font>.gpio, RaspiPin.<font color='cyan'>GPIO_04</font>, <font color='orange'><i>"green"</i></font>);    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;25&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.button = <font color='#ffff66'><b>this</b></font>.gpio.provisionDigitalInputPin(RaspiPin.<font color='cyan'>GPIO_02</font>, PinPullResistance.PULL_DOWN);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;26&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.button.addListener(<font color='#ffff66'><b>new</b></font> GpioPinListenerDigital() 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;27&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;28&nbsp;</font>&nbsp;      @Override
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;29&nbsp;</font>&nbsp;      public <font color='#ffff66'><b>void</b></font> handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;30&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;31&nbsp;</font>&nbsp;        caller.manageEvent(event);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;32&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;33&nbsp;</font>&nbsp;    });
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;34&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;35&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;36&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> shutdown()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;37&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;38&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.gpio.shutdown();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;39&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;40&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;41&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> switchYellow(boolean on)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;42&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;43&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (on)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;44&nbsp;</font>&nbsp;      yellowLed.on();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;45&nbsp;</font>&nbsp;    <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;46&nbsp;</font>&nbsp;      yellowLed.off();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;47&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;48&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;49&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> switchGreen(boolean on)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;50&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;51&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (on)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;52&nbsp;</font>&nbsp;      greenLed.on();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;53&nbsp;</font>&nbsp;    <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;54&nbsp;</font>&nbsp;      greenLed.off();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;55&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;56&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+      </pre>
+    </div>
+    <dl>
+      <dt>pi4j.gpio.OneLed.java</dt>
+      <dd>
+        Utility class for led management.
+      </dd>
+    </dl>
+    <div id="div-06" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.gpio;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.GpioController;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.GpioPinDigitalOutput;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.Pin;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.PinState;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;</font>&nbsp;public class OneLed
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;10&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;11&nbsp;</font>&nbsp;  private GpioPinDigitalOutput led = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;12&nbsp;</font>&nbsp;  private <font color='cyan'><b><i>String</i></b></font> name;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;13&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;14&nbsp;</font>&nbsp;  public OneLed(GpioController gpio, Pin pin, <font color='cyan'><b><i>String</i></b></font> name)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;15&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;16&nbsp;</font>&nbsp;    <font color='#ffff66'><b>this</b></font>.name = name;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;17&nbsp;</font>&nbsp;    led = gpio.provisionDigitalOutputPin(pin, <font color='orange'><i>"Led"</i></font>, PinState.LOW);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;18&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;19&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;20&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> on()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;21&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;22&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"true"</i></font>.equals(System.getProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"false"</i></font>)))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;23&nbsp;</font>&nbsp;      System.out.println(<font color='#ffff66'><b>this</b></font>.name + <font color='orange'><i>" is on."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;24&nbsp;</font>&nbsp;    led.high();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;25&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;26&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;27&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> off()
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;28&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;29&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"true"</i></font>.equals(System.getProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"false"</i></font>)))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;30&nbsp;</font>&nbsp;      System.out.println(<font color='#ffff66'><b>this</b></font>.name + <font color='orange'><i>" is off."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;31&nbsp;</font>&nbsp;    led.low();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;32&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;33&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+      </pre>
+    </div>
+    <dl>
+      <dt>pi4j.email.PIControllerMain.java</dt>
+      <dd>
+        This is the main, the one to start from the Raspberry PI (see below)
+      </dd>
+    </dl>
+    <div id="div-07" style="padding:5px; background:#1e1e1e; border-radius:5px; overflow-x: scroll; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 200px; resize:both;">
+      <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+      <!-- Generated code pasted below -->
+
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;</font>&nbsp;package <font color='cyan'>pi4j</font>.email;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;</font>&nbsp;import com.<font color='cyan'>pi4j</font>.io.gpio.event.GpioPinDigitalStateChangeEvent;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;</font>&nbsp;import java.text.SimpleDateFormat;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;</font>&nbsp;import java.util.Date;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;</font>&nbsp;import java.util.List;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;10&nbsp;</font>&nbsp;import org.json.JSONObject;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;11&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;12&nbsp;</font>&nbsp;import <font color='cyan'>pi4j</font>.gpio.GPIOController;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;13&nbsp;</font>&nbsp;import <font color='cyan'>pi4j</font>.gpio.RaspberryPIEventListener;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;14&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;15&nbsp;</font>&nbsp;public class PIControllerMain implements RaspberryPIEventListener
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;16&nbsp;</font>&nbsp;{
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;17&nbsp;</font>&nbsp;  private final static SimpleDateFormat SDF = <font color='#ffff66'><b>new</b></font> SimpleDateFormat(<font color='orange'><i>"yyyy-MMM-dd HH:mm:ss"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;18&nbsp;</font>&nbsp;  private static boolean verbose = <font color='orange'><i>"true"</i></font>.equals(System.getProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"false"</i></font>));
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;19&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;20&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> providerSend    = <font color='orange'><i>"google"</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;21&nbsp;</font>&nbsp;  private static <font color='cyan'><b><i>String</i></b></font> providerReceive = <font color='orange'><i>"google"</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;22&nbsp;</font>&nbsp;  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;23&nbsp;</font>&nbsp;  EmailSender sender = null;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;24&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;25&nbsp;</font>&nbsp;  /**
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;26&nbsp;</font>&nbsp;   * Invoked like:
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;27&nbsp;</font>&nbsp;   *   java <font color='cyan'>pi4j</font>.email.PIControllerMain [-verbose] -send:google -receive:yahoo -help
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;28&nbsp;</font>&nbsp;   *   
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;29&nbsp;</font>&nbsp;   * This will send emails using google, and receive using yahoo.
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;30&nbsp;</font>&nbsp;   * Do check the file email.properties <font color='#ffff66'><b>for</b></font> the different values associated <font color='#ffff66'><b>with</b></font> email servers.
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;31&nbsp;</font>&nbsp;   * 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;32&nbsp;</font>&nbsp;   * @param args See above
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;33&nbsp;</font>&nbsp;   */
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;34&nbsp;</font>&nbsp;  public static <font color='#ffff66'><b>void</b></font> main(<font color='cyan'><b><i>String</i></b></font>[] args)  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;35&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;36&nbsp;</font>&nbsp;    <font color='#ffff66'><b>for</b></font> (int i=<font color='cyan'>0</font>; i&lt;args.length; i++)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;37&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;38&nbsp;</font>&nbsp;      <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"-verbose"</i></font>.equals(args[i]))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;39&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;40&nbsp;</font>&nbsp;        verbose = <font color='pink'><b><i>true</i></b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;41&nbsp;</font>&nbsp;        System.setProperty(<font color='orange'><i>"verbose"</i></font>, <font color='orange'><i>"true"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;42&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;43&nbsp;</font>&nbsp;      <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (args[i].startsWith(<font color='orange'><i>"-send:"</i></font>))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;44&nbsp;</font>&nbsp;        providerSend = args[i].substring(<font color='orange'><i>"-send:"</i></font>.length());      
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;45&nbsp;</font>&nbsp;      <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (args[i].startsWith(<font color='orange'><i>"-receive:"</i></font>))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;46&nbsp;</font>&nbsp;        providerReceive =args[i].substring(<font color='orange'><i>"-receive:"</i></font>.length());  
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;47&nbsp;</font>&nbsp;      <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"-help"</i></font>.equals(args[i]))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;48&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;49&nbsp;</font>&nbsp;        System.out.println(<font color='orange'><i>"Usage:"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;50&nbsp;</font>&nbsp;        System.out.println(<font color='orange'><i>"  java pi4j.email.PIControllerMain -verbose -send:google -receive:yahoo -help"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;51&nbsp;</font>&nbsp;        System.exit(<font color='cyan'>0</font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;52&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;53&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;54&nbsp;</font>&nbsp;    
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;55&nbsp;</font>&nbsp;    PIControllerMain lmc = <font color='#ffff66'><b>new</b></font> PIControllerMain();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;56&nbsp;</font>&nbsp;    GPIOController piController = <font color='#ffff66'><b>new</b></font> GPIOController(lmc);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;57&nbsp;</font>&nbsp;    EmailReceiver receiver = <font color='#ffff66'><b>new</b></font> EmailReceiver(providerReceive); <font color='gray'><i>// For Google, pop must be explicitely enabled at the account level</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;58&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;59&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;60&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Waiting for instructions."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;61&nbsp;</font>&nbsp;      boolean keepLooping = <font color='pink'><b><i>true</i></b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;62&nbsp;</font>&nbsp;      <font color='#ffff66'><b>while</b></font> (keepLooping)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;63&nbsp;</font>&nbsp;      {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;64&nbsp;</font>&nbsp;        List&lt;<font color='cyan'><b><i>String</i></b></font>> received = receiver.receive();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;65&nbsp;</font>&nbsp;        <font color='#ffff66'><b>if</b></font> (verbose || received.size() > <font color='cyan'>0</font>)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;66&nbsp;</font>&nbsp;        System.out.println(SDF.format(<font color='#ffff66'><b>new</b></font> Date())  + <font color='orange'><i>" - Retrieved "</i></font> + received.size() + <font color='orange'><i>" message(s)."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;67&nbsp;</font>&nbsp;        <font color='#ffff66'><b>for</b></font> (<font color='cyan'><b><i>String</i></b></font> s : received)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;68&nbsp;</font>&nbsp;        {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;69&nbsp;</font>&nbsp;  <font color='gray'><i>//      System.out.println(s);</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;70&nbsp;</font>&nbsp;          <font color='cyan'><b><i>String</i></b></font> operation = <font color='orange'><i>""</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;71&nbsp;</font>&nbsp;          <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;72&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;73&nbsp;</font>&nbsp;            JSONObject json = <font color='#ffff66'><b>new</b></font> JSONObject(s);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;74&nbsp;</font>&nbsp;            operation = json.getString(<font color='orange'><i>"operation"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;75&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;76&nbsp;</font>&nbsp;          <font color='#ffff66'><b>catch</b></font> (Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;77&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;78&nbsp;</font>&nbsp;            System.err.println(ex.getMessage());
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;79&nbsp;</font>&nbsp;            System.err.println(<font color='orange'><i>"Message is ["</i></font> + s + <font color='orange'><i>"]"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;80&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;81&nbsp;</font>&nbsp;          <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"exit"</i></font>.equals(operation))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;82&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;83&nbsp;</font>&nbsp;            keepLooping = <font color='pink'><b><i>false</i></b></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;84&nbsp;</font>&nbsp;            System.out.println(<font color='orange'><i>"Will exit next batch."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;85&nbsp;</font>&nbsp;        <font color='gray'><i>//  break;</i></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;86&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;87&nbsp;</font>&nbsp;          <font color='#ffff66'><b>else</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;88&nbsp;</font>&nbsp;          {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;89&nbsp;</font>&nbsp;            <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"turn-green-on"</i></font>.equals(operation))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;90&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;91&nbsp;</font>&nbsp;              System.out.println(<font color='orange'><i>"Turning green on"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;92&nbsp;</font>&nbsp;              piController.switchGreen(<font color='pink'><b><i>true</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;93&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;94&nbsp;</font>&nbsp;            <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"turn-green-off"</i></font>.equals(operation))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;95&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;96&nbsp;</font>&nbsp;              System.out.println(<font color='orange'><i>"Turning green off"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;97&nbsp;</font>&nbsp;              piController.switchGreen(<font color='pink'><b><i>false</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;98&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;&nbsp;99&nbsp;</font>&nbsp;            <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"turn-yellow-on"</i></font>.equals(operation))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;100&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;101&nbsp;</font>&nbsp;              System.out.println(<font color='orange'><i>"Turning yellow on"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;102&nbsp;</font>&nbsp;              piController.switchYellow(<font color='pink'><b><i>true</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;103&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;104&nbsp;</font>&nbsp;            <font color='#ffff66'><b>else</b></font> <font color='#ffff66'><b>if</b></font> (<font color='orange'><i>"turn-yellow-off"</i></font>.equals(operation))
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;105&nbsp;</font>&nbsp;            {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;106&nbsp;</font>&nbsp;              System.out.println(<font color='orange'><i>"Turning yellow off"</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;107&nbsp;</font>&nbsp;              piController.switchYellow(<font color='pink'><b><i>false</i></b></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;108&nbsp;</font>&nbsp;            }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;109&nbsp;</font>&nbsp;            <font color='#ffff66'><b>try</b></font> { Thread.sleep(<font color='cyan'>1000L</font>); } <font color='#ffff66'><b>catch</b></font> (InterruptedException ie) { ie.printStackTrace(); }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;110&nbsp;</font>&nbsp;          }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;111&nbsp;</font>&nbsp;        }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;112&nbsp;</font>&nbsp;      }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;113&nbsp;</font>&nbsp;      piController.shutdown();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;114&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Done."</i></font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;115&nbsp;</font>&nbsp;      System.exit(<font color='cyan'>0</font>);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;116&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;117&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font> (Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;118&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;119&nbsp;</font>&nbsp;      ex.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;120&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;121&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;122&nbsp;</font>&nbsp;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;123&nbsp;</font>&nbsp;  public <font color='#ffff66'><b>void</b></font> manageEvent(GpioPinDigitalStateChangeEvent event)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;124&nbsp;</font>&nbsp;  {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;125&nbsp;</font>&nbsp;    <font color='#ffff66'><b>if</b></font> (sender == null)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;126&nbsp;</font>&nbsp;      sender = <font color='#ffff66'><b>new</b></font> EmailSender(providerSend);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;127&nbsp;</font>&nbsp;    <font color='#ffff66'><b>try</b></font>
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;128&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;129&nbsp;</font>&nbsp;      <font color='cyan'><b><i>String</i></b></font> mess = <font color='orange'><i>"{ pin: '"</i></font> + event.getPin() + <font color='orange'><i>"', state:'"</i></font> + event.getState() + <font color='orange'><i>"' }"</i></font>;
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;130&nbsp;</font>&nbsp;      System.out.println(<font color='orange'><i>"Sending:"</i></font> + mess);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;131&nbsp;</font>&nbsp;      sender.send(sender.getEmailDest().split(<font color='orange'><i>","</i></font>), 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;132&nbsp;</font>&nbsp;                  sender.getEventSubject(), 
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;133&nbsp;</font>&nbsp;                  mess);
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;134&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;135&nbsp;</font>&nbsp;    <font color='#ffff66'><b>catch</b></font> (Exception ex)
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;136&nbsp;</font>&nbsp;    {
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;137&nbsp;</font>&nbsp;      ex.printStackTrace();
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;138&nbsp;</font>&nbsp;    }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;139&nbsp;</font>&nbsp;  }
+&nbsp;<font color='gray' style='text-align:right; background-color:lightgray;'>&nbsp;&nbsp;140&nbsp;</font>&nbsp;}
+      <!-- End of generated code -->
+      </pre>
+    </div>    
+    <table style="width:100%;"><tr><td><h2><a name="05">Wiring</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>    
+    This diagram shows the name of the pins you want to use on the GPIO Connector of the Raspberry PI.
+    <p style="text-align:center;">
+      <a href="p1header.png" target="P1"><img src="p1header.png" alt="Raspberry PI P1 Connector map" width="250" height="313" title="Click to enlarge"></a>
+    </p>
+    As we said before, we need to use the GPIO pins 1, 4, and 2.
+    <br>
+    <i>Attention!</i>:
+    <br>
+    GPIO pin 1 is the pin #12
+    <br>
+    GPIO pin 4 is the pin #16
+    <br>
+    GPIO pin 2 is the pin #13
+    <br>
+    The two leds need a 220 Ohms resistor inline between their anode (+) and the GPIO pin they're connected on.
+    <br>
+    Their cathode (-) is connected on the Ground (pin #6)
+    <p style="text-align:center;">
+      <a href="wiring.png" target="P1"><img src="wiring.png" alt="Wiring" width="456" height="400" title="Click to enlarge"></a>
+    </p>    
+    <table style="width:100%;"><tr><td><h2><a name="06">Demonstration</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>    
+    The Raspberry PI is connected to the home wireless network with the small wireless dongle you can see on the pictures below.
+    <br>
+    An ethernet cable would have done the same job.
+    <br>
+    Also notice that there is no keyboard, mouse, nor screen connected to the device.
+    <br>
+    We used <code>ssh</code> to connect to a Linux session, from which we started the Java program, in background.
+    <p style="text-align:center;">
+      <a href="img/IMAG0453.jpg" target="img"><img src="img/IMAG0453.jpg" alt="Click to enlarge" title="Click to enlarge" height="230" width="408"></a>
+      <br>
+      The Raspberry PI, connected to a breadboard.
+    </p>
+    At this point, the Raspberry PI is up and running, the java program has been started:
+    <pre>
+    
+ Prompt&gt; <b>sudo</b> ./run -send:google -receive:google [&] 
+    </pre>
+    <i>Hint</i>: there is an <code>help</code> option.
+    <pre>
+
+ Prompt&gt; ./run -help
+ Usage:
+   java pi4j.email.PIControllerMain -verbose -send:google -receive:yahoo -help
+ Prompt&gt; 
+    </pre>
+    The <code>run</code> script looks like this:
+    <pre style="font-family:'Source Code Pro', 'Courier New'; font-size:11px; color:white; background-color:#1e1e1e;">
+
+ #!/bin/bash
+ CP=./classes
+ CP=$CP:/home/pi/pi4j/pi4j-distribution/target/distro-contents/lib/pi4j-core.jar
+ CP=$CP:./lib/javax.mail_1.1.0.0_1-4-4.jar
+ CP=$CP:./lib/json.jar
+ #
+ java -classpath $CP pi4j.email.LedControllerMain $*
+    </pre>
+    Notice the different components on the breadboard:
+    <ul>
+      <li style="list-style-type: disc;">A green led</li>
+      <li style="list-style-type: disc;">A yellow led</li>
+      <li style="list-style-type: disc;">A push button</li>
+    </ul>
+    <p style="text-align:center;">
+      <a href="img/IMAG0454.jpg" target="img"><img src="img/IMAG0454.jpg" alt="Click to enlarge" title="Click to enlarge" height="230" width="408"></a>
+      <br>
+      Event on the Raspberry PI side. Button pushed.
+    </p>
+    Some event happens on the Raspberry PI's side. Someone pushed pushed - and the released - the button.
+    <br>
+    Two emails have been sent:
+    <pre>
+    
+ from   : olivier.lediouris@gmail.com
+ subject: PI Event
+ content: { pin: '"GPIO 2" &lt;GPIO 2>', state:'HIGH' }
+    </pre>
+    <pre>
+    
+ from   : olivier.lediouris@gmail.com
+ subject: PI Event
+ content: { pin: '"GPIO 2" &lt;GPIO 2>', state:'LOW' }
+    </pre>
+    Now, you send the following email (in plain text), from your laptop, desktop, smart phone, tablet, what not:
+    <pre>
+
+ to     : olivier.lediouris@gmail.com
+ subject: PI Request
+ content: { operation: "turn-green-on" }
+    </pre>
+    <p style="text-align:center;">
+      <a href="img/IMAG0455.jpg" target="img"><img src="img/IMAG0455.jpg" alt="Click to enlarge" title="Click to enlarge" height="230" width="408"></a>
+      <br>
+      Green led is on.
+    </p>
+    The email is received by the Raspberry PI, the green led is turned on.
+    <br>
+    And you receive an acknowledgement, by email:
+    <pre>
+
+ from   : olivier.lediouris@gmail.com
+ subject: PI Robot Ack
+ content: Your request [{operation:"turn-green-on"}] is being taken care of.
+    </pre>
+    <br>
+    Now you send the following email:
+    <pre>
+
+ to     : olivier.lediouris@gmail.com
+ subject: PI Request
+ content: { operation: "turn-yellow-on" }
+    </pre>
+    <p style="text-align:center;">
+      <a href="img/IMAG0456.jpg" target="img"><img src="img/IMAG0456.jpg" alt="Click to enlarge" title="Click to enlarge" height="230" width="408"></a>
+      <br>
+      Yellow led is on.
+    </p>
+    The email is received by the Raspberry PI, the yellow led is turned on.
+    <br>
+    And you receive an acknowledgement, by email:
+    <pre>
+
+ from   : olivier.lediouris@gmail.com
+ subject: PI Robot Ack
+ content: Your request [{operation:"turn-yellow-on"}] is being taken care of.
+    </pre>
+    <br>
+    Now you send the following emails:
+    <pre>
+
+ to     : olivier.lediouris@gmail.com
+ subject: PI Request
+ content: { operation: "turn-yellow-off" }
+    </pre>
+    <pre>
+
+ to     : olivier.lediouris@gmail.com
+ subject: PI Request
+ content: { operation: "turn-green-off" }
+    </pre>
+    <pre>
+
+ to     : olivier.lediouris@gmail.com
+ subject: PI Request
+ content: { operation: "exit" }
+    </pre>
+    <p style="text-align:center;">
+      <a href="img/IMAG0457.jpg" target="img"><img src="img/IMAG0457.jpg" alt="Click to enlarge" title="Click to enlarge" height="230" width="408"></a>
+      <br>      
+      Everything off, program terminated.
+    </p>
+    You receive all the acknowledgements, as usual.
+    <br>
+    All leds are turned off, and the program exits.
+    <br>
+    Done! Back to base.
+    <table style="width:100%;"><tr><td><h2><a name="07">Resources</a></h2></td><td style="vertical-align:middle; text-align:right"><small><a href="#">Top</a></small></td></tr></table>
+    <ul>
+      <li><a href="http://www.raspberrypi.org/">Raspberry PI</a>
+      <li><a href="http://www.pi4j.com">PI4J</a>
+      <li><a href="src.zip">The sources of this project</a></li>
+    </ul>
+    <hr>
+    <address>Oliv did it</address>
+  </body>
+</html>

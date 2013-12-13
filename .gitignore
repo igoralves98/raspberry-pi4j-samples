@@ -1,0 +1,10 @@
+*.jpr
+*.class
+*.dex
+*.ap_
+*.cdi_javac
+.data/
+*.url
+classes/
+/classes/*.properties
+classes/*
