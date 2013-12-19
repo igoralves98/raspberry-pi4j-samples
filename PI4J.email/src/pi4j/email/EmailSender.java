@@ -6,14 +6,22 @@ import java.io.FileInputStream;
 
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class EmailSender
 {
@@ -127,6 +135,15 @@ public class EmailSender
   public void send(String[] dest, 
                    String subject, 
                    String content)
+  throws MessagingException, AddressException
+  {
+    send(dest, subject, content, null);
+  }
+  
+  public void send(String[] dest, 
+                   String subject, 
+                   String content,
+                   String attachment)
     throws MessagingException, AddressException
   {
     Properties props = setProps();
@@ -153,11 +170,31 @@ public class EmailSender
     for (int i=1; i<dest.length; i++)
       msg.addRecipient(javax.mail.Message.RecipientType.CC, new InternetAddress(dest[i]));
     msg.setSubject(subject);
-    msg.setText(content != null ? content : "");
-    msg.setContent(content, "text/plain");
+
+    if (attachment != null)
+    {
+      BodyPart messageBodyPart = new MimeBodyPart();
+      messageBodyPart.setText(content);
+      Multipart multipart = new MimeMultipart();
+      // Set text message part
+      multipart.addBodyPart(messageBodyPart);
+      // Part two is attachment
+      messageBodyPart = new MimeBodyPart();
+      String filename = attachment;
+      DataSource source = new FileDataSource(filename);
+      messageBodyPart.setDataHandler(new DataHandler(source));
+      messageBodyPart.setFileName(filename);
+      multipart.addBodyPart(messageBodyPart);
+      // Send the complete message parts
+      msg.setContent(multipart);
+    }
+    else
+    {
+      msg.setText(content != null ? content : "");
+      msg.setContent(content, "text/plain");
+    } 
     msg.saveChanges();
     if (verbose) System.out.println("sending:[" + content + "], " + Integer.toString(content.length()) + " characters");
-
     Transport.send(msg);
   }
 

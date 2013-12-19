@@ -1,12 +1,9 @@
 package pi4j.email;
 
-import java.io.StringReader;
-
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 import org.json.JSONObject;
 
@@ -29,10 +26,10 @@ public class SampleMain
   public static void main(String[] args)  
   {
 //  String provider = "yahoo";
-    String providerSend = "google";
+    String providerSend = "oracle";
 //  String provider = "oracle";
 //  provider = "yahoo";
-    String providerReceive = "google";
+    String providerReceive = "oracle";
 //  provider = "oracle";
 
     for (int i=0; i<args.length; i++)
@@ -70,7 +67,8 @@ public class SampleMain
                                          "olivier_le_diouris@yahoo.com",
                                          "olivier.lediouris@oracle.com" }, 
                           "PI Request", 
-                          "{ operation: 'whatever-" + Integer.toString(i + 1) + "' }");
+                          "{ operation: 'see-attached-" + Integer.toString(i + 1) + "' }",
+                          "P8150115.JPG");
               System.out.println("Sent.");
               Thread.sleep(60000L); // 1 minute
             }
