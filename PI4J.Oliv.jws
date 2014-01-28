@@ -22,6 +22,7 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/ResourceBundlesContentSet"/>
    </list>
    <list n="listOfChildren">
+      <hash><url n="URL" path="ADC/ADC.jpr"/></hash>
       <hash><url n="URL" path="GPIO.01/GPIO.01.jpr"/></hash>
       <hash><url n="URL" path="PI4J.email/PI4J.email.jpr"/></hash>
       <hash><url n="URL" path="ReadSerialPort/ReadSerialPort.jpr"/></hash>

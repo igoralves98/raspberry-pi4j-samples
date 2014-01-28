@@ -12,9 +12,9 @@ import java.util.Date;
 public class NMEAReader
 {
   public static void main(String args[])
-    throws InterruptedException
+    throws InterruptedException, NumberFormatException
   {
-    int br = 4800;
+    int br = Integer.parseInt(System.getProperty("baud.rate", "4800"));
     if (args.length > 0)
     {
       try
@@ -41,7 +41,7 @@ public class NMEAReader
       public void dataReceived(SerialDataEvent event)
       {
         // print out the data received to the console
-        System.out.print("Read:" + event.getData());
+        System.out.print(/*"Read:\n" + */ event.getData());
       }
     });
 

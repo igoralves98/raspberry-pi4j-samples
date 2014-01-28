@@ -31,7 +31,5 @@ public class MainController
       try { Thread.sleep(step); } catch (InterruptedException ie) {}
     }
     gpio.shutdown();
-  } 
-  
-  
+  }   
 }
