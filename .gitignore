@@ -8,3 +8,5 @@
 classes/
 /classes/*.properties
 classes/*
+doc/
+PI4J.email/email.properties
