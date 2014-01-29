@@ -1,4 +1,4 @@
-package analogdigitalconverter;
+package adc;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -11,10 +11,9 @@ import com.pi4j.io.gpio.RaspiPin;
 /**
  * Read an Analog to Digital Converter
  */
-public class ADCReader
+public class ADCObserver
 {
   private final static boolean DISPLAY_DIGIT = false;
-  private final static boolean DEBUG         = false;
   // Note: "Mismatch" 23-24. The wiring says DOUT->#23, DIN->#24
   // 23: DOUT on the ADC is IN on the GPIO. ADC:Slave, GPIO:Master
   // 24: DIN on the ADC, OUT on the GPIO. Same reason as above.
@@ -24,7 +23,7 @@ public class ADCReader
   private static Pin spiMosi = RaspiPin.GPIO_05; // Pin #24, data out. MOSI: Master Out Slave In
   private static Pin spiCs   = RaspiPin.GPIO_06; // Pin #25, Chip Select
  
-  private enum MCP3008_input_channels
+  public static enum MCP3008_input_channels
   {
     CH0(0),
     CH1(1),
@@ -45,16 +44,21 @@ public class ADCReader
     public int ch() { return this.ch; }
   }
   
-  private static int ADC_CHANNEL = MCP3008_input_channels.CH0.ch(); // Between 0 and 7, 8 channels on the MCP3008
+  private MCP3008_input_channels adcChannel; // Between 0 and 7, 8 channels on the MCP3008
   
   private static GpioPinDigitalInput  misoInput        = null;
   private static GpioPinDigitalOutput mosiOutput       = null;
   private static GpioPinDigitalOutput clockOutput      = null;
   private static GpioPinDigitalOutput chipSelectOutput = null;
   
-  private static boolean go = true;
+  private boolean go = true;
   
-  public static void main(String[] args)
+  public ADCObserver(MCP3008_input_channels channel)
+  {
+    adcChannel = channel;
+  }
+  
+  public void start()
   {
     GpioController gpio = GpioFactory.getInstance();
     mosiOutput       = gpio.provisionDigitalOutputPin(spiMosi, "MOSI", PinState.LOW);
@@ -63,46 +67,36 @@ public class ADCReader
     
     misoInput        = gpio.provisionDigitalInputPin(spiMiso, "MISO");
     
-    Runtime.getRuntime().addShutdownHook(new Thread()
-                                         {
-                                           public void run()
-                                           {
-                                             System.out.println("Shutting down.");
-                                             go = false;
-                                           }
-                                         });
     int lastRead  = 0;
     int tolerance = 5;
     while (go)
     {
-      boolean trimPotChanged = false;
       int adc = readAdc();
       int postAdjust = Math.abs(adc - lastRead);
       if (postAdjust > tolerance)
       {
-        trimPotChanged = true;
-        int volume = (int)(adc / 10.23); // [0, 1023] ~ [0x0000, 0x03FF] ~ [0&0, 0&1111111111]
-        if (DEBUG)
-          System.out.println("readAdc:" + Integer.toString(adc) + 
-                                          " (0x" + lpad(Integer.toString(adc, 16).toUpperCase(), "0", 2) + 
-                                          ", 0&" + lpad(Integer.toString(adc, 2), "0", 8) + ")");        
-        System.out.println("Volume:" + volume + "% (" + adc + ")");
+        ADCContext.getInstance().fireValueChanged(adcChannel, adc);
         lastRead = adc;
       }
       try { Thread.sleep(100L); } catch (InterruptedException ie) { ie.printStackTrace(); }
     }
-    System.out.println("Bye...");
+    System.out.println("Shutting down...");
     gpio.shutdown();
   }   
   
-  private static int readAdc()
+  public void stop()
+  {
+    go = false;  
+  }
+  
+  private int readAdc()
   {
     chipSelectOutput.high();
     
     clockOutput.low();
     chipSelectOutput.low();
   
-    int adccommand = ADC_CHANNEL;
+    int adccommand = adcChannel.ch();
     adccommand |= 0x18; // 0x18: 00011000
     adccommand <<= 3;
     // Send 5 bits: 8 - 3. 8 input channels on the MCP3008.
@@ -138,13 +132,5 @@ public class ADCReader
 
     adcOut >>= 1; // Drop first bit
     return adcOut;
-  }
-  
-  private static String lpad(String str, String with, int len)
-  {
-    String s = str;
-    while (s.length() < len)
-      s = with + s;
-    return s;
   }
 }
