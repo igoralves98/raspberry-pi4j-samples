@@ -46,7 +46,7 @@ public class AnalogDisplayApp
 
     frame.setVisible(true);
 
-    if (false) // For Dev...
+    if (true) // For Dev...
     {
       try { obs.start(); }
       catch (Exception ioe)

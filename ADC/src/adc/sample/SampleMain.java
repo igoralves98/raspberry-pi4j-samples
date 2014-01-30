@@ -7,6 +7,12 @@ import adc.ADCObserver;
 public class SampleMain
 {
   private final static boolean DEBUG = false;
+  
+  private final static int DIGITAL_OPTION = 0;
+  private final static int ANALOG_OPTION  = 1;
+  
+  private static int displayOption = ANALOG_OPTION;
+  
   private ADCObserver.MCP3008_input_channels channel = null;
   
   public SampleMain(int ch) throws Exception
@@ -24,8 +30,16 @@ public class SampleMain
              if (DEBUG)
                System.out.println("readAdc:" + Integer.toString(newValue) + 
                                                " (0x" + lpad(Integer.toString(newValue, 16).toUpperCase(), "0", 2) + 
-                                               ", 0&" + lpad(Integer.toString(newValue, 2), "0", 8) + ")");        
-             System.out.println("Volume:" + volume + "% (" + newValue + ")");
+                                               ", 0&" + lpad(Integer.toString(newValue, 2), "0", 8) + ")"); 
+             if (displayOption == DIGITAL_OPTION)
+               System.out.println("Volume:" + volume + "% (" + newValue + ")");
+             else if (displayOption == ANALOG_OPTION)
+             {
+               String str = "";
+               for (int i=0; i<volume; i++)
+                 str += ".";
+               System.out.println(str);
+             }
            }
          }
        });

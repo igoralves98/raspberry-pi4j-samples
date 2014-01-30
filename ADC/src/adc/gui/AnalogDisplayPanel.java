@@ -181,6 +181,7 @@ public class AnalogDisplayPanel
   
   public void setValue(final double d)
   {
+    System.out.println("Setting value to " + d);
     this.value = d;
     double from = prevValue; 
     double to = d;

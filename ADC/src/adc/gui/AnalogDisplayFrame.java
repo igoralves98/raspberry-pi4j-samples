@@ -20,7 +20,7 @@ public class AnalogDisplayFrame
   private JMenuItem menuFileExit = new JMenuItem();
   
   private AnalogDisplayPanel displayPanel = null;
-  private AnalogDisplayApp caller;
+  private transient AnalogDisplayApp caller;
   
   public AnalogDisplayFrame(ADCObserver.MCP3008_input_channels channel, AnalogDisplayApp parent)
   {
@@ -54,6 +54,7 @@ public class AnalogDisplayFrame
   
   void fileExit_ActionPerformed(ActionEvent e)
   {
+    System.out.println(e.getActionCommand());
     this.caller.close();
     System.exit(0);
   }
