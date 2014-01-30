@@ -44,7 +44,7 @@ public class ADCObserver
     public int ch() { return this.ch; }
   }
   
-  private MCP3008_input_channels adcChannel; // Between 0 and 7, 8 channels on the MCP3008
+  private MCP3008_input_channels[] adcChannel; // Between 0 and 7, 8 channels on the MCP3008
   
   private static GpioPinDigitalInput  misoInput        = null;
   private static GpioPinDigitalOutput mosiOutput       = null;
@@ -54,6 +54,11 @@ public class ADCObserver
   private boolean go = true;
   
   public ADCObserver(MCP3008_input_channels channel)
+  {
+    this(new MCP3008_input_channels[] { channel })  ;
+  }
+  
+  public ADCObserver(MCP3008_input_channels[] channel)
   {
     adcChannel = channel;
   }
@@ -67,16 +72,21 @@ public class ADCObserver
     
     misoInput        = gpio.provisionDigitalInputPin(spiMiso, "MISO");
     
-    int lastRead  = 0;
+    int lastRead[] = new int[adcChannel.length];
+    for (int i=0; i<lastRead.length; i++)
+      lastRead[i] = 0;
     int tolerance = 5;
     while (go)
     {
-      int adc = readAdc();
-      int postAdjust = Math.abs(adc - lastRead);
-      if (postAdjust > tolerance)
+      for (int i=0; i<adcChannel.length; i++)
       {
-        ADCContext.getInstance().fireValueChanged(adcChannel, adc);
-        lastRead = adc;
+        int adc = readAdc(adcChannel[i]);
+        int postAdjust = Math.abs(adc - lastRead[i]);
+        if (postAdjust > tolerance)
+        {
+          ADCContext.getInstance().fireValueChanged(adcChannel[i], adc);
+          lastRead[i] = adc;
+        }
       }
       try { Thread.sleep(100L); } catch (InterruptedException ie) { ie.printStackTrace(); }
     }
@@ -89,14 +99,14 @@ public class ADCObserver
     go = false;  
   }
   
-  private int readAdc()
+  private int readAdc(MCP3008_input_channels channel)
   {
     chipSelectOutput.high();
     
     clockOutput.low();
     chipSelectOutput.low();
   
-    int adccommand = adcChannel.ch();
+    int adccommand = channel.ch();
     adccommand |= 0x18; // 0x18: 00011000
     adccommand <<= 3;
     // Send 5 bits: 8 - 3. 8 input channels on the MCP3008.
