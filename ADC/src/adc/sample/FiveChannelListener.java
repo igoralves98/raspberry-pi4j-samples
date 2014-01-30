@@ -85,41 +85,6 @@ public class FiveChannelListener
     new FiveChannelListener();
   }
 
-  private static ADCObserver.MCP3008_input_channels findChannel(int ch) throws IllegalArgumentException
-  {
-    ADCObserver.MCP3008_input_channels channel = null;
-    switch (ch)
-    {
-      case 0:
-        channel = ADCObserver.MCP3008_input_channels.CH0;
-        break;
-      case 1:
-        channel = ADCObserver.MCP3008_input_channels.CH1;
-        break;
-      case 2:
-        channel = ADCObserver.MCP3008_input_channels.CH2;
-        break;
-      case 3:
-        channel = ADCObserver.MCP3008_input_channels.CH3;
-        break;
-      case 4:
-        channel = ADCObserver.MCP3008_input_channels.CH4;
-        break;
-      case 5:
-        channel = ADCObserver.MCP3008_input_channels.CH5;
-        break;
-      case 6:
-        channel = ADCObserver.MCP3008_input_channels.CH6;
-        break;
-      case 7:
-        channel = ADCObserver.MCP3008_input_channels.CH7;
-        break;
-      default:
-        throw new IllegalArgumentException("No channel " + Integer.toString(ch));
-    }
-    return channel;
-  }
-  
   private static String lpad(String str, String with, int len)
   {
     String s = str;
