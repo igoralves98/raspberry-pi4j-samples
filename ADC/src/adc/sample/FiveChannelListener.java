@@ -18,7 +18,8 @@ public class FiveChannelListener
   
   private static int displayOption = ANALOG_OPTION;
   
-  private ADCObserver.MCP3008_input_channels channel[] = null;
+  private static ADCObserver.MCP3008_input_channels channel[] = null;
+  private final int[] channelValues = new int[] { 0, 0, 0, 0, 0 };
   
   public FiveChannelListener() throws Exception
   {
@@ -28,7 +29,7 @@ public class FiveChannelListener
       ADCObserver.MCP3008_input_channels.CH1,
       ADCObserver.MCP3008_input_channels.CH2,  
       ADCObserver.MCP3008_input_channels.CH3,  
-      ADCObserver.MCP3008_input_channels.CH4  
+      ADCObserver.MCP3008_input_channels.CH4 
     };
     final ADCObserver obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).
     
@@ -41,23 +42,38 @@ public class FiveChannelListener
          {
 //         if (inputChannel.equals(channel))
            {
+             int ch = inputChannel.ch();
              int volume = (int)(newValue / 10.23); // [0, 1023] ~ [0x0000, 0x03FF] ~ [0&0, 0&1111111111]
+             channelValues[ch] = volume;
              if (DEBUG)
                System.out.println("readAdc:" + Integer.toString(newValue) + 
                                                " (0x" + lpad(Integer.toString(newValue, 16).toUpperCase(), "0", 2) + 
                                                ", 0&" + lpad(Integer.toString(newValue, 2), "0", 8) + ")"); 
              if (displayOption == DIGITAL_OPTION)
-               System.out.println("Ch " + Integer.toString(inputChannel.ch()) + "Volume:" + volume + "% (" + newValue + ")");
+             {
+               String output = "";
+               for (int chan=0; chan<channel.length; chan++)
+                 output += "Ch " + Integer.toString(chan) + ", Volume:" + channelValues[chan] + "%    ";
+               System.out.println(output.trim());
+             }
              else if (displayOption == ANALOG_OPTION)
              {
-               String str = "";
-               for (int i=0; i<volume; i++)
-                 str += ".";
-               int ch = inputChannel.ch();
-               str = EscapeSeq.superpose(str, "Ch " + Integer.toString(ch) + ": " + Integer.toString(volume) + "%");
-               AnsiConsole.out.println(EscapeSeq.ansiLocate(0, ch) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
-               AnsiConsole.out.println(EscapeSeq.ansiLocate(0, ch) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, channelColors[ch]) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT);               
-//             System.out.println(str);
+               for (int chan=0; chan<channel.length; chan++)
+               {
+                 String str = "";
+                 for (int i=0; i<channelValues[chan]; i++)
+                   str += ".";
+                 try
+                 {
+                   str = EscapeSeq.superpose(str, "Ch " + Integer.toString(chan) + ": " + Integer.toString(channelValues[chan]) + "%");
+                   AnsiConsole.out.println(EscapeSeq.ansiLocate(2, 2 + chan + 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                   AnsiConsole.out.println(EscapeSeq.ansiLocate(2, 2 + chan + 1) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, channelColors[chan]) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT);               
+                 }
+                 catch (Exception ex)
+                 {
+                   System.out.println(str);
+                 }
+               }
              }
            }
          }
@@ -80,6 +96,7 @@ public class FiveChannelListener
     {
       AnsiConsole.systemInstall();
       AnsiConsole.out.println(EscapeSeq.ANSI_CLS);
+      AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + EscapeSeq.ANSI_BOLD + "Displaying channels' volume");
     }
     // Channels are hard-coded
     new FiveChannelListener();

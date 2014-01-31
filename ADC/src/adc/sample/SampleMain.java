@@ -4,15 +4,21 @@ import adc.ADCContext;
 import adc.ADCListener;
 import adc.ADCObserver;
 
+import adc.utils.EscapeSeq;
+
+import org.fusesource.jansi.AnsiConsole;
+
 public class SampleMain
 {
   private final static boolean DEBUG = false;
+  private final static String STR100 = "                                                                                                    ";
   
   private final static int DIGITAL_OPTION = 0;
   private final static int ANALOG_OPTION  = 1;
   
   private static int displayOption = ANALOG_OPTION;
-  
+
+  final String[] channelColors = new String[] { EscapeSeq.ANSI_RED, EscapeSeq.ANSI_BLUE, EscapeSeq.ANSI_YELLOW, EscapeSeq.ANSI_GREEN, EscapeSeq.ANSI_WHITE };  
   private ADCObserver.MCP3008_input_channels channel = null;
   
   public SampleMain(int ch) throws Exception
@@ -38,7 +44,16 @@ public class SampleMain
                String str = "";
                for (int i=0; i<volume; i++)
                  str += ".";
-               System.out.println(str);
+               try
+               {
+                 str = EscapeSeq.superpose(str, "Ch " + Integer.toString(inputChannel.ch()) + ": " + Integer.toString(volume) + "%");
+                 AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                 AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, channelColors[inputChannel.ch()]) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT);               
+               }
+               catch (Exception ex)
+               {
+                 System.out.println(str);
+               }
              }
            }
          }
@@ -57,6 +72,12 @@ public class SampleMain
   
   public static void main(String[] args) throws Exception
   {
+    if (displayOption == ANALOG_OPTION)
+    {
+      AnsiConsole.systemInstall();
+      AnsiConsole.out.println(EscapeSeq.ANSI_CLS);
+    }
+
     int channel = 0;
     if (args.length > 0)
       channel = Integer.parseInt(args[0]);
