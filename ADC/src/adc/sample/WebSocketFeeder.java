@@ -20,7 +20,7 @@ public class WebSocketFeeder
   public WebSocketFeeder(int ch) throws Exception
   {
     channel = findChannel(ch);
-    String wsUri = "ws://localhost:9876/"; // TODO From a system variable
+    String wsUri = System.getProperty("ws.uri", "ws://localhost:9876/"); 
     
     initWebSocketConnection(wsUri);
     final ADCObserver obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).

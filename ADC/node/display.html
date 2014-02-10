@@ -7,13 +7,7 @@
         <style>
         * { font-family:tahoma; font-size:12px; padding:0px; margin:0px; }
         p { line-height:18px; }
-//      div { width:500px; margin-left:auto; margin-right:auto;}
-/*        #content { padding:5px; background:#ddd; border-radius:5px; overflow-y: scroll;
-                   border:1px solid #CCC; margin-top:10px; height: 160px; }
-        #input { border-radius:2px; border:1px solid #ccc;
-                 margin-top:10px; padding:5px; width:400px;  }
-        #status { width:88px; display:block; float:left; margin-top:15px; }
-*/        </style>
+        </style>
 
         <script type="text/javascript">
         /**
@@ -29,11 +23,13 @@
          */
         var response = {};
         var displayValue;
+        var statusFld;
         
         window.onload = function()
         {
           displayValue = new AnalogDisplay('valueCanvas', 100, 100,  10,  1, true, 40);
-
+          statusFld = document.getElementById("status");
+          
           console.log("Sending first (POST) request...");
           var xhr = new XMLHttpRequest();
           xhr.onreadystatechange = function() 
@@ -85,7 +81,7 @@
         <tr>
           <td align="left">
             <div id="status" style="padding:5px; background:#ddd; border-radius:5px; overflow-y: scroll; border:1px solid #CCC; margin-top:10px; height: 80px;">
-                <i>Status will go here when needed...</i>
+              <!--i>Status will go here when needed...</i-->
             </div>
           </td>
         </tr>

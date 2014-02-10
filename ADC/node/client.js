@@ -1,6 +1,6 @@
 "use strict";
 
-var content, input, prompt, send, connection, myName;
+var connection;
 
 (function () 
 {
@@ -13,7 +13,7 @@ var content, input, prompt, send, connection, myName;
 
   if (!ws) 
   {
-    console.log('Sorry, but your browser does not support WebSockets.'); // TODO Fallback
+    displayMessage('Sorry, but your browser does not support WebSockets.'); // TODO Fallback
     return;
   }
 
@@ -25,19 +25,19 @@ var content, input, prompt, send, connection, myName;
 
   connection.onopen = function () 
   {
-    console.log('Logged.')
+    displayMessage('Connected.')
   };
 
   connection.onerror = function (error) 
   {
     // just in there were some problems with connection...
-    console.log('Sorry, but there is some problem with your connection or the server is down.');
+    displayMessage('Sorry, but there is some problem with your connection or the server is down.');
   };
 
   // most important part - incoming messages
   connection.onmessage = function (message) 
   {
-    console.log('onmessage:' + message);
+ // console.log('onmessage:' + message);
     // try to parse JSON message. 
     try 
     {
@@ -45,7 +45,7 @@ var content, input, prompt, send, connection, myName;
     } 
     catch (e) 
     {
-      console.log('This doesn\'t look like a valid JSON: ', message.data);
+      displayMessage('This doesn\'t look like a valid JSON: ' + message.data);
       return;
     }
 
@@ -55,12 +55,12 @@ var content, input, prompt, send, connection, myName;
     { 
       // it's a single message
       var value = parseInt(json.data.text);
-      console.log('Setting value to ' + value);
+   // console.log('Setting value to ' + value);
       displayValue.setValue(value);
     } 
     else 
     {
-      console.log('Hmm..., I\'ve never seen JSON like this: ', json);
+      displayMessage('Hmm..., I\'ve never seen JSON like this: ' + json);
     }
   };
 
@@ -73,15 +73,14 @@ var content, input, prompt, send, connection, myName;
   {
     if (connection.readyState !== 1) 
     {
-      console.log('Unable to comminucate with the WebSocket server. Try again.');
+      displayMessage('Unable to communicate with the WebSocket server. Try again.');
     }
   }, 3000); // Ping
 
 })();
 
-var sendMessage = function() 
+var sendMessage = function(msg) 
 {
-  var msg = input.value;
   if (!msg) 
   {
     return;
@@ -90,3 +89,14 @@ var sendMessage = function()
   connection.send(msg);
 };
  
+var displayMessage = function(mess)
+{
+  var messList = statusFld.innerHTML;
+  messList = (((messList !== undefined && messList.length) > 0 ? messList + '<br>' : '') + mess);
+  statusFld.innerHTML = messList;
+};
+
+var resetStatus = function()
+{
+  statusFld.innerHTML = "";
+};
