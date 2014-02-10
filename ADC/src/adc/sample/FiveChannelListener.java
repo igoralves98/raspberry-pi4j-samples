@@ -31,7 +31,7 @@ public class FiveChannelListener
       ADCObserver.MCP3008_input_channels.CH3,  
       ADCObserver.MCP3008_input_channels.CH4 
     };
-    final ADCObserver obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).
+    final ADCObserver obs = new ADCObserver(channel);
     
     final String[] channelColors = new String[] { EscapeSeq.ANSI_RED, EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_YELLOW, EscapeSeq.ANSI_GREEN, EscapeSeq.ANSI_BLUE };
     
