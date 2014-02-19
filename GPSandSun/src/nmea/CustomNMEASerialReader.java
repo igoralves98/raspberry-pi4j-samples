@@ -1,0 +1,58 @@
+package nmea;
+
+import com.pi4j.io.serial.Serial;
+import com.pi4j.io.serial.SerialDataEvent;
+import com.pi4j.io.serial.SerialDataListener;
+import com.pi4j.io.serial.SerialFactory;
+
+import java.util.List;
+
+import ocss.nmea.api.NMEAEvent;
+import ocss.nmea.api.NMEAListener;
+import ocss.nmea.api.NMEAReader;
+
+public class CustomNMEASerialReader 
+     extends NMEAReader 
+{
+  private int baudRate = 4800;
+  private CustomNMEASerialReader instance = this;
+  
+  public CustomNMEASerialReader(List<NMEAListener> al, int br)
+  {
+    super(al);
+    baudRate = br;
+  }
+
+  public void read()
+  {
+    if (System.getProperty("verbose", "false").equals("true")) 
+      System.out.println("From " + this.getClass().getName() + " Reading Serial Port.");
+    
+    super.enableReading();
+    
+    // Opening Serial port
+    try
+    {
+      final Serial serial = SerialFactory.createInstance();
+
+      // create and register the serial data listener
+      serial.addListener(new SerialDataListener()
+      {
+        @Override
+        public void dataReceived(SerialDataEvent event)
+        {
+      //  System.out.print(/*"Read:\n" + */ event.getData());
+          instance.fireDataRead(new NMEAEvent(this, event.getData()));
+        }
+      });
+      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + "]");
+      serial.open(Serial.DEFAULT_COM_PORT, baudRate);
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    // Reading on Serial Port
+    System.out.println("Port is open...");
+  }
+}

@@ -9,6 +9,6 @@ classes/
 /classes/*.properties
 classes/*
 doc/
-PI4J.email/email.properties
+/PI4J.email/email.properties
 node_modules/
 RaspberryPI.doc/
