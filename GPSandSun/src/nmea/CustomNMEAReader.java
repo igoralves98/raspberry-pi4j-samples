@@ -18,7 +18,7 @@ import ocss.nmea.parser.StringParsers;
 public class CustomNMEAReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
-  private final static DecimalFormat DFZ = new DecimalFormat("#0.00'\272'");
+  private final static DecimalFormat DFZ = new DecimalFormat("##0.00'\272'");
   
   private static GeoPos prevPosition = null;
   private static long   prevDateTime = -1L;
@@ -31,7 +31,7 @@ public class CustomNMEAReader extends NMEAClient
   public void dataDetectedEvent(NMEAEvent e)
   {
 //  System.out.println("Received:" + e.getContent());
-    manageData(e.getContent());
+    manageData(e.getContent().trim());
   }
 
   private static CustomNMEAReader customClient = null;  
@@ -47,7 +47,7 @@ public class CustomNMEAReader extends NMEAClient
      // System.out.println(line);
         RMC rmc = StringParsers.parseRMC(sentence);
      // System.out.println(rmc.toString());
-        if (rmc.getRmcDate() != null && rmc.getGp() != null)
+        if (rmc != null && rmc.getRmcDate() != null && rmc.getGp() != null)
         {
           if ((prevDateTime == -1L || prevPosition == null) ||
               (prevDateTime != (rmc.getRmcDate().getTime() / 1000) || !rmc.getGp().equals(prevPosition)))
@@ -75,10 +75,17 @@ public class CustomNMEAReader extends NMEAClient
         }
         else
         {
-          if (rmc.getRmcDate() == null)
-            System.out.println("... no Date in [" + sentence + "]");
-          if (rmc.getGp() == null)
-            System.out.println("... no Pos in [" + sentence + "]");
+          if (rmc == null)
+            System.out.println("... no RMC data in [" + sentence + "]");
+          else
+          {  
+            String errMess = "";
+            if (rmc.getRmcDate() == null)
+              errMess += ("no Date ");
+            if (rmc.getGp() == null)
+              errMess += ("no Pos ");
+            System.out.println(errMess + "in [" + sentence + "]");
+          }
         }
       }
     }    
@@ -88,7 +95,7 @@ public class CustomNMEAReader extends NMEAClient
 
   public static void main(String[] args)
   {
-    System.setProperty("deltaT", "67.2810"); // 2014-Jan-01
+    System.setProperty("deltaT", System.getProperty("deltaT", "67.2810")); // 2014-Jan-01
 
     int br = 4800;
     System.out.println("CustomNMEAReader invoked with " + args.length + " Parameter(s).");
@@ -109,9 +116,8 @@ public class CustomNMEAReader extends NMEAClient
         }
       });    
     customClient.initClient();
-//  customClient.setReader(new CustomReader(customClient.getListeners()));
     customClient.setReader(new CustomNMEASerialReader(customClient.getListeners(), br));
-    customClient.startWorking();
+    customClient.startWorking(); // Feignasse!
   }
 
   private void stopDataRead()
