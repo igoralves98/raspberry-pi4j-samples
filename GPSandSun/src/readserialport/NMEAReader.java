@@ -10,8 +10,6 @@ public class NMEAReader
   public static void main(String args[])
     throws InterruptedException, NumberFormatException
   {
-    System.setProperty("deltaT", "67.2810"); // 2014-Jan-01
-
     int br = Integer.parseInt(System.getProperty("baud.rate", "4800"));
     if (args.length > 0)
     {
@@ -39,7 +37,7 @@ public class NMEAReader
       public void dataReceived(SerialDataEvent event)
       {
         // print out the data received to the console
-        System.out.print("Read:\n" + event.getData()); // << and not println
+        System.out.println("[" + event.getData() + "]"); // << and not println
       }
     });
     

@@ -23,6 +23,7 @@ public class CustomNMEASerialReader
     baudRate = br;
   }
 
+  @Override
   public void read()
   {
     if (System.getProperty("verbose", "false").equals("true")) 
@@ -45,8 +46,9 @@ public class CustomNMEASerialReader
           instance.fireDataRead(new NMEAEvent(this, event.getData()));
         }
       });
-      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + "]");
-      serial.open(Serial.DEFAULT_COM_PORT, baudRate);
+      String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
+      System.out.println("Opening port [" + port + "]");
+      serial.open(port, baudRate);
     }
     catch (Exception ex)
     {

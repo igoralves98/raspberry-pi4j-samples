@@ -10,4 +10,3 @@ CP=$CP:./lib/nauticalalmanac.jar
 CP=$CP:./lib/nmeaparser.jar
 CP=$CP:./lib/coreutilities.jar
 sudo java -cp $CP nmea.CustomNMEAReader $*
-

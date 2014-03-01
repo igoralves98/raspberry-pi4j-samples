@@ -28,6 +28,7 @@ public class CustomNMEAReader extends NMEAClient
     super();
   }
   
+  @Override
   public void dataDetectedEvent(NMEAEvent e)
   {
 //  System.out.println("Received:" + e.getContent());
@@ -57,7 +58,7 @@ public class CustomNMEAReader extends NMEAClient
             AstroComputer.setDateTime(current.get(Calendar.YEAR), 
                                       current.get(Calendar.MONTH) + 1, 
                                       current.get(Calendar.DAY_OF_MONTH), 
-                                      current.get(Calendar.HOUR_OF_DAY), // 12 - (int)Math.round(AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(ts.getTimeZone()))), 
+                                      current.get(Calendar.HOUR_OF_DAY), 
                                       current.get(Calendar.MINUTE), 
                                       current.get(Calendar.SECOND));
             AstroComputer.calculate();
