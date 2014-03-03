@@ -12,6 +12,19 @@ import java.text.NumberFormat;
 public class AdafruitLSM303
 {
   // Minimal constants carried over from Arduino library
+  /*
+  Prompt> sudo i2cdetect -y 1
+       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+  00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+  10: -- -- -- -- -- -- -- -- -- 19 -- -- -- -- 1e --
+  20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  70: -- -- -- -- -- -- -- --
+   */
+  // Those 2 next addresses are returned by "sudo i2cdetect -y 1", see above.
   public final static int LSM303_ADDRESS_ACCEL = (0x32 >> 1); // 0011001x, 0x19
   public final static int LSM303_ADDRESS_MAG   = (0x3C >> 1); // 0011110x, 0x1E
                                                                     // Default    Type
@@ -36,37 +49,42 @@ public class AdafruitLSM303
   private byte[] accelData, magData;
   
   private final static NumberFormat Z_FMT = new DecimalFormat("000");
+  private static boolean verbose = false;
 
   public AdafruitLSM303()
   {
-    System.out.println("Starting sensors reading:");
-    // get I2C bus instance
+    if (verbose)
+      System.out.println("Starting sensors reading:");
     try
     {
       // Get i2c bus
       bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends onthe RasPI version
-      System.out.println("Connected to bus. OK.");
+      if (verbose)
+        System.out.println("Connected to bus. OK.");
 
       // Get device itself
       accelerometer = bus.getDevice(LSM303_ADDRESS_ACCEL);
       magnetometer  = bus.getDevice(LSM303_ADDRESS_MAG);
-      System.out.println("Connected to devices. OK.");
+      if (verbose)
+        System.out.println("Connected to devices. OK.");
 
-      // Start sensing
-      
+      /*
+       * Start sensing
+       */
       // Enable accelerometer
       accelerometer.write(LSM303_REGISTER_ACCEL_CTRL_REG1_A, (byte)0x27); // 00100111
       accelerometer.write(LSM303_REGISTER_ACCEL_CTRL_REG4_A, (byte)0x00);
-      System.out.println("Accelerometer OK.");
+      if (verbose)
+        System.out.println("Accelerometer OK.");
 
       // Enable magnetometer
       magnetometer.write(LSM303_REGISTER_MAG_MR_REG_M, (byte)0x00);
       int gain = LSM303_MAGGAIN_1_3;
       magnetometer.write(LSM303_REGISTER_MAG_CRB_REG_M, (byte)gain);
-      System.out.println("Magnetometer OK.");
+      if (verbose)
+        System.out.println("Magnetometer OK.");
 
       startReading();
-
     }
     catch (IOException e)
     {
@@ -74,8 +92,7 @@ public class AdafruitLSM303
     }
   }
 
-
-  // Create a separate thread for reading the sensors
+  // Create a separate thread to read the sensors
   public void startReading()
   {
     Runnable task = new Runnable()
