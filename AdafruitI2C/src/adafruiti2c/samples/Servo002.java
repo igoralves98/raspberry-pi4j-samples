@@ -5,6 +5,12 @@ import adafruiti2c.AdafruitPCA9685;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/*
+ * Standard servo
+ * TowerPro SG-5010
+ * 
+ * Enter the angle interactively, and see for yourself.
+ */
 public class Servo002
 {
   private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));

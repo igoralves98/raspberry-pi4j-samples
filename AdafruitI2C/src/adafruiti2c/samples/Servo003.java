@@ -5,6 +5,12 @@ import adafruiti2c.AdafruitPCA9685;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/*
+ * Continuous servo
+ * Parallax Futaba S148
+ * 
+ * Enter the speed interactively, and see for yourself.
+ */
 public class Servo003
 {
   private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));

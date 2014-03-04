@@ -5,6 +5,10 @@ import adafruiti2c.AdafruitPCA9685;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/*
+ * Two servos - one standard, one continous
+ * Enter all the values from the command line, and see for yourself.
+ */
 public class Servo001
 {
   private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
