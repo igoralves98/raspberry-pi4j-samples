@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+/*
+ * Altitude, Pressure, Temperature
+ */
 public class AdafruitBMP180
 {
   // Minimal constants carried over from Arduino library
@@ -70,6 +73,11 @@ public class AdafruitBMP180
   
   public AdafruitBMP180()
   {
+    this(BMP180_ADDRESS);
+  }
+  
+  public AdafruitBMP180(int address)
+  {
     try
     {
       // Get i2c bus
@@ -78,7 +86,7 @@ public class AdafruitBMP180
         System.out.println("Connected to bus. OK.");
 
       // Get device itself
-      bmp180 = bus.getDevice(BMP180_ADDRESS);
+      bmp180 = bus.getDevice(address);
       if (verbose)
         System.out.println("Connected to device. OK.");
       
@@ -106,6 +114,7 @@ public class AdafruitBMP180
     { ex.printStackTrace(); }
     return result;
   }
+  
   private int readS8(int reg) throws Exception
   {
     // "Reads a signed byte from the I2C device"

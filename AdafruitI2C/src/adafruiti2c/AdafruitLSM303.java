@@ -8,7 +8,9 @@ import java.io.IOException;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-
+/*
+ * Accelerometer + Magnetometer
+ */
 public class AdafruitLSM303
 {
   // Minimal constants carried over from Arduino library

@@ -5,7 +5,9 @@ import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
 import java.io.IOException;
-
+/*
+ * Servo Driver
+ */
 public class AdafruitPCA9685
 {
   public final static int SUBADR1       = 0x02;
