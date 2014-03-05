@@ -34,34 +34,13 @@ var connection;
     displayMessage('Sorry, but there is some problem with your connection or the server is down.');
   };
 
-  // most important part - incoming messages
   connection.onmessage = function (message) 
   {
- // console.log('onmessage:' + message);
-    // try to parse JSON message. 
-    try 
-    {
-      var json = JSON.parse(message.data);
-    } 
-    catch (e) 
-    {
-      displayMessage('This doesn\'t look like a valid JSON: ' + message.data);
-      return;
-    }
-
-    // NOTE: if you're not sure about the JSON structure
-    // check the server source code above
-    if (json.type === 'message') // TODO Get rid of the other types above
-    { 
-      // it's a single message
-      var value = parseInt(json.data.text);
-   // console.log('Setting value to ' + value);
-      displayValue.setValue(value);
-    } 
-    else 
-    {
-      displayMessage('Hmm..., I\'ve never seen JSON like this: ' + json);
-    }
+    console.log('onmessage:' + JSON.stringify(message.data));
+    var data = JSON.parse(message.data);
+    var value = data.data.text.replace(/&quot;/g, '"');
+    var val   = JSON.parse(value);
+    displayValue.setValue(val.value);
   };
 
   /**
