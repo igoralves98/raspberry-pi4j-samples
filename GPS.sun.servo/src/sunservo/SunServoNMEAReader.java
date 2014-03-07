@@ -34,8 +34,8 @@ public class SunServoNMEAReader extends NMEAClient
   
   private static boolean calibrated = false;
   private static AdafruitPCA9685 servoBoard = null;
-  private static int servoMin = 150;   // Min pulse length out of 4096
-  private static int servoMax = 600;   // Max pulse length out of 4096
+  private static int servoMin = 130;   // was 150. Min pulse length out of 4096
+  private static int servoMax = 615;   // was 600. Max pulse length out of 4096
   
   private final static int CONTINUOUS_SERVO_CHANNEL = 14;
   private final static int STANDARD_SERVO_CHANNEL   = 15;

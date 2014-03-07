@@ -46,8 +46,8 @@ public class Servo003
     servoBoard.setPWMFreq(freq); // Set frequency in Hz
     
     // For the Parallax Futaba S148
-    int servoMin = 150;   // Full Speed backward
-    int servoMax = 600;   // Full Speed forward
+    int servoMin = 130;   // Full speed backward
+    int servoMax = 615;   // Full speed forward
 
     final int CONTINUOUS_SERVO_CHANNEL   = 14;
     

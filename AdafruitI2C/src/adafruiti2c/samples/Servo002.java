@@ -46,14 +46,15 @@ public class Servo002
     servoBoard.setPWMFreq(freq); // Set frequency in Hz
     
     // For the TowerPro SG-5010
-    int servoMin = 150;   // -90 deg
-    int servoMax = 600;   // +90 deg
+    int servoMin = 130;   // -90 deg
+    int servoMax = 615;   // +90 deg
 
     final int STANDARD_SERVO_CHANNEL   = 15;
     
     int servo = STANDARD_SERVO_CHANNEL;
     
     boolean keepGoing = true;
+    System.out.println("[" + servoMin + ", " + servoMax + "]");
     System.out.println("Enter 'quit' to exit.");
     while (keepGoing)
     {

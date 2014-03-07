@@ -125,8 +125,8 @@ public class AdafruitPCA9685
   {
     AdafruitPCA9685 servoBoard = new AdafruitPCA9685();
     servoBoard.setPWMFreq(60); // Set frequency to 60 Hz
-    int servoMin = 150;   // Min pulse length out of 4096
-    int servoMax = 600;   // Max pulse length out of 4096
+    int servoMin = 130;   // was 150. Min pulse length out of 4096
+    int servoMax = 615;   // was 600. Max pulse length out of 4096
     
     final int CONTINUOUS_SERVO_CHANNEL = 14;
     final int STANDARD_SERVO_CHANNEL   = 15;
