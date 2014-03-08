@@ -16,6 +16,7 @@ set CP=%CP%;.\lib\almanactools.jar
 set CP=%CP%;.\lib\geomutil.jar
 set CP=%CP%;.\lib\nauticalalmanac.jar
 set CP=%CP%;.\lib\nmeaparser.jar
+set CP=%CP%;.\lib\jansi-1.9.jar
 set JAVAC_OPTIONS=%JAVAC_OPTIONS% -cp %CP%
 echo Compiling
 javac %JAVAC_OPTIONS% .\src\sunservo\*.java

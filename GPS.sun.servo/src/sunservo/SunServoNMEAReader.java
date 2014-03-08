@@ -10,7 +10,10 @@ import java.io.InputStreamReader;
 
 import java.text.DecimalFormat;
 
+import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import nmea.CustomNMEASerialReader;
@@ -22,10 +25,13 @@ import ocss.nmea.parser.GeoPos;
 import ocss.nmea.parser.RMC;
 import ocss.nmea.parser.StringParsers;
 
+import org.fusesource.jansi.AnsiConsole;
+
 public class SunServoNMEAReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
   private final static DecimalFormat DFZ = new DecimalFormat("##0.00'\272'");
+  private final static SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
   
   private static GeoPos prevPosition = null;
   private static long   prevDateTime = -1L;
@@ -39,6 +45,7 @@ public class SunServoNMEAReader extends NMEAClient
   
   private final static int CONTINUOUS_SERVO_CHANNEL = 14;
   private final static int STANDARD_SERVO_CHANNEL   = 15;
+  private final static String STR100 = "                                                                                                    ";
 
   private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
@@ -83,6 +90,7 @@ public class SunServoNMEAReader extends NMEAClient
   private static void manageData(String sentence)
   {
     boolean valid = StringParsers.validCheckSum(sentence);
+    Date now = new Date();
     if (valid)
     {
       String id = sentence.substring(3, 6);
@@ -124,17 +132,29 @@ public class SunServoNMEAReader extends NMEAClient
               if (he > 0)
               {
                 if (parked)
-                  System.out.println("Resuming, sun is up.");
+                {
+                  String str = (SDF.format(now) + ":Resuming, sun is up.");
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+                }
                 parked = false;    
                 int angle = 180 - (int)Math.round(z);
                 if (angle < -90 || angle > 90)
-                  System.err.println("Between -90 and 90 only");
+                {  
+                  String str = (SDF.format(now) + ":Between -90 and 90 only");
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+                }
                 else
                 {
                   if (prevZ != angle)
                   {
-                    System.out.println("From [" + sentence + "]");
-                    System.out.println(current.getTime().toString() + ", He:" + DFH.format(he)+ ", Z:" + DFZ.format(z) + " (" + rmc.getGp().toString() + ") -> " + angle);
+                    String str = (SDF.format(now) + ":From [" + sentence + "]");
+                    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+                    str = (current.getTime().toString() + ", He:" + DFH.format(he)+ ", Z:" + DFZ.format(z) + " (" + rmc.getGp().toString() + ") => " + angle);
+                    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 3) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 3) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
                     int on = 0;
                     int off = (int)(servoMin + (((double)(angle + 90) / 180d) * (servoMax - servoMin)));
     //              System.out.println("setPWM(" + STANDARD_SERVO_CHANNEL + ", " + on + ", " + off + ");");
@@ -148,7 +168,11 @@ public class SunServoNMEAReader extends NMEAClient
               {
                 // Parking
                 if (!parked)
-                  System.out.println("Parking, sun is down");
+                {
+                  String str = (SDF.format(now) + ":Parking, sun is down.");
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+                  AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 2) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_WHITE, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+                }
                 parked = true;
                 int on = 0;
                 int angle = 0;
@@ -168,7 +192,12 @@ public class SunServoNMEAReader extends NMEAClient
         else
         {
           if (rmc == null)
-            System.out.println("... no RMC data in [" + sentence + "]");
+          {
+            String str = (SDF.format(now) + ": ... no RMC data in [" + sentence + "]");
+            AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+            AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_RED, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+          }
+
           else
           {  
             String errMess = "";
@@ -176,13 +205,22 @@ public class SunServoNMEAReader extends NMEAClient
               errMess += ("no Date ");
             if (rmc.getGp() == null)
               errMess += ("no Pos ");
-            System.out.println(errMess + "in [" + sentence + "]");
+            String str = (SDF.format(now) + ":" + errMess + "in [" + sentence + "]");
+            AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+            AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_RED, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
           }
         }
       }
     }    
     else
-      System.out.println("Invalid data [" + sentence + "]");
+    {
+      String str = (SDF.format(now) + ":Invalid data [" + sentence + "]");
+      AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+      AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 1) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_RED, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
+    }
+    String str = SDF.format(now);
+    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 4) + EscapeSeq.ANSI_NORMAL + EscapeSeq.ANSI_DEFAULT_BACKGROUND + EscapeSeq.ANSI_DEFAULT_TEXT + STR100);
+    AnsiConsole.out.println(EscapeSeq.ansiLocate(1, 4) + EscapeSeq.ansiSetTextAndBackgroundColor(EscapeSeq.ANSI_CYAN, EscapeSeq.ANSI_BLACK) + EscapeSeq.ANSI_BOLD + str + EscapeSeq.ANSI_NORMAL);               
   }
 
   private static void calibrate()
@@ -233,6 +271,9 @@ public class SunServoNMEAReader extends NMEAClient
       calibrate(); // Point the arrow South.
       calibrated = true;
     }    
+
+    AnsiConsole.systemInstall();
+    AnsiConsole.out.println(EscapeSeq.ANSI_HOME + EscapeSeq.ANSI_CLS);
       
     Runtime.getRuntime().addShutdownHook(new Thread() 
       {

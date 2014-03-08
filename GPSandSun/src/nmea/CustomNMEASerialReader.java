@@ -47,7 +47,8 @@ public class CustomNMEASerialReader
         }
       });
       String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
-      System.out.println("Opening port [" + port + "]");
+      if (System.getProperty("verbose", "false").equals("true")) 
+        System.out.println("Opening port [" + port + "]");
       serial.open(port, baudRate);
     }
     catch (Exception ex)
@@ -55,6 +56,7 @@ public class CustomNMEASerialReader
       ex.printStackTrace();
     }
     // Reading on Serial Port
-    System.out.println("Port is open...");
+    if (System.getProperty("verbose", "false").equals("true")) 
+      System.out.println("Port is open...");
   }
 }

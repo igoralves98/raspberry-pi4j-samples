@@ -11,4 +11,6 @@ CP=$CP:./lib/geomutil.jar
 CP=$CP:./lib/nauticalalmanac.jar
 CP=$CP:./lib/nmeaparser.jar
 CP=$CP:./lib/coreutilities.jar
+CP=$CP:./lib/jansi-1.9.jar
 sudo java -cp $CP sunservo.SunServoNMEAReader $*
+# sudo java -Dserial.port=/dev/ttyUSB0 -cp $CP sunservo.SunServoNMEAReader $*
