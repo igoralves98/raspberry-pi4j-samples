@@ -72,7 +72,7 @@
                                               displayValue.animate(ui.value);
                                               // Feed the server here with the new value
                                               var payload = { value: ui.value };
-                                              connection.send(JSON.stringify(payload));
+                                              sendMessage(JSON.stringify(payload));
                                             },
                                           }).find(".ui-slider-handle").append(tooltip).hover(function() 
                                                                                              {

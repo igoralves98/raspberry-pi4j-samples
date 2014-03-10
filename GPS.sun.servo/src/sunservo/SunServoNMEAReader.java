@@ -29,8 +29,8 @@ import org.fusesource.jansi.AnsiConsole;
 
 public class SunServoNMEAReader extends NMEAClient
 {
-  private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
-  private final static DecimalFormat DFZ = new DecimalFormat("##0.00'\272'");
+  private final static DecimalFormat DFH    = new DecimalFormat("#0.00'\272'");
+  private final static DecimalFormat DFZ    = new DecimalFormat("##0.00'\272'");
   private final static SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
   
   private static GeoPos prevPosition = null;

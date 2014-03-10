@@ -60,6 +60,7 @@ var connection;
 
 var sendMessage = function(msg) 
 {
+  console.log("Sending:" + msg);
   if (!msg) 
   {
     return;
