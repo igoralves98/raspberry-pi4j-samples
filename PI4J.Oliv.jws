@@ -30,6 +30,7 @@
       <hash><url n="URL" path="PI4J.email/PI4J.email.jpr"/></hash>
       <hash><url n="URL" path="pilogger/pilogger/PILogger.jpr"/></hash>
       <hash><url n="URL" path="ReadSerialPort/ReadSerialPort.jpr"/></hash>
+      <hash><url n="URL" path="Relay/Relay.jpr"/></hash>
       <hash><url n="URL" path="TwoLeds/TwoLeds.jpr"/></hash>
    </list>
 </jws:workspace>
