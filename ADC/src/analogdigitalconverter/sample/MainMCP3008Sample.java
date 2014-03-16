@@ -19,6 +19,10 @@ public class MainMCP3008Sample
                                            {
                                              System.out.println("Shutting down.");
                                              go = false;
+                                             synchronized (Thread.currentThread())
+                                             {
+                                               Thread.currentThread().notify();
+                                             }
                                            }
                                          });
     int lastRead  = 0;
@@ -39,9 +43,15 @@ public class MainMCP3008Sample
         System.out.println("Volume:" + volume + "% (" + adc + ")");
         lastRead = adc;
       }
-      try { Thread.sleep(100L); } catch (InterruptedException ie) { ie.printStackTrace(); }
+      try 
+      { 
+        synchronized (Thread.currentThread()) 
+        {
+          Thread.currentThread().wait(100L); 
+        }
+      } catch (InterruptedException ie) { ie.printStackTrace(); }
     }
-    System.out.println("Bye...");
+    System.out.println("Bye, freeing resources.");
     MCP3008Reader.shutdownMCP3008();
   }   
   
