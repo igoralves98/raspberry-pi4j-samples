@@ -17,7 +17,7 @@ public class GPIO02led
     // create gpio controller
     final GpioController gpio = GpioFactory.getInstance();
 
-    // provision gpio pin #01 as an output pin and turn on
+    // provision gpio pin #00 & #02 as an output pin and turn on
     final GpioPinDigitalOutput pin00 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "RedLed",   PinState.HIGH);
     final GpioPinDigitalOutput pin02 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "GreenLed", PinState.HIGH);
 
