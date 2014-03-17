@@ -84,15 +84,14 @@ public class MCP3008Reader
       else
         mosiOutput.low();
       adccommand <<= 1;      
-      clockOutput.high();
-      clockOutput.low();      
+      // Clock high and low
+      highLowOnPin(clockOutput);      
     }
 
     int adcOut = 0;
     for (int i=0; i<12; i++) // Read in one empty bit, one null bit and 10 ADC bits
     {
-      clockOutput.high();
-      clockOutput.low();      
+      highLowOnPin(clockOutput);      
       adcOut <<= 1;
 
       if (misoInput.isHigh())
@@ -109,5 +108,11 @@ public class MCP3008Reader
 
     adcOut >>= 1; // Drop first bit
     return adcOut;
+  }
+  
+  private static void highLowOnPin(GpioPinDigitalOutput pin)
+  {
+    pin.high();
+    pin.low();
   }
 }
