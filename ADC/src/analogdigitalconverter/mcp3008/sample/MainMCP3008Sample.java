@@ -1,13 +1,14 @@
-package analogdigitalconverter.sample;
+package analogdigitalconverter.mcp3008.sample;
 
-import analogdigitalconverter.MCP3008Reader;
-import analogdigitalconverter.MCP3008Reader.MCP3008_input_channels;
+import analogdigitalconverter.mcp3008.MCP3008Reader;
+import analogdigitalconverter.mcp3008.MCP3008Reader.MCP3008_input_channels;
 
 public class MainMCP3008Sample
 {
   private final static boolean DEBUG = false;
   private static boolean go = true;
-  private static int ADC_CHANNEL = MCP3008_input_channels.CH0.ch(); // Between 0 and 7, 8 channels on the MCP3008
+  private static int ADC_CHANNEL =
+    MCP3008Reader.MCP3008_input_channels.CH0.ch(); // Between 0 and 7, 8 channels on the MCP3008
   
   public static void main(String[] args)
   {
