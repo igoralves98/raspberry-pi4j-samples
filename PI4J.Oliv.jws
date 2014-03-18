@@ -31,6 +31,7 @@
       <hash><url n="URL" path="pilogger/pilogger/PILogger.jpr"/></hash>
       <hash><url n="URL" path="ReadSerialPort/ReadSerialPort.jpr"/></hash>
       <hash><url n="URL" path="Relay/Relay.jpr"/></hash>
+      <hash><url n="URL" path="RGB-Led/RGB-Led.jpr"/></hash>
       <hash><url n="URL" path="TwoLeds/TwoLeds.jpr"/></hash>
    </list>
 </jws:workspace>
