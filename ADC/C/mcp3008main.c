@@ -1,5 +1,4 @@
 /*
- * adc.c:
  * Compile with 
  * gcc -l wiringPi -o readMCP3008 mcp3008reader.c mcp3008main.c
  ***********************************************************************
