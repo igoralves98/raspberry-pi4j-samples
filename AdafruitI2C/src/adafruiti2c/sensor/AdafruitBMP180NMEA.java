@@ -1,4 +1,4 @@
-package adafruiti2c;
+package adafruiti2c.sensor;
 
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import ocss.nmea.parser.StringGenerator;
+
 /*
  * Altitude, Pressure, Temperature
  */
-public class AdafruitBMP180
+public class AdafruitBMP180NMEA
 {
   // Minimal constants carried over from Arduino library
   /*
@@ -71,12 +73,12 @@ public class AdafruitBMP180
   private I2CDevice bmp180;
   private int mode = BMP180_STANDARD;
   
-  public AdafruitBMP180()
+  public AdafruitBMP180NMEA()
   {
     this(BMP180_ADDRESS);
   }
   
-  public AdafruitBMP180(int address)
+  public AdafruitBMP180NMEA(int address)
   {
     try
     {
@@ -358,36 +360,58 @@ public class AdafruitBMP180
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
   }
   
+  private static boolean go = true;
+  
   public static void main(String[] args)
   {
     final NumberFormat NF = new DecimalFormat("##00.00");
-    AdafruitBMP180 sensor = new AdafruitBMP180();
-    float press = 0;
-    float temp  = 0;
-    double alt  = 0;
-
-    try { press = sensor.readPressure(); } 
-    catch (Exception ex) 
-    { 
-      System.err.println(ex.getMessage()); 
-      ex.printStackTrace();
-    }
-    sensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
-    try { alt = sensor.readAltitude(); } 
-    catch (Exception ex) 
-    { 
-      System.err.println(ex.getMessage()); 
-      ex.printStackTrace();
-    }
-    try { temp = sensor.readTemperature(); } 
-    catch (Exception ex) 
-    { 
-      System.err.println(ex.getMessage()); 
-      ex.printStackTrace();
-    }
+    AdafruitBMP180NMEA sensor = new AdafruitBMP180NMEA();
     
-    System.out.println("Temperature: " + NF.format(temp) + " C");
-    System.out.println("Pressure   : " + NF.format(press / 100) + " hPa");
-    System.out.println("Altitude   : " + NF.format(alt) + " m");
+    Runtime.getRuntime().addShutdownHook(new Thread()
+     {
+       public void run()
+       {
+         System.out.println("Exiting.");
+         go = false; 
+       }       
+     });
+    while (go)
+    {
+      float press = 0;
+      float temp  = 0;
+      double alt  = 0;
+  
+      try { press = sensor.readPressure(); } 
+      catch (Exception ex) 
+      { 
+        System.err.println(ex.getMessage()); 
+        ex.printStackTrace();
+      }
+      sensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
+      try { alt = sensor.readAltitude(); } 
+      catch (Exception ex) 
+      { 
+        System.err.println(ex.getMessage()); 
+        ex.printStackTrace();
+      }
+      try { temp = sensor.readTemperature(); } 
+      catch (Exception ex) 
+      { 
+        System.err.println(ex.getMessage()); 
+        ex.printStackTrace();
+      }
+      
+      String nmeaMMB = StringGenerator.generateMMB("II", (press / 100));
+      String nmeaMTA = StringGenerator.generateMTA("II", temp);
+      
+      System.out.println(NF.format(press / 100) + " hPa  " + nmeaMMB);
+      System.out.println(NF.format(temp) + " C      " + nmeaMTA);
+      
+//    System.out.println("Temperature: " + NF.format(temp) + " C");
+//    System.out.println("Pressure   : " + NF.format(press / 100) + " hPa");
+//    System.out.println("Altitude   : " + NF.format(alt) + " m");
+      waitfor(1000L);
+    }
+    System.out.println("Bye...");
   }
 }

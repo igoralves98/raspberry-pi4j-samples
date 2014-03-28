@@ -1,6 +1,6 @@
 package adafruiti2c.samples.ws;
 
-import adafruiti2c.AdafruitPCA9685;
+import adafruiti2c.servo.AdafruitPCA9685;
 
 import java.io.FileOutputStream;
 
