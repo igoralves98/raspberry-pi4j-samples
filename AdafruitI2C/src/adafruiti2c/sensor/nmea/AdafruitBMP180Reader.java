@@ -1,4 +1,4 @@
-package adafruiti2c.sensor.listener;
+package adafruiti2c.sensor.nmea;
 
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
@@ -6,13 +6,16 @@ import com.pi4j.io.i2c.I2CFactory;
 
 import java.io.IOException;
 
+import nmea.server.ctx.NMEAContext;
+
 import ocss.nmea.api.NMEAEvent;
+import ocss.nmea.api.NMEAListener;
 import ocss.nmea.parser.StringGenerator;
 
 /*
  * Altitude, Pressure, Temperature
  */
-public class AdafruitBMP180NMEAReader
+public class AdafruitBMP180Reader
 {
   // Minimal constants carried over from Arduino library
   /*
@@ -71,12 +74,12 @@ public class AdafruitBMP180NMEAReader
   private I2CDevice bmp180;
   private int mode = BMP180_STANDARD;
   
-  public AdafruitBMP180NMEAReader()
+  public AdafruitBMP180Reader()
   {
     this(BMP180_ADDRESS);
   }
   
-  public AdafruitBMP180NMEAReader(int address)
+  public AdafruitBMP180Reader(int address)
   {
     try
     {
@@ -409,11 +412,17 @@ public class AdafruitBMP180NMEAReader
       String nmeaMMB = StringGenerator.generateMMB("II", (press / 100));
       String nmeaMTA = StringGenerator.generateMTA("II", temp);
 
-      SensorNMEAContext.getInstance().fireDataDetected(new NMEAEvent(this, nmeaMMB));      
-      SensorNMEAContext.getInstance().fireDataDetected(new NMEAEvent(this, nmeaMTA));  
+      broadcastNMEASentence(nmeaMMB);
+      broadcastNMEASentence(nmeaMTA);
         
       waitfor(1000L); // One sec.
     }
     System.out.println("Reader stopped.");
+  }
+  
+  private void broadcastNMEASentence(String nmea)
+  {
+    for (NMEAListener l : NMEAContext.getInstance().getNMEAListeners())
+      l.dataDetected(new NMEAEvent(this, nmea));
   }
 }
