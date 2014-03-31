@@ -6,6 +6,11 @@ import adafruiti2c.sensor.listener.SensorNMEAContext;
 
 import ocss.nmea.api.NMEAEvent;
 
+/*
+ * Uses its own listeners, defined in this project.
+ * @see AdafruitBMP180Listener
+ * @see SensorNMEAContext
+ */
 public class SampleBMP180Main
 {
   private final AdafruitBMP180NMEAReader sensorReader = new AdafruitBMP180NMEAReader();
@@ -23,6 +28,7 @@ public class SampleBMP180Main
   
   public void start()
   {
+    System.out.println("Starting reader.");
     sensorReader.startReading();
   }
   

@@ -380,6 +380,7 @@ public class AdafruitBMP180NMEAReader
   public void startReading()
   {
     go = true;
+    System.out.println("Top of the reading loop.");
     while (go)
     {
       float press = 0;

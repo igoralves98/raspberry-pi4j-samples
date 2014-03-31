@@ -8,6 +8,13 @@ import nmea.server.ctx.NMEAContext;
 import ocss.nmea.api.NMEAEvent;
 import ocss.nmea.api.NMEAListener;
 
+/*
+ * This one uses the listeners already existing in OlivSoft
+ * (namely the NMEA Console)
+ * 
+ * @see AdafruitBMP180Reader
+ * @see NMEAContext
+ */
 public class SampleBMP180NMEAMain
 {
   private final AdafruitBMP180Reader sensorReader = new AdafruitBMP180Reader();
