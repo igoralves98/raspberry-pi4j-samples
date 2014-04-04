@@ -23,15 +23,15 @@ public class Relay01
     // create gpio controller
     final GpioController gpio = GpioFactory.getInstance();
 
-    // provision gpio pin #01 as an output pin and turn on
+    // For a relay it seems that HIGH means NC (Normally Closed)...
     final GpioPinDigitalOutput pin17 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "Relay1", PinState.HIGH);
     final GpioPinDigitalOutput pin18 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "Relay2", PinState.HIGH);
-    System.out.println("--> GPIO state should be: OFF");
+    System.out.println("--> GPIO state should be: OFF, and it is ");
 
     Thread.sleep(1000);
 
     pin17.low();
-    System.out.println("--> pin 17 should be: ON");
+    System.out.println("--> pin 17 should be: ON, and it is " + (pin17.isHigh()?"OFF":"ON"));
 
     Thread.sleep(1000);
 

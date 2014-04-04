@@ -79,7 +79,7 @@ public class PIControllerMain implements RaspberryPIEventListener
        {
          piController.switchRelay(false);
          piController.shutdown();
-         System.out.println("Exiting nicely.");
+         System.out.println("\nExiting nicely.");
        }
      });
     
