@@ -32,6 +32,7 @@
       <hash><url n="URL" path="POVUtil.One/POVUtil.One.jpr"/></hash>
       <hash><url n="URL" path="ReadSerialPort/ReadSerialPort.jpr"/></hash>
       <hash><url n="URL" path="Relay/Relay.jpr"/></hash>
+      <hash><url n="URL" path="Relay.by.email/Relay.by.email.jpr"/></hash>
       <hash><url n="URL" path="RGB-Led/RGB-Led.jpr"/></hash>
       <hash><url n="URL" path="SevenSegDisplay/SevenSegDisplay.jpr"/></hash>
       <hash><url n="URL" path="TwoLeds/TwoLeds.jpr"/></hash>

@@ -2,10 +2,14 @@ package relay;
 
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 
+import java.io.FileReader;
+
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
+
+import java.util.Properties;
 
 import org.json.JSONObject;
 
@@ -66,11 +70,34 @@ public class PIControllerMain implements RaspberryPIEventListener
       }
     }
     
-    GPIOController piController = new GPIOController();
+    final GPIOController piController = new GPIOController();
     EmailReceiver receiver = new EmailReceiver(providerReceive); // For Google, pop must be explicitely enabled at the account level
+    
+    Runtime.getRuntime().addShutdownHook(new Thread()
+     {
+       public void run()
+       {
+         piController.switchRelay(false);
+         piController.shutdown();
+         System.out.println("Exiting nicely.");
+       }
+     });
+    
     try
     {
-      System.out.println("Waiting for instructions.");
+      String from = "";
+      try
+      {
+        Properties props = new Properties();
+        props.load(new FileReader("email.properties"));
+        String emitters = props.getProperty("pi.accept.emails.from");
+        from = ", from " + emitters;
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      System.out.println("Waiting for instructions" + from + ".");
       boolean keepLooping = true;
       while (keepLooping)
       {
