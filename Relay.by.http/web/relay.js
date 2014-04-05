@@ -11,5 +11,4 @@ var request = function(pin, status) // REST Client
   var ajax = new XMLHttpRequest();
   ajax.open("GET", restRequest, false);
   ajax.send(null);
-
 };
