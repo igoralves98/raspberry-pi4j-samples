@@ -5,7 +5,7 @@ var set = function(device, state)
 
 var SERVICE_ROOT = "/relay-access";
 
-var request = function(pin, status) // REST Client
+var request = function(pin, status)
 {
   var restRequest = SERVICE_ROOT + "?dev=" + pin + "&status=" + status;
   var ajax = new XMLHttpRequest();
