@@ -206,7 +206,7 @@ public class StandaloneHTTPServer
       System.out.println("\t-?\tDisplay this message");
       System.out.println("\t-verbose=[y|n] - default is n");
       System.out.println("The following variables can be defined in the command line (before the class name):");
-      System.out.println("\t-Dhttp.port=[port number]\tThe HTTP port to listen to, 6666 by default");
+      System.out.println("\t-Dhttp.port=[port number]\tThe HTTP port to listen to, 9999 by default");
       System.out.println("\t-Dhttp.host=[hostname]   \tThe HTTP host to bind, localhost by default");
       System.out.println("Example:");
       System.out.println("java -Dhttp.port=6789 -Dhttp.host=localhost " + new StandaloneHTTPServer().getClass().getName());
