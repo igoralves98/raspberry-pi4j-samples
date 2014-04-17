@@ -4,6 +4,8 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
+import com.pi4j.system.SystemInfo;
+
 import java.io.IOException;
 
 import java.text.DecimalFormat;
@@ -149,7 +151,24 @@ public class AdafruitLSM303
       while (heading < 0)
         heading += 360f;
 
-      System.out.println("accel (X: " + accelX + ", Y: " + accelY + ", Z: " + accelZ + ") mag (X: " + magX + ", Y: " + magY + ", Z: " + magZ + ", heading: " + Z_FMT.format(heading) + ")");
+      // Bonus : CPU Temperature
+      float cpuTemp = Float.MIN_VALUE;
+      float cpuVoltage = Float.MIN_VALUE;
+      try
+      {
+        cpuTemp    = SystemInfo.getCpuTemperature();
+        cpuVoltage = SystemInfo.getCpuVoltage();
+      }
+      catch (InterruptedException ie)
+      {
+        ie.printStackTrace();
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+
+      System.out.println("accel (X: " + accelX + ", Y: " + accelY + ", Z: " + accelZ + ") mag (X: " + magX + ", Y: " + magY + ", Z: " + magZ + ", heading: " + Z_FMT.format(heading) + ")" + (cpuTemp != Float.MIN_VALUE?" Cpu Temp:" + cpuTemp:"") + (cpuVoltage != Float.MIN_VALUE?" Cpu Volt:" + cpuVoltage:""));
 
       //Use the values as you want
       // ...

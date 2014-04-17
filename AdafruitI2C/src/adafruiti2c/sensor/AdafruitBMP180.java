@@ -4,6 +4,8 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
+import com.pi4j.system.SystemInfo;
+
 import java.io.IOException;
 
 import java.text.DecimalFormat;
@@ -389,5 +391,19 @@ public class AdafruitBMP180
     System.out.println("Temperature: " + NF.format(temp) + " C");
     System.out.println("Pressure   : " + NF.format(press / 100) + " hPa");
     System.out.println("Altitude   : " + NF.format(alt) + " m");
+    // Bonus : CPU Temperature
+    try
+    {
+      System.out.println("CPU Temperature   :  " + SystemInfo.getCpuTemperature());
+      System.out.println("CPU Core Voltage  :  " + SystemInfo.getCpuVoltage());
+    }
+    catch (InterruptedException ie)
+    {
+      ie.printStackTrace();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
   }
 }

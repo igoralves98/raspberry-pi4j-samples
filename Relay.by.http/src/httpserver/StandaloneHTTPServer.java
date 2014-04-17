@@ -1,6 +1,9 @@
 package httpserver;
 
 
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,14 +25,23 @@ import relay.RelayManager;
  */
 public class StandaloneHTTPServer
 {
-  private boolean verbose     = false;
+  private static boolean verbose = false;
+  private static boolean speak   = false;
   private static RelayManager rm;
+  private VoiceManager voiceManager = VoiceManager.getInstance();
+  private static Voice voice;
+  private final static String VOICENAME = "kevin16";
 
   public StandaloneHTTPServer() {}
   
   public StandaloneHTTPServer(String[] prms)
   {
-    rm = new RelayManager();
+    try { rm = new RelayManager(); }
+    catch (Exception ex)
+    {
+      System.err.println("You're not on the PI, hey?");
+      ex.printStackTrace();
+    }
     // Bind the server
     String machineName = "localhost";
     String port        = "9999";
@@ -40,6 +52,7 @@ public class StandaloneHTTPServer
     System.out.println("HTTP Host:" + machineName);
     System.out.println("HTTP Port:" + port);
     
+    System.out.println("\nOptions are -verbose=y|[n], -speak=y|[n]");
     if (prms != null && prms.length > 0)
     {
       for (int i=0; i<prms.length; i++)
@@ -48,6 +61,10 @@ public class StandaloneHTTPServer
         if (prms[i].startsWith("-verbose="))
         {
           verbose = prms[i].substring("-verbose=".length()).equals("y");
+        }
+        else if (prms[i].startsWith("-speak="))
+        {
+          speak = prms[i].substring("-speak=".length()).equals("y");
         }
 //      System.out.println("verbose=" + verbose);
       }
@@ -61,6 +78,12 @@ public class StandaloneHTTPServer
     catch (NumberFormatException nfe)
     {
       throw nfe;
+    }
+
+    if (speak)
+    {
+      voice = voiceManager.getVoice(VOICENAME);
+      voice.allocate();
     }
     if (verbose)
       System.out.println("Server running from [" + System.getProperty("user.dir") + "]");
@@ -149,6 +172,7 @@ public class StandaloneHTTPServer
       {
         if (request.startsWith("GET /relay-access"))
         {
+          System.out.println("--> " + request);
           String dev = "";
           String status = "";
           String[] params = parts[1].split("&");
@@ -165,7 +189,14 @@ public class StandaloneHTTPServer
           if (("01".equals(dev) || "02".equals(dev)) &&
               ("on".equals(status) || "off".equals(status)))
           {
-            rm.set(dev, status);
+            if (speak)
+              voice.speak("Turning light " + ("01".equals(dev)?"one":"two") + ", " + status + "!");
+            try { rm.set(dev, status); }
+            catch (Exception ex)
+            {
+              System.err.println(ex.toString());
+            }
+            str = "200 OK\r\n\r\n"; 
           }
           else
           {
@@ -185,6 +216,8 @@ public class StandaloneHTTPServer
     rm.shutdown();
     rm.set("01", "off");
     rm.set("02", "off");
+    if (speak)
+      voice.deallocate();
   }
 
   /**
