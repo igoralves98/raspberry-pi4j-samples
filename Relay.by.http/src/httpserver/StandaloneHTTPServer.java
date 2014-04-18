@@ -22,6 +22,8 @@ import relay.RelayManager;
  *
  * Runs the communication between an HTTP client and the
  * features of the Data server to be displayed remotely.
+ * 
+ * Comes with a speech option using "freeTTS" (see http://freetts.sourceforge.net/docs/index.php)
  */
 public class StandaloneHTTPServer
 {
@@ -196,7 +198,7 @@ public class StandaloneHTTPServer
             {
               System.err.println(ex.toString());
             }
-            str = "200 OK\r\n\r\n"; 
+            str = "200 OK\r\n"; 
           }
           else
           {

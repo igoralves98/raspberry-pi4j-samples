@@ -14,7 +14,7 @@ public class SmallClient
     int responseCode = 0;
     try
     {
-      URL url = new URL("http://raspberrypi:9999/relay-access?dev=02&status=off");
+      URL url = new URL("http://raspberrypi:9999/relay-access?dev=01&status=off");
       HttpURLConnection conn = (HttpURLConnection)url.openConnection();  
       conn.setRequestMethod("GET");
       responseCode = conn.getResponseCode();
