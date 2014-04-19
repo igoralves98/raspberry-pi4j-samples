@@ -168,7 +168,15 @@ public class AdafruitLSM303
         e.printStackTrace();
       }
 
-      System.out.println("accel (X: " + accelX + ", Y: " + accelY + ", Z: " + accelZ + ") mag (X: " + magX + ", Y: " + magY + ", Z: " + magZ + ", heading: " + Z_FMT.format(heading) + ")" + (cpuTemp != Float.MIN_VALUE?" Cpu Temp:" + cpuTemp:"") + (cpuVoltage != Float.MIN_VALUE?" Cpu Volt:" + cpuVoltage:""));
+      System.out.println("accel (X: " + accelX + 
+                              ", Y: " + accelY + 
+                              ", Z: " + accelZ + 
+                         ") mag (X: " + magX + 
+                              ", Y: " + magY + 
+                              ", Z: " + magZ + 
+                              ", heading: " + Z_FMT.format(heading) + ")" + 
+                         (cpuTemp != Float.MIN_VALUE?" Cpu Temp:" + cpuTemp:"") + 
+                         (cpuVoltage != Float.MIN_VALUE?" Cpu Volt:" + cpuVoltage:""));
 
       //Use the values as you want
       // ...
