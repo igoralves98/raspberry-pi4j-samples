@@ -77,7 +77,7 @@ public class BatteryMonitor
     System.out.println("  -calibration");
     System.out.println("  -debug=y|n|yes|no|true|false - example -debug=y       (default is n)");
     System.out.println("  -ch=[0-7]                    - example -ch=0          (default is 0)");
-    System.out.println("  -min=minADC:minVolt          - example -min=280:3.75  (default is 0:0.0)");
+    System.out.println("  -min=minADC:minVolt          - example -min=280:3.75  (default is    0:0.0)");
     System.out.println("  -max=maxADC:maxVolt          - example -min=879:11.25 (default is 1023:15.0)");
     int channel = 0;
     for (String prm : args)
