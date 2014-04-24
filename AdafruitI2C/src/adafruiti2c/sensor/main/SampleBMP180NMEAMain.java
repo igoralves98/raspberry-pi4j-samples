@@ -1,6 +1,5 @@
 package adafruiti2c.sensor.main;
 
-import adafruiti2c.sensor.listener.AdafruitBMP180NMEAReader;
 import adafruiti2c.sensor.nmea.AdafruitBMP180Reader;
 
 import nmea.server.ctx.NMEAContext;
@@ -11,7 +10,7 @@ import ocss.nmea.api.NMEAListener;
 /*
  * This one uses the listeners already existing in OlivSoft
  * (namely the NMEA Console)
- * 
+ *
  * @see AdafruitBMP180Reader
  * @see NMEAContext
  */

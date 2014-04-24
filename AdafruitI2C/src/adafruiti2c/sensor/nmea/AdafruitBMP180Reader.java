@@ -30,7 +30,7 @@ public class AdafruitBMP180Reader
   60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
   70: -- -- -- -- -- -- -- 77
    */
-  // Those 2 next addresses are returned by "sudo i2cdetect -y 1", see above.
+  // The next address is returned by "sudo i2cdetect -y 1", see above.
   public final static int BMP180_ADDRESS = 0x77; 
   // Operating Modes
   public final static int BMP180_ULTRALOWPOWER     = 0;

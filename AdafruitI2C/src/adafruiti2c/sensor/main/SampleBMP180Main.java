@@ -1,7 +1,7 @@
 package adafruiti2c.sensor.main;
 
 import adafruiti2c.sensor.listener.AdafruitBMP180Listener;
-import adafruiti2c.sensor.listener.AdafruitBMP180NMEAReader;
+import adafruiti2c.sensor.nmea.AdafruitBMP180Reader;
 import adafruiti2c.sensor.listener.SensorNMEAContext;
 
 import ocss.nmea.api.NMEAEvent;
@@ -13,7 +13,7 @@ import ocss.nmea.api.NMEAEvent;
  */
 public class SampleBMP180Main
 {
-  private final AdafruitBMP180NMEAReader sensorReader = new AdafruitBMP180NMEAReader();
+  private final AdafruitBMP180Reader sensorReader = new AdafruitBMP180Reader();
   
   public SampleBMP180Main()
   {
