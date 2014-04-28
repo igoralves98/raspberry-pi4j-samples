@@ -1,0 +1,6 @@
+#!/bin/bash
+CP=./classes
+CP=$CP:./lib/jansi-1.9.jar
+CP=$CP:/home/pi/pi4j/pi4j-distribution/target/distro-contents/lib/pi4j-core.jar
+java -cp $CP adc.sample.FiveChannelListener
+

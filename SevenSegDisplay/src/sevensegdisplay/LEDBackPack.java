@@ -42,8 +42,9 @@ public class LEDBackPack
   public final static int HT16K33_BLINKRATE_1HZ          = 0x02;
   public final static int HT16K33_BLINKRATE_HALFHZ       = 0x03;
 
-  // Display buffer (8x16-bits)
-  private int[] buffer = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 };
+  // Display buffer (8x16-bits). 
+  //                       1st digit, 2nd digit, column, 3rd digit, 4th digit, ?,      ?,      ?     Probably for the 8x8 led matrix
+  private int[] buffer = { 0x0000,    0x0000,    0x0000, 0x0000,    0x0000,    0x0000, 0x0000, 0x0000 };
     
   public LEDBackPack()
   {
@@ -112,6 +113,7 @@ public class LEDBackPack
   {
     setBufferRow(row, value, true);
   }
+  
   public void setBufferRow(int row, int value, boolean update) throws IOException
   {  
     if (row > 7)
@@ -155,7 +157,7 @@ public class LEDBackPack
   
   public void clear(boolean update) throws IOException
   {
-    this.buffer = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+    this.buffer = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 }; // Reset. Bam!
     if (update)
       this.writeDisplay();
   }

@@ -1,11 +1,10 @@
 package sevensegdisplay.samples;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import sevensegdisplay.SevenSegment;
 
@@ -35,7 +34,7 @@ public class ClockSample
     // Continually update the time on a 4 char, 7-segment display
     while (true)
     {
-      Calendar now = GregorianCalendar.getInstance();
+      Calendar now = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
       int hour   = now.get(Calendar.HOUR);
       int minute = now.get(Calendar.MINUTE);
       int second = now.get(Calendar.SECOND);
@@ -45,7 +44,7 @@ public class ClockSample
       // Set minutes
       segment.writeDigit(3, (minute / 10));      // Tens
       segment.writeDigit(4, minute % 10);        // Ones
-      // Toggle color
+      // Toggle colon
       segment.setColon(second % 2 != 0);         // Toggle colon at 1Hz
       // Wait one second
       try { Thread.sleep(1000L); } catch (InterruptedException ie){}
