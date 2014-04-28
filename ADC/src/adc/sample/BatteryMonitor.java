@@ -114,9 +114,9 @@ public class BatteryMonitor
   private final static String SCALE_PRM       = "-scale=";
   private final static String LOG_PRM         = "-log=";
   
-  private static int minADC =    0;
-  private static int maxADC = 1023;
-  private static float minVolt = 0f;
+  private static int minADC =     0;
+  private static int maxADC =  1023;
+  private static float minVolt =  0f;
   private static float maxVolt = 15f;
   private static boolean scale=false;
   

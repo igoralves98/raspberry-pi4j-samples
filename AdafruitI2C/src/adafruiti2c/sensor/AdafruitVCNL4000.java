@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 /*
  * Proximity sensor
  */
-public class AdafruitVCNL400
+public class AdafruitVCNL4000
 {
   /*
   Prompt> sudo i2cdetect -y 1
@@ -29,7 +29,7 @@ public class AdafruitVCNL400
   70: -- -- -- -- -- -- -- --
    */
   // This next addresses is returned by "sudo i2cdetect -y 1", see above.
-  public final static int VCNL400_ADDRESS = 0x13; 
+  public final static int VCNL4000_ADDRESS = 0x13; 
   // Commands
   public final static int VCNL4000_COMMAND          = 0x80;
   public final static int VCNL4000_PRODUCTID        = 0x81;
@@ -55,12 +55,12 @@ public class AdafruitVCNL400
   private I2CBus bus;
   private I2CDevice vcnl4000;
   
-  public AdafruitVCNL400()
+  public AdafruitVCNL4000()
   {
-    this(VCNL400_ADDRESS);
+    this(VCNL4000_ADDRESS);
   }
   
-  public AdafruitVCNL400(int address)
+  public AdafruitVCNL4000(int address)
   {
     try
     {
@@ -90,7 +90,7 @@ public class AdafruitVCNL400
     {
       result = this.vcnl4000.read(reg);
       if (verbose)
-        System.out.println("I2C: Device " + VCNL400_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("I2C: Device " + VCNL4000_ADDRESS + " returned " + result + " from reg " + reg);
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -107,7 +107,7 @@ public class AdafruitVCNL400
       if (result > 127)
         result -= 256;
       if (verbose)
-        System.out.println("I2C: Device " + VCNL400_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("I2C: Device " + VCNL4000_ADDRESS + " returned " + result + " from reg " + reg);
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -157,7 +157,7 @@ public class AdafruitVCNL400
   public static void main(String[] args)
   {
     final NumberFormat NF = new DecimalFormat("##00.00");
-    AdafruitVCNL400 sensor = new AdafruitVCNL400();
+    AdafruitVCNL4000 sensor = new AdafruitVCNL4000();
     int prox = 0;
 
     try { prox = sensor.readProximity(); } 
