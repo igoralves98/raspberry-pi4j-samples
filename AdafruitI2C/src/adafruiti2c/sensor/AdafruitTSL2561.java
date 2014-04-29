@@ -58,7 +58,7 @@ public class AdafruitTSL2561
     try
     {
       // Get i2c bus
-      bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends onthe RasPI version
+      bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends on the RasPI version
       if (verbose)
       {
         System.out.println("Connected to bus. OK.");
@@ -133,32 +133,32 @@ public class AdafruitTSL2561
   public double readLux() throws Exception
   {
     int ambient = this.readFull();
-    int IR      = this.readIR();
+    int ir      = this.readIR();
 
-    if (ambient >= 0xffff || IR >= 0xffff) // value(s) exeed(s) datarange
+    if (ambient >= 0xffff || ir >= 0xffff) // value(s) exeed(s) datarange
       throw new RuntimeException("Gain too high. Values exceed range.");
 
     if (this.gain == TSL2561_GAIN_1X)
     {
       ambient *= 16;    // scale 1x to 16x
-      IR *= 16;         // scale 1x to 16x
+      ir *= 16;         // scale 1x to 16x
     }                
-    double ratio = (IR / (float)ambient);
+    double ratio = (ir / (float)ambient);
 
     if (verbose)
     {
-      System.out.println("IR Result" + IR);
+      System.out.println("IR Result" + ir);
       System.out.println("Ambient Result" + ambient);
     }
     double lux = 0d;
     if ((ratio >= 0) && (ratio <= 0.52))
       lux = (0.0315 * ambient) - (0.0593 * ambient * (Math.pow(ratio, 1.4)));
     else if (ratio <= 0.65)
-      lux = (0.0229 * ambient) - (0.0291 * IR);
+      lux = (0.0229 * ambient) - (0.0291 * ir);
     else if (ratio <= 0.80)
-      lux = (0.0157 * ambient) - (0.018 * IR);
+      lux = (0.0157 * ambient) - (0.018 * ir);
     else if (ratio <= 1.3)
-      lux = (0.00338 * ambient) - (0.0026 * IR);
+      lux = (0.00338 * ambient) - (0.0026 * ir);
     else if (ratio > 1.3)
       lux = 0;
 
