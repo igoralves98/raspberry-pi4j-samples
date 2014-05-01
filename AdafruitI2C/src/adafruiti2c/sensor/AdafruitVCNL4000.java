@@ -90,7 +90,7 @@ public class AdafruitVCNL4000
     {
       result = this.vcnl4000.read(reg);
       if (verbose)
-        System.out.println("I2C: Device " + VCNL4000_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("(U8) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -107,7 +107,7 @@ public class AdafruitVCNL4000
       if (result > 127)
         result -= 256;
       if (verbose)
-        System.out.println("I2C: Device " + VCNL4000_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("(S8) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -118,14 +118,22 @@ public class AdafruitVCNL4000
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+//  int result = (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+    return result;
   }
 
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+//  int result = (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+    return result;
   }
 
   public int readProximity() throws Exception
@@ -135,13 +143,13 @@ public class AdafruitVCNL4000
     boolean keepTrying = true;
     while (keepTrying)
     {
-      int cmd = readU8(VCNL4000_COMMAND);
+      int cmd = this.readU8(VCNL4000_COMMAND);
       if (verbose)
-        System.out.println("DBG: Pproximity: " + (cmd & 0xFFFF) + ", " + cmd);
-      if ((cmd & VCNL4000_PROXIMITYREADY) != 0)
+        System.out.println("DBG: Proximity: " + (cmd & 0xFFFF) + ", " + cmd + " (" + VCNL4000_PROXIMITYREADY + ")");
+      if (((cmd & 0xff) & VCNL4000_PROXIMITYREADY) != 0)
       {
         keepTrying = false;
-        prox = readU16(VCNL4000_PROXIMITYDATA);
+        prox = this.readU16(VCNL4000_PROXIMITYDATA);
       }
       else
         waitfor(1);  // Wait 1ms
@@ -149,25 +157,26 @@ public class AdafruitVCNL4000
     return prox;
   }
       
+  private static String toHex(int i)
+  {
+    String s = Integer.toString(i, 16).toUpperCase();
+    while (s.length() % 2 != 0)
+      s = "0" + s;
+    return "0x" + s;
+  }
+  
   private static void waitfor(long howMuch)
   {
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
   }
   
+  private static boolean go = true;
+  
   public static void main(String[] args)
   {
-    final NumberFormat NF = new DecimalFormat("##00.00");
     AdafruitVCNL4000 sensor = new AdafruitVCNL4000();
     int prox = 0;
 
-    try { prox = sensor.readProximity(); } 
-    catch (Exception ex) 
-    { 
-      System.err.println(ex.getMessage()); 
-      ex.printStackTrace();
-    }
-
-    System.out.println("Proximity: " + NF.format(prox) + " unit?");
     // Bonus : CPU Temperature
     try
     {
@@ -181,6 +190,27 @@ public class AdafruitVCNL4000
     catch (IOException e)
     {
       e.printStackTrace();
+    }
+
+    Runtime.getRuntime().addShutdownHook(new Thread()
+                                         {
+                                           public void run()
+                                           {
+                                             go = false;
+                                             System.out.println("\nBye");
+                                           }
+                                         });
+    int i = 0;
+    while (go && i++ < 5)
+    {
+      try { prox = sensor.readProximity(); } 
+      catch (Exception ex) 
+      { 
+        System.err.println(ex.getMessage()); 
+        ex.printStackTrace();
+      }
+      System.out.println("Proximity: " + prox); //  + " unit?");
+      try { Thread.sleep(100L); } catch (InterruptedException ex) {}
     }
   }
 }

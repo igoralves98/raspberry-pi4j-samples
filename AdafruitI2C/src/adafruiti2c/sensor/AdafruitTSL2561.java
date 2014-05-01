@@ -39,6 +39,31 @@ public class AdafruitTSL2561
   public final static int TSL2561_INTEGRATIONTIME_13MS  = 0x00; // rather 13.7ms
   public final static int TSL2561_INTEGRATIONTIME_101MS = 0x01;
   public final static int TSL2561_INTEGRATIONTIME_402MS = 0x02;
+
+  public final static double TSL2561_LUX_K1C = 0.130;   // (0x0043)  // 0.130 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B1C = 0.0315;  // (0x0204)  // 0.0315 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M1C = 0.0262;  // (0x01ad)  // 0.0262 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K2C = 0.260;   // (0x0085)  // 0.260 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B2C = 0.0337;  // (0x0228)  // 0.0337 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M2C = 0.0430;  // (0x02c1)  // 0.0430 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K3C = 0.390;   // (0x00c8)  // 0.390 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B3C = 0.0363;  // (0x0253)  // 0.0363 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M3C = 0.0529;  // (0x0363)  // 0.0529 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K4C = 0.520;   // (0x010a)  // 0.520 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B4C = 0.0392;  // (0x0282)  // 0.0392 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M4C = 0.0605;  // (0x03df)  // 0.0605 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K5C = 0.65;    // (0x014d)  // 0.65 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B5C = 0.0229;  // (0x0177)  // 0.0229 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M5C = 0.0291;  // (0x01dd)  // 0.0291 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K6C = 0.80;    // (0x019a)  // 0.80 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B6C = 0.0157;  // (0x0101)  // 0.0157 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M6C = 0.0180;  // (0x0127)  // 0.0180 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K7C = 1.3;     // (0x029a)  // 1.3 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B7C = 0.00338; // (0x0037)  // 0.00338 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M7C = 0.00260; // (0x002b)  // 0.00260 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_K8C = 1.3;     // (0x029a)  // 1.3 * 2^RATIO_SCALE
+  public final static double TSL2561_LUX_B8C = 0.000;   // (0x0000)  // 0.000 * 2^LUX_SCALE
+  public final static double TSL2561_LUX_M8C = 0.000;   // (0x0000)  // 0.000 * 2^LUX_SCALE
   
   private static boolean verbose = false;
   private int gain        = TSL2561_GAIN_1X;
@@ -130,6 +155,10 @@ public class AdafruitTSL2561
     return readU16Rev(reg);
   }
 
+  /*
+   * Device lux range 0.1 - 40,000+
+   * see https://learn.adafruit.com/tsl2561/overview
+   */
   public double readLux() throws Exception
   {
     int ambient = this.readFull();
@@ -138,7 +167,7 @@ public class AdafruitTSL2561
     if (ambient >= 0xffff || ir >= 0xffff) // value(s) exeed(s) datarange
       throw new RuntimeException("Gain too high. Values exceed range.");
 
-    if (this.gain == TSL2561_GAIN_1X)
+    if (false && this.gain == TSL2561_GAIN_1X)
     {
       ambient *= 16;    // scale 1x to 16x
       ir *= 16;         // scale 1x to 16x
@@ -147,19 +176,22 @@ public class AdafruitTSL2561
 
     if (verbose)
     {
-      System.out.println("IR Result" + ir);
-      System.out.println("Ambient Result" + ambient);
+      System.out.println("IR Result:" + ir);
+      System.out.println("Ambient Result:" + ambient);
     }
+    /*
+     * For the values below, see https://github.com/adafruit/Adafruit_TSL2561/blob/master/Adafruit_TSL2561_U.h
+     */    
     double lux = 0d;
-    if ((ratio >= 0) && (ratio <= 0.52))
-      lux = (0.0315 * ambient) - (0.0593 * ambient * (Math.pow(ratio, 1.4)));
-    else if (ratio <= 0.65)
-      lux = (0.0229 * ambient) - (0.0291 * ir);
-    else if (ratio <= 0.80)
-      lux = (0.0157 * ambient) - (0.018 * ir);
-    else if (ratio <= 1.3)
-      lux = (0.00338 * ambient) - (0.0026 * ir);
-    else if (ratio > 1.3)
+    if ((ratio >= 0) && (ratio <= TSL2561_LUX_K4C))
+      lux = (TSL2561_LUX_B1C * ambient) - (0.0593 * ambient * (Math.pow(ratio, 1.4)));
+    else if (ratio <= TSL2561_LUX_K5C)
+      lux = (TSL2561_LUX_B5C * ambient) - (TSL2561_LUX_M5C * ir);
+    else if (ratio <= TSL2561_LUX_K6C)
+      lux = (TSL2561_LUX_B6C * ambient) - (TSL2561_LUX_M6C * ir);
+    else if (ratio <= TSL2561_LUX_K7C)
+      lux = (TSL2561_LUX_B7C * ambient) - (TSL2561_LUX_M7C * ir);
+    else if (ratio > TSL2561_LUX_K8C)
       lux = 0;
 
     return lux;
@@ -175,9 +207,7 @@ public class AdafruitTSL2561
     {
       result = this.tsl2561.read(reg);
       if (verbose)
-      {
-        System.out.println("I2C: Device " + TSL2561_ADDRESS + " returned " + result + " from reg " + reg);
-      }
+        System.out.println("(U8) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
     catch (Exception ex)
     {
@@ -200,9 +230,7 @@ public class AdafruitTSL2561
         result -= 256;
       }
       if (verbose)
-      {
-        System.out.println("I2C: Device " + TSL2561_ADDRESS + " returned " + result + " from reg " + reg);
-      }
+        System.out.println("(S8) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
     catch (Exception ex)
     {
@@ -215,21 +243,40 @@ public class AdafruitTSL2561
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+//  return (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(U16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+    return result;
   }
 
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+//  return (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(S16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+    return result;
   }
 
   private int readU16Rev(int register) throws Exception
   {
     int lo = this.readU8(register);
     int hi = this.readU8(register + 1);
-    return (hi << 8) + lo;
+    int result = (hi << 8) + lo;
+    if (verbose)
+      System.out.println("(U16r) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+    return result;
+  }
+  
+  private static String toHex(int i)
+  {
+    String s = Integer.toString(i, 16).toUpperCase();
+    while (s.length() % 2 != 0)
+      s = "0" + s;
+    return "0x" + s;
   }
   
   private static void waitfor(long howMuch)
@@ -247,13 +294,18 @@ public class AdafruitTSL2561
   public static void main(String[] args)
   {
     final NumberFormat NF = new DecimalFormat("##00.00");
+    verbose = false;
     AdafruitTSL2561 sensor = new AdafruitTSL2561();
     double lux = 0;
 
     try
     {
-      lux = sensor.readLux();
-      System.out.println("Lux: " + NF.format(lux) + " Lux");
+      for (int i=0; i<100; i++)
+      {
+        lux = sensor.readLux();
+        System.out.println("Lux: " + NF.format(lux) + " Lux");
+        waitfor(500L);
+      }
       sensor.turnOff();
     }
     catch (Exception ex)

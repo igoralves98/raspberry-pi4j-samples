@@ -119,6 +119,11 @@ public class AdafruitTCS34725
   private int integrationTime = 0xFF;
   private int gain            = 0x01;
   
+  public static void setVerbose(boolean b)
+  {
+    verbose = b;
+  }
+  
   public AdafruitTCS34725()
   {
     this(TCS34725_ADDRESS);
@@ -129,6 +134,11 @@ public class AdafruitTCS34725
     this(address, false, 0xff, 0x01);
   }
   
+  public AdafruitTCS34725(boolean b, int integrationTime, int gain)
+  {
+    this(TCS34725_ADDRESS, b, integrationTime, gain);
+  }
+
   public AdafruitTCS34725(int integrationTime, int gain)
   {
     this(TCS34725_ADDRESS, false, integrationTime, gain);
@@ -174,22 +184,22 @@ public class AdafruitTCS34725
   
   public void enable() throws IOException
   {
-    tcs34725.write(TCS34725_ENABLE, (byte)TCS34725_ENABLE_PON);
+    this.write8(TCS34725_ENABLE, (byte)TCS34725_ENABLE_PON);
     waitfor(10L);
-    tcs34725.write(TCS34725_ENABLE, (byte)(TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN));
+    this.write8(TCS34725_ENABLE, (byte)(TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN));
   }
   
   public void disable() throws Exception
   {
     int reg = 0;
     reg = this.readU8(TCS34725_ENABLE);
-    tcs34725.write(TCS34725_ENABLE, (byte)(reg & ~(TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN)));    
+    this.write8(TCS34725_ENABLE, (byte)(reg & ~(TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN)));    
   }
 
   public void setIntegrationTime(int integrationTime) throws IOException
   {
     this.integrationTime = integrationTime;
-    tcs34725.write(TCS34725_ATIME, (byte)integrationTime);
+    this.write8(TCS34725_ATIME, (byte)integrationTime);
   }
         
   public int getIntegrationTime() throws Exception
@@ -199,7 +209,7 @@ public class AdafruitTCS34725
         
   public void setGain(int gain) throws IOException
   {
-    tcs34725.write(TCS34725_CONTROL, (byte)gain);
+    this.write8(TCS34725_CONTROL, (byte)gain);
   }
         
   public int getGain() throws Exception
@@ -214,7 +224,7 @@ public class AdafruitTCS34725
     int g = this.readU16Rev(TCS34725_GDATAL);
     int c = this.readU16Rev(TCS34725_CDATAL);
     waitfor((long)(INTEGRATION_TIME_DELAY.get(this.integrationTime) / 1000L));
-    return new TCSColor(r, g, b, c);
+    return new TCSColor(r, b, g, c);
   }
   
   public void setInterrupt(boolean intrpt) throws Exception
@@ -224,7 +234,7 @@ public class AdafruitTCS34725
       r |= TCS34725_ENABLE_AIEN;
     else
       r &= ~TCS34725_ENABLE_AIEN;
-    tcs34725.write(TCS34725_ENABLE, (byte)r);
+    this.write8(TCS34725_ENABLE, (byte)r);
   }
         
   public void clearInterrupt() throws IOException
@@ -234,10 +244,10 @@ public class AdafruitTCS34725
       
   public void setIntLimits(int low, int high) throws IOException
   {
-    tcs34725.write(0x04, (byte)(low & 0xFF));
-    tcs34725.write(0x05, (byte)(low >> 8));
-    tcs34725.write(0x06, (byte)(high & 0xFF));
-    tcs34725.write(0x07, (byte)(high >> 8));
+    this.write8(0x04, (byte)(low & 0xFF));
+    this.write8(0x05, (byte)(low >> 8));
+    this.write8(0x06, (byte)(high & 0xFF));
+    this.write8(0x07, (byte)(high >> 8));
   }
    
   /*
@@ -274,12 +284,20 @@ public class AdafruitTCS34725
     double illuminance = (-0.32466 * rgb.getR()) + (1.57837 * rgb.getG()) + (-0.73191 * rgb.getB());
     return (int)illuminance;
   }
-                                 
+
+  private void write8(int register, int value) throws IOException
+  {
+    this.tcs34725.write(TCS34725_COMMAND_BIT | register, (byte)(value & 0xff));
+  }
+  
   private int readU16Rev(int register) throws Exception
   {
     int lo = this.readU8(register);
     int hi = this.readU8(register + 1);
-    return (hi << 8) + lo;
+    int result = (hi << 8) + lo;
+    if (verbose)
+      System.out.println("(U16r) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
+    return result;
   }
   
   private int readU8(int reg) throws Exception
@@ -288,9 +306,9 @@ public class AdafruitTCS34725
     int result = 0;
     try
     {
-      result = this.tcs34725.read(reg);
+      result = this.tcs34725.read(TCS34725_COMMAND_BIT | reg);
       if (verbose)
-        System.out.println("I2C: Device " + TCS34725_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("(U8) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | reg));
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -303,11 +321,11 @@ public class AdafruitTCS34725
     int result = 0;
     try
     {
-      result = this.tcs34725.read(reg);
+      result = this.tcs34725.read(TCS34725_COMMAND_BIT | reg);
       if (result > 127)
         result -= 256;
       if (verbose)
-        System.out.println("I2C: Device " + TCS34725_ADDRESS + " returned " + result + " from reg " + reg);
+        System.out.println("(S8) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | reg));
     }
     catch (Exception ex)
     { ex.printStackTrace(); }
@@ -318,16 +336,32 @@ public class AdafruitTCS34725
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+  //  int result = (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
+    return result;
   }
 
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+  //  int result = (hi << 8) + lo;
+    int result = (lo << 8) + hi;
+    if (verbose)
+      System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
+    return result;
   }
 
+  private static String toHex(int i)
+  {
+    String s = Integer.toString(i, 16).toUpperCase();
+    while (s.length() % 2 != 0)
+      s = "0" + s;
+    return "0x" + s;
+  }
+  
   private static void waitfor(long howMuch)
   {
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
@@ -349,26 +383,29 @@ public class AdafruitTCS34725
     public int getG() { return this.g; }                       
     public int getC() { return this.c; }       
     
-    public String toString() { return "[" + Integer.toString(r) + " " +
-                                            Integer.toString(b) + " " +
-                                            Integer.toString(g) + " " +
-                                            Integer.toString(c) + "]"; }
+    public String toString() { return "[ r:" + Integer.toString(r) + 
+                                      ", b:" + Integer.toString(b) + 
+                                      ", g:" + Integer.toString(g) + 
+                                      ", c:" + Integer.toString(c) + "]"; }
   }
   
   public static void main(String[] args)
   {
-    AdafruitTCS34725 sensor = new AdafruitTCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
+    AdafruitTCS34725 sensor = new AdafruitTCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
+
     try 
     { 
+      System.out.println(".. Setting interrupt");
       sensor.setInterrupt(false);
       waitfor(1000L);
-
+      System.out.println(".. Getting raw data");
       AdafruitTCS34725.TCSColor rgb = sensor.getRawData();
+      System.out.println(".. Calculating");
       int colorTemp = AdafruitTCS34725.calculateColorTemperature(rgb);
       int lux       = AdafruitTCS34725.calculateLux(rgb);
       System.out.println(rgb.toString());
-      System.out.printf("Color Temperature: %d K", colorTemp);
-      System.out.printf("Luminosity: %d lux", lux);
+      System.out.printf("Color Temperature: %d K%n", colorTemp);
+      System.out.printf("Luminosity: %d lux%n", lux);
       
       sensor.setInterrupt(true);
       waitfor(1000L);
