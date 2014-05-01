@@ -43,7 +43,7 @@ public class L3GD20Dictionaries
     OutputMap.put(OPEN_DRAIN, (byte)1);
   }
   
-  public final static String _4_WIRE = "4-wirw";
+  public final static String _4_WIRE = "4-wire";
   public final static String _3_WIRE = "3-wire";
   public final static Map<String, Byte> SimModeMap = new HashMap<String, Byte>();
   static 
@@ -67,8 +67,8 @@ public class L3GD20Dictionaries
   public final static Map<String, Byte> FullScaleMap = new HashMap<String, Byte>();
   static
   {
-    FullScaleMap.put(_250_DPS, (byte)0);
-    FullScaleMap.put(_500_DPS, (byte)1);
+    FullScaleMap.put(_250_DPS,  (byte)0);
+    FullScaleMap.put(_500_DPS,  (byte)1);
     FullScaleMap.put(_2000_DPS, (byte)2);
   }
 
