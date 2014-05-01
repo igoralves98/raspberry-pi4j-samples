@@ -37,9 +37,9 @@ public class SampleL3GD20ReadRealData
       x = data[0];
       y = data[1];
       z = data[2];
-//      x += (data[0] * wait);
-//      y += (data[1] * wait);
-//      z += (data[2] * wait);
+//    x += (data[0] * wait);
+//    y += (data[1] * wait);
+//    z += (data[2] * wait);
       System.out.printf("X:%.2f, Y:%.2f, Z:%.2f%n", x, y, z);
       try { Thread.sleep(wait); } catch (InterruptedException ex) {}
     }
