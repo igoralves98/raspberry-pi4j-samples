@@ -16,6 +16,9 @@ import java.text.NumberFormat;
  */
 public class AdafruitVCNL4000
 {
+  public final static int LITTLE_ENDIAN = 0;
+  public final static int BIG_ENDIAN    = 1;
+  private final static int VCNL4000_ENDIANNESS = LITTLE_ENDIAN;
   /*
   Prompt> sudo i2cdetect -y 1
        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -119,7 +122,8 @@ public class AdafruitVCNL4000
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
 //  int result = (hi << 8) + lo;
-    int result = (lo << 8) + hi;
+    int result = (VCNL4000_ENDIANNESS == BIG_ENDIAN)? (hi << 8) + lo : (lo << 8) + hi; // Little endian for VCNL4000
+    
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
@@ -130,7 +134,7 @@ public class AdafruitVCNL4000
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
 //  int result = (hi << 8) + lo;
-    int result = (lo << 8) + hi;
+    int result = (lo << 8) + hi; // Little endian
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;

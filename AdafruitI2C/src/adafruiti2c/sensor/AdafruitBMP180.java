@@ -138,14 +138,14 @@ public class AdafruitBMP180
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+    return (hi << 8) + lo; // Big Endian
   }
 
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
+    return (hi << 8) + lo; // Big Endian
   }
 
   public void readCalibrationData() throws Exception

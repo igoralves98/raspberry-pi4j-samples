@@ -244,7 +244,7 @@ public class AdafruitTSL2561
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
 //  return (hi << 8) + lo;
-    int result = (lo << 8) + hi;
+    int result = (lo << 8) + hi; // Littel endian
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
@@ -255,7 +255,7 @@ public class AdafruitTSL2561
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
 //  return (hi << 8) + lo;
-    int result = (lo << 8) + hi;
+    int result = (lo << 8) + hi; // Little endian
     if (verbose)
       System.out.println("(S16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
@@ -265,7 +265,7 @@ public class AdafruitTSL2561
   {
     int lo = this.readU8(register);
     int hi = this.readU8(register + 1);
-    int result = (hi << 8) + lo;
+    int result = (hi << 8) + lo; // Big endian
     if (verbose)
       System.out.println("(U16r) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;

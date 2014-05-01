@@ -407,7 +407,7 @@ public class AdafruitL3GD20
                                             "EnabledMap");
   }
   
-  public boolean getAxisXEnabled() throws Exception
+  public boolean isAxisXEnabled() throws Exception
   {
     String enabled = this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_CTRL_REG1, L3GD20_MASK_CTRL_REG1_Xen, L3GD20Dictionaries.EnabledMap);
     return enabled.equals(L3GD20Dictionaries.TRUE);
@@ -422,7 +422,7 @@ public class AdafruitL3GD20
                                             "EnabledMap");
   }
   
-  public boolean getAxisYEnabled() throws Exception
+  public boolean isAxisYEnabled() throws Exception
   {
     String enabled = this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_CTRL_REG1, L3GD20_MASK_CTRL_REG1_Yen, L3GD20Dictionaries.EnabledMap);
     return enabled.equals(L3GD20Dictionaries.TRUE);
@@ -437,7 +437,7 @@ public class AdafruitL3GD20
                                             "EnabledMap");
   }
   
-  public boolean getAxisZEnabled() throws Exception
+  public boolean isAxisZEnabled() throws Exception
   {
     String enabled = this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_CTRL_REG1, L3GD20_MASK_CTRL_REG1_Zen, L3GD20Dictionaries.EnabledMap);
     return enabled.equals(L3GD20Dictionaries.TRUE);
@@ -482,7 +482,11 @@ public class AdafruitL3GD20
   
   public void setFifoModeValue(String value) throws Exception
   {
-    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_FIFO_CTRL_REG, L3GD20_MASK_FIFO_CTRL_REG_FM, value, L3GD20Dictionaries.FifoModeMap, "FifoModeMap") ;
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_FIFO_CTRL_REG, 
+                                            L3GD20_MASK_FIFO_CTRL_REG_FM, 
+                                            value, 
+                                            L3GD20Dictionaries.FifoModeMap, 
+                                            "FifoModeMap") ;
   }
         
   public String getFifoModeValue() throws Exception
@@ -519,10 +523,274 @@ public class AdafruitL3GD20
     return new Number[] { dr, bw };
   }
                                 
-  // TODO All getters and setters
-  
-  
-  
+  public void setFifoThresholdValue(int value) throws Exception
+  {
+    this.writeToRegister(L3GD20_REG_RW_FIFO_CTRL_REG, L3GD20_MASK_FIFO_CTRL_REG_WTM, value);
+  }
+
+  public int getFifoThresholdValue() throws Exception
+  {
+    return this.readFromRegister(L3GD20_REG_RW_FIFO_CTRL_REG, L3GD20_MASK_FIFO_CTRL_REG_WTM);
+  }
+
+  public int getFifoStoredDataLevelValue() throws Exception
+  {
+    return this.readFromRegister(L3GD20_REG_R_FIFO_SRC_REG, L3GD20_MASK_FIFO_SRC_REG_FSS);
+  }
+
+  public boolean isFifoEmpty() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_FIFO_SRC_REG, 
+                                                                                   L3GD20_MASK_FIFO_SRC_REG_EMPTY, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean isFifoFull() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_FIFO_SRC_REG, 
+                                                                                   L3GD20_MASK_FIFO_SRC_REG_OVRN, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean isFifoGreaterOrEqualThanWatermark() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_FIFO_SRC_REG, 
+                                                                                   L3GD20_MASK_FIFO_SRC_REG_WTM, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1CombinationValue(String value) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_ANDOR, 
+                                            value, 
+                                            L3GD20Dictionaries.AndOrMap, 
+                                            "AndOrMap");
+  }
+
+  public String getInt1CombinationValue() throws Exception
+  {
+    return this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                    L3GD20_MASK_INT1_CFG_ANDOR, 
+                                                    L3GD20Dictionaries.AndOrMap);
+  }
+
+  public void setInt1LatchRequestEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_LIR, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1LatchRequestEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_LIR, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnZHighEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_ZHIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnZHighEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_ZHIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnZLowEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_ZLIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnZLowEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_ZLIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnYHighEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_YHIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnYHighEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_YHIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnYLowEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_YLIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnYLowEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_YLIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnXHighEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_XHIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnXHighEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_XHIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1GenerationOnXLowEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_CFG_REG, 
+                                            L3GD20_MASK_INT1_CFG_XLIE, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1GenerationOnXLowEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_CFG_REG, 
+                                                                                   L3GD20_MASK_INT1_CFG_XLIE, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean isInt1Active() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_IA, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasZHighEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_ZH, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasZLowEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_ZL, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasYHighEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_YH, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasYLowEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_YL, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasXHighEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_XH, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public boolean hasXLowEventOccured() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_R_INT1_SRC_REG, 
+                                                                                   L3GD20_MASK_INT1_SRC_XL, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1ThresholdXValue(int value) throws Exception
+  {
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_XH, L3GD20_MASK_INT1_THS_H, (value & 0x7f00) >> 8);
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_XL, L3GD20_MASK_INT1_THS_L, value & 0x00ff);
+  }
+
+  public void setInt1ThresholdYValue(int value) throws Exception
+  {
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_YH, L3GD20_MASK_INT1_THS_H, (value & 0x7f00) >> 8);
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_YL, L3GD20_MASK_INT1_THS_L, value & 0x00ff);
+  }
+
+  public void setInt1ThresholdZValue(int value) throws Exception
+  {
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_ZH, L3GD20_MASK_INT1_THS_H, (value & 0x7f00) >> 8);
+    this.writeToRegister(L3GD20_REG_RW_INT1_THS_ZL, L3GD20_MASK_INT1_THS_L, value & 0x00ff);
+  }
+
+  public int[] getInt1Threshold_Values() throws Exception
+  {
+    int xh = this.readFromRegister(L3GD20_REG_RW_INT1_THS_XH, L3GD20_MASK_INT1_THS_H);
+    int xl = this.readFromRegister(L3GD20_REG_RW_INT1_THS_XL, L3GD20_MASK_INT1_THS_L);
+    int yh = this.readFromRegister(L3GD20_REG_RW_INT1_THS_YH, L3GD20_MASK_INT1_THS_H);
+    int yl = this.readFromRegister(L3GD20_REG_RW_INT1_THS_YL, L3GD20_MASK_INT1_THS_L);
+    int zh = this.readFromRegister(L3GD20_REG_RW_INT1_THS_ZH, L3GD20_MASK_INT1_THS_H);
+    int zl = this.readFromRegister(L3GD20_REG_RW_INT1_THS_ZL, L3GD20_MASK_INT1_THS_L);
+    return new int[] { xh * 256 + xl, yh * 256 + yl, zh * 256 + zl };
+  }
+
+  public void setInt1DurationWaitEnabled(boolean enabled) throws Exception
+  {
+    this.writeToRegisterWithDictionaryCheck(L3GD20_REG_RW_INT1_DURATION, 
+                                            L3GD20_MASK_INT1_DURATION_WAIT, 
+                                            enabled?L3GD20Dictionaries.TRUE:L3GD20Dictionaries.FALSE, 
+                                            L3GD20Dictionaries.EnabledMap, 
+                                            "EnabledMap");
+  }
+
+  public boolean isInt1DurationWaitEnabled() throws Exception
+  {
+    return L3GD20Dictionaries.TRUE.equals(this.readFromRegisterWithDictionaryMatch(L3GD20_REG_RW_INT1_DURATION, 
+                                                                                   L3GD20_MASK_INT1_DURATION_WAIT, 
+                                                                                   L3GD20Dictionaries.EnabledMap));
+  }
+
+  public void setInt1DurationValue(int value) throws Exception
+  {
+    this.writeToRegister(L3GD20_REG_RW_INT1_DURATION, L3GD20_MASK_INT1_DURATION_D, value);
+  }
+
+  public int getInt1DurationValue() throws Exception
+  {
+    return this.readFromRegister(L3GD20_REG_RW_INT1_DURATION, L3GD20_MASK_INT1_DURATION_D);
+  }
+
   /*
    * Read an unsigned byte from the I2C device
    */
