@@ -38,7 +38,7 @@ public class GyroDisplayPanel
   private transient int[][] faces;
   private transient List<Point3D> rotated = null;
   
-  private final static boolean DEMO = false;
+  private final static boolean DEMO = true;
   private transient SampleL3GD20RealReader sensorReader = null;
   
 //private double angleX = 0d, angleY = 0d, angleZ = 0d;
@@ -58,6 +58,8 @@ public class GyroDisplayPanel
   private void jbInit()
     throws Exception
   {
+    System.out.println("-- Demo Mode is " + (DEMO?"ON":"OFF"));
+    System.out.println("-- Check it in " + this.getClass().getName());
     this.setLayout(null);
     this.setOpaque(false);
     this.setBackground(new Color(0, 0, 0, 0));
