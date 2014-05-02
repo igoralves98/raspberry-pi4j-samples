@@ -21,6 +21,9 @@ import java.util.Map;
  */
 public class AdafruitTCS34725
 {
+  public final static int LITTLE_ENDIAN = 0;
+  public final static int BIG_ENDIAN    = 1;
+  private final static int TCS34725_ENDIANNESS = BIG_ENDIAN;
   /*
   Prompt> sudo i2cdetect -y 1
        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -219,10 +222,10 @@ public class AdafruitTCS34725
   
   public TCSColor getRawData() throws Exception
   {
-    int r = this.readU16Rev(TCS34725_RDATAL);
-    int b = this.readU16Rev(TCS34725_BDATAL);
-    int g = this.readU16Rev(TCS34725_GDATAL);
-    int c = this.readU16Rev(TCS34725_CDATAL);
+    int r = this.readU16(TCS34725_RDATAL);
+    int b = this.readU16(TCS34725_BDATAL);
+    int g = this.readU16(TCS34725_GDATAL);
+    int c = this.readU16(TCS34725_CDATAL);
     waitfor((long)(INTEGRATION_TIME_DELAY.get(this.integrationTime) / 1000L));
     return new TCSColor(r, b, g, c);
   }
@@ -252,6 +255,7 @@ public class AdafruitTCS34725
    
   /*
    * Converts the raw R/G/B values to color temperature in degrees Kelvin
+   * see http://en.wikipedia.org/wiki/Color_temperature
    */
   public static int calculateColorTemperature(TCSColor rgb)
   {
@@ -277,7 +281,7 @@ public class AdafruitTCS34725
   }
   
   /*
-   * Converts the raw R/G/B values to color temperature in degrees Kelvin
+   * Values in Lux (or Lumens) per square meter.
    */
   public static int calculateLux(TCSColor rgb)
   {
@@ -290,13 +294,13 @@ public class AdafruitTCS34725
     this.tcs34725.write(TCS34725_COMMAND_BIT | register, (byte)(value & 0xff));
   }
   
-  private int readU16Rev(int register) throws Exception
+  private int readU16(int register) throws Exception
   {
     int lo = this.readU8(register);
     int hi = this.readU8(register + 1);
-    int result = (hi << 8) + lo; // Big Endian
+    int result = (TCS34725_ENDIANNESS == BIG_ENDIAN) ? (hi << 8) + lo : (lo << 8) + hi; // Big Endian
     if (verbose)
-      System.out.println("(U16r) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
+      System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
     return result;
   }
   
@@ -332,23 +336,12 @@ public class AdafruitTCS34725
     return result;
   }
   
-  private int readU16(int register) throws Exception
-  {
-    int hi = this.readU8(register);
-    int lo = this.readU8(register + 1);
-  //  int result = (hi << 8) + lo;
-    int result = (lo << 8) + hi; // Little endian
-    if (verbose)
-      System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
-    return result;
-  }
-
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
     int lo = this.readU8(register + 1);
-  //  int result = (hi << 8) + lo;
-    int result = (lo << 8) + hi; // Little endian
+    int result = (hi << 8) + lo; // Big endian
+//  int result = (lo << 8) + hi; // Little endian
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
     return result;

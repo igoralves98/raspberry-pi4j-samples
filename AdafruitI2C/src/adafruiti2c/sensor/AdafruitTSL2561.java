@@ -14,6 +14,10 @@ import java.text.NumberFormat;
  */
 public class AdafruitTSL2561
 {
+  public final static int LITTLE_ENDIAN = 0;
+  public final static int BIG_ENDIAN    = 1;
+  private final static int TSL2561_ENDIANNESS = BIG_ENDIAN;
+
   public final static int TSL2561_ADDRESS = 0x39;
 
   public final static int TSL2561_ADDRESS_LOW   = 0x29;
@@ -143,7 +147,7 @@ public class AdafruitTSL2561
   public int readFull() throws Exception
   {
     int reg = TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN0_LOW;
-    return readU16Rev(reg);
+    return readU16(reg);
   }
 
   /*
@@ -152,7 +156,7 @@ public class AdafruitTSL2561
   public int readIR() throws Exception
   {
     int reg = TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN1_LOW;
-    return readU16Rev(reg);
+    return readU16(reg);
   }
 
   /*
@@ -239,17 +243,6 @@ public class AdafruitTSL2561
     return result;
   }
 
-  private int readU16(int register) throws Exception
-  {
-    int hi = this.readU8(register);
-    int lo = this.readU8(register + 1);
-//  return (hi << 8) + lo;
-    int result = (lo << 8) + hi; // Littel endian
-    if (verbose)
-      System.out.println("(U16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
-    return result;
-  }
-
   private int readS16(int register) throws Exception
   {
     int hi = this.readS8(register);
@@ -261,13 +254,13 @@ public class AdafruitTSL2561
     return result;
   }
 
-  private int readU16Rev(int register) throws Exception
+  private int readU16(int register) throws Exception
   {
     int lo = this.readU8(register);
     int hi = this.readU8(register + 1);
-    int result = (hi << 8) + lo; // Big endian
+    int result = (TSL2561_ENDIANNESS == BIG_ENDIAN) ? (hi << 8) + lo : (lo << 8) + hi; // Big Endian
     if (verbose)
-      System.out.println("(U16r) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
+      System.out.println("(U16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
   }
   
