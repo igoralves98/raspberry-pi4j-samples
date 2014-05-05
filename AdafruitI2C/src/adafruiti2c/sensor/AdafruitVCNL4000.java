@@ -73,7 +73,7 @@ public class AdafruitVCNL4000
       if (verbose)
         System.out.println("Connected to device. OK.");
       
-      vcnl4000.write(VCNL4000_IRLED, (byte)20); // 20 * 10mA = 200mA
+      vcnl4000.write(VCNL4000_IRLED, (byte)20); // 20 * 10mA = 200mA. Range [10-200], by step of 10.
       try
       {
         int irLed = readU8(VCNL4000_IRLED);
@@ -173,6 +173,27 @@ public class AdafruitVCNL4000
     return prox;
   }
       
+  public int readAmbient() throws Exception
+  {
+    int ambient = 0;
+    vcnl4000.write(VCNL4000_COMMAND, (byte)VCNL4000_MEASUREAMBIENT);
+    boolean keepTrying = true;
+    while (keepTrying)
+    {
+      int cmd = this.readU8(VCNL4000_COMMAND);
+      if (verbose)
+        System.out.println("DBG: Ambient: " + (cmd & 0xFFFF) + ", " + cmd + " (" + VCNL4000_AMBIENTREADY + ")");
+      if (((cmd & 0xff) & VCNL4000_AMBIENTREADY) != 0)
+      {
+        keepTrying = false;
+        ambient = this.readU16(VCNL4000_AMBIENTDATA);
+      }
+      else
+        waitfor(10);  // Wait 10 ms
+    }
+    return ambient;
+  }
+      
   public final static int AMBIENT_INDEX   = 0;
   public final static int PROXIMITY_INDEX = 1;
   public int[] readAmbientProximity() throws Exception
@@ -249,15 +270,17 @@ public class AdafruitVCNL4000
                                              System.out.println("Ambient between " + minAmbient + " and " + maxAmbient);
                                            }
                                          });
+    System.out.println("-- Ready --");
     int i = 0;
     while (go) //  && i++ < 5)
     {
       try 
       { 
 //      prox = sensor.readProximity(); 
-        int[] data = sensor.readAmbientProximity();
-        prox    = data[PROXIMITY_INDEX];
-        ambient = data[AMBIENT_INDEX];
+        ambient = sensor.readAmbient();
+//      int[] data = sensor.readAmbientProximity();
+//      prox    = data[PROXIMITY_INDEX];
+//      ambient = data[AMBIENT_INDEX];
         maxProx = Math.max(prox, maxProx);
         maxAmbient = Math.max(ambient, maxAmbient);
         minProx = Math.min(prox, minProx);
@@ -268,7 +291,7 @@ public class AdafruitVCNL4000
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
-      System.out.println("Ambient:" + ambient + ", Proximity: " + prox); //  + " unit?");
+      System.out.println("Ambient:" + ambient); // + ", Proximity: " + prox); //  + " unit?");
       try { Thread.sleep(100L); } catch (InterruptedException ex) { System.err.println(ex.toString()); }
     }
   }
