@@ -1,7 +1,5 @@
 package adc.sample.log;
 
-import adc.gui.AnalogDisplayFrame;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -17,15 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class LogAnalysis
 {
-  private final static float VOLTAGE_COEFF = 1.5f; // MULTIPLYING VOLTAGE by this one !
+  private static float voltageCoeff = 1.0f; // MULTIPLYING VOLTAGE by this one !
+  private static int hourOffset     = 0;
   private final static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   private final Map<Date, LogData> logdata = new HashMap<Date, LogData>();
   
@@ -64,6 +61,8 @@ public class LogAnalysis
     int prevVolume    = 0;
     float prevVoltage = 0;
     float minVolt = Float.MAX_VALUE, maxVolt = Float.MIN_VALUE;
+    int nbl = 0;
+    boolean withSmoothing = "true".equals(System.getProperty("with.smoothing", "true"));
     while (keepReading)
     {
       line = br.readLine();
@@ -71,14 +70,16 @@ public class LogAnalysis
         keepReading = false;
       else
       {
+        nbl++;
         String[] data = line.split(";");
         try
         {
           Date logDate  = SDF.parse(data[0]);
+          logDate = new Date(logDate.getTime() + (hourOffset * 3600 * 1000));
           int adc       = Integer.parseInt(data[1]);
           int volume    = Integer.parseInt(data[2]);
-          float voltage = Float.parseFloat(data[3]) * VOLTAGE_COEFF; 
-          if (previousDate != -1)
+          float voltage = Float.parseFloat(data[3]) * voltageCoeff; 
+          if (withSmoothing && previousDate != -1)
           { 
             // Smooth...
             long deltaT = (logDate.getTime() - previousDate) / 1000; // in seconds
@@ -87,11 +88,11 @@ public class LogAnalysis
             float deltaVolt = (voltage - prevVoltage);
             for (int i=0; i<deltaT; i++)
             {
-              Date smootDate   = new Date(previousDate + (i * 1000));
+              Date smoothDate  = new Date(previousDate + (i * 1000));
               int smoothADC    = prevAdc + (int)((double)deltaADC * ((double)i / (double)deltaT));
               int smoothVolume = prevVolume + (int)((double)deltaVolume * ((double)i / (double)deltaT));
-              float smoothVolt = prevVoltage + (int)((double)deltaVolt * ((double)i / (double)deltaT));
-              logdata.put(smootDate, new LogData(smootDate, smoothADC, smoothVolume, smoothVolt));
+              float smoothVolt = prevVoltage + (float)((double)deltaVolt * ((double)i / (double)deltaT));
+              logdata.put(smoothDate, new LogData(smoothDate, smoothADC, smoothVolume, smoothVolt));
             }
           }
           else
@@ -129,6 +130,7 @@ public class LogAnalysis
       }
     }
     br.close();
+    System.out.println("Read " + nbl + " lines.");
     // Sort
 //    SortedSet<Date> keys = new TreeSet<Date>(logdata.keySet());
 //    for (Date key : keys) 
@@ -137,11 +139,19 @@ public class LogAnalysis
 //       // do something
 //      System.out.println(value.getDate() + ": " + value.getVoltage()  + " V");
 //    }
-    System.out.println("From  [" + minDate + "] to [" + maxDate + "] (" + Long.toString((maxDate.getTime() - minDate.getTime()) / 1000) + " s)");
-    System.out.println("Volts [" + minVolt + ", " + maxVolt + "]");
-    System.out.println("Smallest interval:" + (smallestTimeInterval / 1000) + " s.");
-    System.out.println("LogData has " + logdata.size() + " element(s)");
-    frame.setLogData(logdata);
+    if (nbl == 0)
+    {
+      JOptionPane.showMessageDialog(null, "LogFile [" + fName + "] is empty, aborting.", "Battery Log", JOptionPane.WARNING_MESSAGE);
+      System.exit(1);
+    }
+    else
+    {
+      System.out.println("From  [" + minDate + "] to [" + maxDate + "] (" + Long.toString((maxDate.getTime() - minDate.getTime()) / 1000) + " s)");
+      System.out.println("Volts [" + minVolt + ", " + maxVolt + "]");
+      System.out.println("Smallest interval:" + (smallestTimeInterval / 1000) + " s.");
+      System.out.println("LogData has " + logdata.size() + " element(s)");
+      frame.setLogData(logdata);
+    }
   }
   
   public static void main(String[] args) throws Exception
@@ -155,10 +165,22 @@ public class LogAnalysis
     {
       e.printStackTrace();
     }
+    
+    try { voltageCoeff = Float.parseFloat(System.getProperty("voltage.coeff", Float.toString(voltageCoeff))); }
+    catch (NumberFormatException nfe)
+    {
+      nfe.printStackTrace();
+    }
+    try { hourOffset = Integer.parseInt(System.getProperty("hour.offset", Integer.toString(hourOffset))); }
+    catch (NumberFormatException nfe)
+    {
+      nfe.printStackTrace();
+    }
+    System.setProperty("hour.offset", Integer.toString(hourOffset));
     String dataFName = "battery.log";
     if (args.length > 0)
       dataFName = args[0];
-    LogAnalysis la = new LogAnalysis(dataFName);
+    new LogAnalysis(dataFName);
   }
   
   public static class LogData

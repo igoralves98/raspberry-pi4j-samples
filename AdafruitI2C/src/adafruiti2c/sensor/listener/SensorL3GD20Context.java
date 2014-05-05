@@ -40,11 +40,11 @@ public class SensorL3GD20Context implements Serializable
     sensorReaderListeners.remove(l);
   }
 
-  public void fireDataDetected(double x, double y, double z)
+  public void fireMotionDetected(double x, double y, double z)
   {
     for (AdafruitL3GD20Listener l : sensorReaderListeners)
     {
-      l.dataDetected(x, y, z);
+      l.motionDetected(x, y, z);
     }
   }
 

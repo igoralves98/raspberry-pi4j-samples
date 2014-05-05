@@ -180,7 +180,7 @@ public class AdafruitLSM303
 
       //Use the values as you want
       // ...
-      try { Thread.sleep(1000L); } catch (InterruptedException ie) {}
+      try { Thread.sleep(1000L); } catch (InterruptedException ie) { System.err.println(ie.getMessage()); }
     }
   }
 

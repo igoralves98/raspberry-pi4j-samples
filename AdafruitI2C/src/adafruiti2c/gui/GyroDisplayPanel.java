@@ -27,7 +27,7 @@ import javax.swing.SwingUtilities;
 public class GyroDisplayPanel
   extends JPanel
 {
-  @SuppressWarnings("compatibility:-6774783565143675115")
+  @SuppressWarnings("compatibility:5286281276243161150")
   public final static long serialVersionUID = 1L;
   
   protected transient Stroke thick = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -38,10 +38,11 @@ public class GyroDisplayPanel
   private transient int[][] faces;
   private transient List<Point3D> rotated = null;
   
-  private final static boolean DEMO = true;
+  private final static boolean DEMO = "true".equals(System.getProperty("demo", "true"));
   private transient SampleL3GD20RealReader sensorReader = null;
   
-//private double angleX = 0d, angleY = 0d, angleZ = 0d;
+  private double angleX = 0d, angleY = 0d, angleZ = 0d;
+  private final double DELTA_T = 0.05;
   
   public GyroDisplayPanel()
   {
@@ -87,7 +88,7 @@ public class GyroDisplayPanel
     
     rotateFigure(0, 0, 0);
     if (DEMO)
-      startMoving(); // This would be replaced by the listener interaction
+      startMoving(); // This would be replaced by the listener interaction, in non-demo mode.
     else
     {
       Thread sensorListener = new Thread()
@@ -97,12 +98,15 @@ public class GyroDisplayPanel
           try
           {
             sensorReader = new SampleL3GD20RealReader();
-            System.out.println("Adding listener");
+            System.out.println("...Adding listener");
             SensorL3GD20Context.getInstance().addReaderListener(new AdafruitL3GD20Listener()
               {
-                public void dataDetected(double x, double y, double z) 
+                public void motionDetected(double x, double y, double z) 
                 {
-                  try { rotateFigure(x, y, z); } catch (Exception ex) {}
+                  angleX += (x * DELTA_T);
+                  angleY += (y * DELTA_T);
+                  angleZ += (z * DELTA_T);
+                  try { rotateFigure(angleX, angleY, angleZ); } catch (Exception ex) {}
                 }
                 
                 public void close()
@@ -170,7 +174,8 @@ public class GyroDisplayPanel
     
   }
   
-  private void startMoving()
+  // For demo
+  private void startMoving() 
   {
     Thread movingThread = new Thread()
       {

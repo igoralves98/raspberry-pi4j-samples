@@ -14,6 +14,9 @@ public class SampleTCS34725Main
   
   public static void main(String[] args) throws Exception
   {
+    int colorThreshold = 4000;
+    if (args.length > 0)
+      try { colorThreshold = Integer.parseInt(args[0]); } catch (NumberFormatException nfe) { System.err.println(nfe.toString()); }
     final AdafruitTCS34725 sensor = new AdafruitTCS34725(AdafruitTCS34725.TCS34725_INTEGRATIONTIME_50MS, AdafruitTCS34725.TCS34725_GAIN_4X);
     // Setup output pins here for the 3 color led
     final GpioController gpio = GpioFactory.getInstance();
@@ -44,14 +47,41 @@ public class SampleTCS34725Main
       System.out.println("Read color R:" + r + 
                                    " G:" + g +
                                    " B:" + b);
-      // TODO Send to 3-color led. The output is digital!! Not analog.
+      // Send to 3-color led. The output is digital!! Not analog.
       // Use a DAC: https://learn.adafruit.com/mcp4725-12-bit-dac-with-raspberry-pi/overview
       // For now, take the biggest one
-      int max = Math.max(r, g);
-      max = Math.max(max, b);
-      if (max == r) redPin.high();   else redPin.low();
-      if (max == g) greenPin.high(); else greenPin.low();
-      if (max == b) bluePin.high();  else bluePin.low();
+      if (r > colorThreshold || g > colorThreshold || b > colorThreshold)
+      {
+        int max = Math.max(r, g);
+        max = Math.max(max, b);
+        if (max == r) 
+        {
+          System.out.println("Red!");
+          redPin.high();   
+        }
+        else 
+          redPin.low();
+        if (max == g) 
+        {
+          System.out.println("Green!");
+          greenPin.high(); 
+        }
+        else 
+          greenPin.low();
+        if (max == b) 
+        {
+          System.out.println("Blue!");
+          bluePin.high();  
+        }
+        else 
+          bluePin.low();
+      }
+      else
+      {
+        redPin.low();
+        greenPin.low();
+        bluePin.low();
+      }
     }
     redPin.low();
     greenPin.low();

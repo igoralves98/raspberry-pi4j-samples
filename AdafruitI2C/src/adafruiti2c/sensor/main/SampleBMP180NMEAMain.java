@@ -62,7 +62,7 @@ public class SampleBMP180NMEAMain
           System.out.println();            
           reader.stop();
           // Wait for everything to shutdown, for the example...
-          try { Thread.sleep(2000L); } catch (InterruptedException ie) {}
+          try { Thread.sleep(2000L); } catch (InterruptedException ie) { ie.printStackTrace(); }
         }
       });
     

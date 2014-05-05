@@ -16,7 +16,9 @@ import java.text.NumberFormat;
  */
 public class AdafruitBMP180
 {
-  // Minimal constants carried over from Arduino library
+  public final static int LITTLE_ENDIAN = 0;
+  public final static int BIG_ENDIAN    = 1;
+  private final static int BMP180_ENDIANNESS = LITTLE_ENDIAN;
   /*
   Prompt> sudo i2cdetect -y 1
        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -37,7 +39,7 @@ public class AdafruitBMP180
   public final static int BMP180_HIGHRES           = 2;
   public final static int BMP180_ULTRAHIGHRES      = 3;
 
-  // BMP085 Registers
+  // BMP180 Registers
   public final static int BMP180_CAL_AC1           = 0xAA;  // R   Calibration data (16 bits)
   public final static int BMP180_CAL_AC2           = 0xAC;  // R   Calibration data (16 bits)
   public final static int BMP180_CAL_AC3           = 0xAE;  // R   Calibration data (16 bits)
@@ -138,14 +140,23 @@ public class AdafruitBMP180
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-    return (hi << 8) + lo; // Big Endian
+    return (BMP180_ENDIANNESS == BIG_ENDIAN) ? (hi << 8) + lo : (lo << 8) + hi; // Big Endian
   }
 
   private int readS16(int register) throws Exception
   {
-    int hi = this.readS8(register);
-    int lo = this.readU8(register + 1);
-    return (hi << 8) + lo; // Big Endian
+    int hi = 0, lo = 0;
+    if (BMP180_ENDIANNESS == BIG_ENDIAN)
+    {
+      hi = this.readS8(register);
+      lo = this.readU8(register + 1);
+    }
+    else
+    {
+      lo = this.readS8(register);
+      hi = this.readU8(register + 1);
+    }
+    return (hi << 8) + lo;
   }
 
   public void readCalibrationData() throws Exception
@@ -355,7 +366,7 @@ public class AdafruitBMP180
     return altitude;
   }
       
-  private static void waitfor(long howMuch)
+  protected static void waitfor(long howMuch)
   {
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
   }

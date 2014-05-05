@@ -43,6 +43,7 @@ public class LogAnalysisPanel
   private final static NumberFormat VOLT_FMT = new DecimalFormat("#0.00");
   private final static DateFormat DATE_FMT = new SimpleDateFormat("dd-MMM-yy HH:mm");
   protected transient Stroke thick = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+  private boolean withSmoothing = "true".equals(System.getProperty("with.smoothing", "true"));
 
   public LogAnalysisPanel()
   {
@@ -83,30 +84,34 @@ public class LogAnalysisPanel
       Map<Date, Float> smoothVoltage = new HashMap<Date, Float>();
       final int SMOOTH_WIDTH = 1000;
       SortedSet<Date> keys = new TreeSet<Date>(logdata.keySet());
-      List<LogData> ld = new ArrayList<LogData>();
-      for (Date d : keys)
-        ld.add(logdata.get(d));
-      
-      for (int i=0; i<ld.size(); i++)
+      if (withSmoothing)
       {
-        float yAccu = 0f;
-        for (int acc=i-(SMOOTH_WIDTH / 2); acc<i+(SMOOTH_WIDTH/2); acc++)
+        List<LogData> ld = new ArrayList<LogData>();
+        for (Date d : keys)
+          ld.add(logdata.get(d));
+        
+        for (int i=0; i<ld.size(); i++)
         {
-          double y;
-          if (acc < 0)
-            y = ld.get(0).getVoltage();
-          else if (acc > (ld.size() - 1))
-            y = ld.get(ld.size() - 1).getVoltage();
-          else
-            y = ld.get(acc).getVoltage();
-          yAccu += y;
+          float yAccu = 0f;
+          for (int acc=i-(SMOOTH_WIDTH / 2); acc<i+(SMOOTH_WIDTH/2); acc++)
+          {
+            double y;
+            if (acc < 0)
+              y = ld.get(0).getVoltage();
+            else if (acc > (ld.size() - 1))
+              y = ld.get(ld.size() - 1).getVoltage();
+            else
+              y = ld.get(acc).getVoltage();
+            yAccu += y;
+          }
+          yAccu = yAccu / SMOOTH_WIDTH;
+  //      System.out.println("Smooth Voltage:" + yAccu);
+          smoothVoltage.put(ld.get(i).getDate(), yAccu);
         }
-        yAccu = yAccu / SMOOTH_WIDTH;
-//      System.out.println("Smooth Voltage:" + yAccu);
-        smoothVoltage.put(ld.get(i).getDate(), yAccu);
       }
       
       // Sort, mini maxi.
+      boolean narrow = "y".equals(System.getProperty("narrow", "n"));
    /* SortedSet<Date> */ keys = new TreeSet<Date>(logdata.keySet());
       for (Date key : keys) 
       { 
@@ -126,14 +131,33 @@ public class LogAnalysisPanel
           if (value.getDate().after(maxDate))
             maxDate = value.getDate();
         }
+        if (narrow)
+        {
+          minVolt = Math.min(minVolt, value.getVoltage());
+          maxVolt = Math.max(maxVolt, value.getVoltage());
+        }
+      }   
+      if (!narrow)
+      {
         minVolt =  0; // Math.min(minVolt, value.getVoltage());
-        maxVolt = 15; // Math.max(maxVolt, value.getVoltage());
-      }      
+        maxVolt = 15; // Math.max(maxVolt, value.getVoltage());          
+      }
       long timespan  = maxDate.getTime() - minDate.getTime();
       float voltspan = maxVolt - minVolt;
       
       g2d.setColor(Color.white);
       g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+      // Volt grid
+      int minVoltGrid = (int)Math.floor(minVolt);
+      int maxVoltGrid = (int)Math.ceil(maxVolt);
+      g2d.setColor(Color.lightGray);
+      for (int v=minVoltGrid; v<maxVoltGrid; v++)
+      {
+        float voltoffset = v - minVolt;
+        int y = this.getHeight() - (int)(this.getHeight() * ((float)voltoffset / (float)voltspan));
+        g2d.drawLine(0, y, this.getWidth(), y);
+      }
+      
       g2d.setColor(Color.red);
       Point previous = null;      
       // Raw Data
@@ -152,25 +176,28 @@ public class LogAnalysisPanel
           g2d.drawLine(previous.x, previous.y, current.x, current.y);
         previous = current;
       }
-      // Smooth Data
-      g2d.setColor(Color.blue);
-      Stroke orig = g2d.getStroke();
-      g2d.setStroke(thick);
-      previous = null;      
-      for (Date key : keys) 
-      { 
-        float volt = smoothVoltage.get(key).floatValue();
-        long timeoffset = key.getTime() - minDate.getTime();
-        float voltoffset = volt - minVolt;
-        int x = (int)(this.getWidth() * ((float)timeoffset / (float)timespan));
-        int y = this.getHeight() - (int)(this.getHeight() * ((float)voltoffset / (float)voltspan));
-        Point current = new Point(x, y);
-      //System.out.println("x:" + x + ", y:" + y);
-        if (previous != null)
-          g2d.drawLine(previous.x, previous.y, current.x, current.y);
-        previous = current;
+      if (withSmoothing)
+      {
+        // Smooth Data
+        g2d.setColor(Color.blue);
+        Stroke orig = g2d.getStroke();
+        g2d.setStroke(thick);
+        previous = null;      
+        for (Date key : keys) 
+        { 
+          float volt = smoothVoltage.get(key).floatValue();
+          long timeoffset = key.getTime() - minDate.getTime();
+          float voltoffset = volt - minVolt;
+          int x = (int)(this.getWidth() * ((float)timeoffset / (float)timespan));
+          int y = this.getHeight() - (int)(this.getHeight() * ((float)voltoffset / (float)voltspan));
+          Point current = new Point(x, y);
+        //System.out.println("x:" + x + ", y:" + y);
+          if (previous != null)
+            g2d.drawLine(previous.x, previous.y, current.x, current.y);
+          previous = current;
+        }
+        g2d.setStroke(orig);
       }
-      g2d.setStroke(orig);
     }
   }
 

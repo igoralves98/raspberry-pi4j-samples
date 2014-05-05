@@ -27,6 +27,7 @@ public class SampleL3GD20RealReader
     sensor.calibrate();
   }
   
+  private final static int MIN_MOVE = 10;
   public void start() throws Exception
   {
     long wait = 20L;
@@ -38,12 +39,15 @@ public class SampleL3GD20RealReader
       y = data[1];
       z = data[2];
       // Broadcast if needed
-      if (Math.abs(x - refX) > 1 || Math.abs(y - refY) > 1 || Math.abs(z - refZ) > 1)
+      if (Math.abs(x - refX) > MIN_MOVE || Math.abs(y - refY) > MIN_MOVE || Math.abs(z - refZ) > MIN_MOVE)
       {
+//      System.out.println("X:" + refX + " -> " + x);
+//      System.out.println("Y:" + refY + " -> " + y);
+//      System.out.println("Z:" + refZ + " -> " + z);
         refX = x;
         refY = y;
         refZ = z;
-        SensorL3GD20Context.getInstance().fireDataDetected(x, y, z);
+        SensorL3GD20Context.getInstance().fireMotionDetected(x, y, z);
       }    
 //    System.out.printf("X:%.2f, Y:%.2f, Z:%.2f%n", x, y, z);
       try { Thread.sleep(wait); } catch (InterruptedException ex) {}

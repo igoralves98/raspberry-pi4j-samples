@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class AdafruitMCP4725
 {
-  public final static int MCP4725_ADDRESS = 0x62; 
+  public final static int MCP4725_ADDRESS = 0x62; // Can be changed with pin A0. A0 connected to VDD: 0x63
 
   public final static int MCP4725_REG_WRITEDAC       = 0x40;
   public final static int MCP4725_REG_WRITEDACEEPROM = 0x60;

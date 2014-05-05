@@ -7,7 +7,8 @@ import java.io.IOException;
 import sevensegdisplay.SevenSegment;
 
 public class CPUTempSample
-{ private static boolean go = true;
+{ 
+  private static boolean go = true;
   
   private static void setGo(boolean b)
   {

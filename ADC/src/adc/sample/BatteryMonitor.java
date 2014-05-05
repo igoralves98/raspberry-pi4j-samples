@@ -108,9 +108,11 @@ public class BatteryMonitor
   
   private final static String DEBUG_PRM       = "-debug=";
   private final static String CALIBRATION_PRM = "-calibration";
+  private final static String CAL             = "-cal";
   private final static String CHANNEL_PRM     = "-ch=";
   private final static String MIN_VALUE       = "-min=";
   private final static String MAX_VALUE       = "-max=";
+  private final static String TUNE_VALUE      = "-tune=";
   private final static String SCALE_PRM       = "-scale=";
   private final static String LOG_PRM         = "-log=";
   
@@ -118,18 +120,24 @@ public class BatteryMonitor
   private static int maxADC =  1023;
   private static float minVolt =  0f;
   private static float maxVolt = 15f;
-  private static boolean scale=false;
+  private static float tuningVolt  = 15f;
+  private static int tuningADC     = 1023;
+  private static boolean scale = false;
+  private static boolean tuning = false;
   
   public static void main(String[] args) throws Exception
   {
     System.out.println("Parameters are:");
-    System.out.println("  -calibration");
+    System.out.println("  -calibration or -cal");
     System.out.println("  -debug=y|n|yes|no|true|false - example -debug=y        (default is n)");
     System.out.println("  -ch=[0-7]                    - example -ch=0           (default is 0)");
     System.out.println("  -min=minADC:minVolt          - example -min=280:3.75   (default is    0:0.0)");
     System.out.println("  -max=maxADC:maxVolt          - example -min=879:11.25  (default is 1023:15.0)");
+    System.out.println("  -tune=ADC:volt               - example -tune=973:12.6  (default is 1023:15.0)");
     System.out.println("  -scale=y|n                   - example -scale=y        (default is n)");
     System.out.println("  -log=[log-file-name]         - example -log=[batt.csv] (default is battery.log)");
+    System.out.println("");
+    System.out.println(" -min & -max are required if -tune is not here, and vice versa.");
     int channel = 0;
     for (String prm : args)
     {
@@ -145,6 +153,13 @@ public class BatteryMonitor
         scale = ("y".equals(prm.substring(SCALE_PRM.length())));
       else if (prm.startsWith(LOG_PRM))
         logFileName = prm.substring(LOG_PRM.length()); 
+      else if (prm.startsWith(TUNE_VALUE))
+      {
+        tuning = true;
+        String val = prm.substring(TUNE_VALUE.length());
+        tuningADC = Integer.parseInt(val.substring(0, val.indexOf(":"))); 
+        tuningVolt = Float.parseFloat(val.substring(val.indexOf(":") + 1)); 
+      }
       else if (prm.startsWith(MIN_VALUE))
       {
         String val = prm.substring(MIN_VALUE.length());
@@ -158,37 +173,32 @@ public class BatteryMonitor
         maxVolt = Float.parseFloat(val.substring(val.indexOf(":") + 1)); 
       }
     }
-    System.out.println("Prms: ADC Channel:" + channel + ", MinADC:" + minADC + ", MinVolt:" + minVolt + ", MaxADC:" + maxADC + ", maxVolt:" + maxVolt);
+    String prms = "Prms: ADC Channel:" + channel;
+    if (tuning)
+      prms += ", tuningADC:" + tuningADC + ", tuningVolt:" + tuningVolt;
+    else
+      prms += ", MinADC:" + minADC + ", MinVolt:" + minVolt + ", MaxADC:" + maxADC + ", maxVolt:" + maxVolt;
+    System.out.println(prms);
     if (scale)
     {
+      if (tuning)
+      {
+        minADC = 0;
+        minVolt = 0f;
+        maxADC = tuningADC;
+        maxVolt = tuningVolt;
+      }
       final int deltaADC = maxADC - minADC;
       final float deltaVolt = maxVolt - minVolt;
       
       float b = ((maxVolt * minADC) - (minVolt * maxADC)) / deltaADC;
-      float a = (minVolt - b) / minADC;
+      float a = (maxVolt - b) / maxADC;
       
   //  System.out.println("a=" + a + "(" + ((maxVolt - b) / maxADC) + "), b=" + b);
       
       System.out.println("=== Scale ===");
       System.out.println("Value range: ADC:0 => V:" + b + ", ADC:1023 => V:" + ((a * 1023) + b));
-      for (int value=0; false && value<1024; value++)
-      {
-        int volume = (int)(value / 10.23); // [0, 1023] ~ [0x0000, 0x03FF] ~ [0&0, 0&1111111111]
-        float voltage = 0;
-        if (value < minADC)
-        {
-          voltage = /* 0 + */ minVolt * ((float)value / (float)minADC);
-        }
-        else if (value >= minADC && value <= maxADC)
-        {  
-          voltage = minVolt + (deltaVolt * (float)(value - minADC) / (float)deltaADC);
-        }
-        else // value > maxADC
-        {
-          voltage = maxVolt + ((15 - maxVolt) * (float)(value - maxADC) / (float)(1023 - maxADC));
-        }
-        System.out.println(value + ";" + volume + ";" + voltage);
-      }
+      System.out.println("Coeff A:" + a + ", coeff B:" + b);
       for (int i=0; i<1024; i++)
         System.out.println(i + ";" + ((a * i) + b));
       System.out.println("=============");

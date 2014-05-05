@@ -808,37 +808,6 @@ public class AdafruitL3GD20
     return result;
   }
   
-  private int readS8(int reg) throws Exception
-  {
-    // "Reads a signed byte from the I2C device"
-    int result = 0;
-    try
-    {
-      result = this.l3dg20.read(reg);
-      if (result > 127)
-        result -= 256;
-      if (verbose)
-        System.out.println("(S8) I2C: Device " + toHex(L3GD20ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
-    }
-    catch (Exception ex)
-    { ex.printStackTrace(); }
-    return result;
-  }
-  
-  private int readU16(int register) throws Exception
-  {
-    int hi = this.readU8(register);
-    int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
-  }
-
-  private int readS16(int register) throws Exception
-  {
-    int hi = this.readS8(register);
-    int lo = this.readU8(register + 1);
-    return (hi << 8) + lo;
-  }
-  
   private static String toHex(int i)
   {
     String s = Integer.toString(i, 16).toUpperCase();

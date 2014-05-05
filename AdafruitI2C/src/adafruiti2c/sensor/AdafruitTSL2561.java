@@ -220,40 +220,6 @@ public class AdafruitTSL2561
     return result;
   }
 
-  /*
-   * Reads a signed byte from the I2C device
-   */
-  private int readS8(int reg) throws Exception
-  {
-    int result = 0;
-    try
-    {
-      result = this.tsl2561.read(reg);
-      if (result > 127)
-      {
-        result -= 256;
-      }
-      if (verbose)
-        System.out.println("(S8) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
-    }
-    catch (Exception ex)
-    {
-      ex.printStackTrace();
-    }
-    return result;
-  }
-
-  private int readS16(int register) throws Exception
-  {
-    int hi = this.readS8(register);
-    int lo = this.readU8(register + 1);
-//  return (hi << 8) + lo;
-    int result = (lo << 8) + hi; // Little endian
-    if (verbose)
-      System.out.println("(S16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
-    return result;
-  }
-
   private int readU16(int register) throws Exception
   {
     int lo = this.readU8(register);

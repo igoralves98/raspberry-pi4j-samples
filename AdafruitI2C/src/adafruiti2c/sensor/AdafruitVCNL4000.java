@@ -3,13 +3,9 @@ package adafruiti2c.sensor;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
-
 import com.pi4j.system.SystemInfo;
 
 import java.io.IOException;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /*
  * Proximity sensor
@@ -99,42 +95,13 @@ public class AdafruitVCNL4000
     { ex.printStackTrace(); }
     return result;
   }
-  
-  private int readS8(int reg) throws Exception
-  {
-    // "Reads a signed byte from the I2C device"
-    int result = 0;
-    try
-    {
-      result = this.vcnl4000.read(reg);
-      if (result > 127)
-        result -= 256;
-      if (verbose)
-        System.out.println("(S8) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
-    }
-    catch (Exception ex)
-    { ex.printStackTrace(); }
-    return result;
-  }
-  
+
   private int readU16(int register) throws Exception
   {
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
-//  int result = (hi << 8) + lo;
     int result = (VCNL4000_ENDIANNESS == BIG_ENDIAN)? (hi << 8) + lo : (lo << 8) + hi; // Little endian for VCNL4000
     
-    if (verbose)
-      System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
-    return result;
-  }
-
-  private int readS16(int register) throws Exception
-  {
-    int hi = this.readS8(register);
-    int lo = this.readU8(register + 1);
-//  int result = (hi << 8) + lo;
-    int result = (lo << 8) + hi; // Little endian
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
@@ -214,7 +181,7 @@ public class AdafruitVCNL4000
         ex.printStackTrace();
       }
       System.out.println("Proximity: " + prox); //  + " unit?");
-      try { Thread.sleep(100L); } catch (InterruptedException ex) {}
+      try { Thread.sleep(100L); } catch (InterruptedException ex) { System.err.println(ex.toString()); }
     }
   }
 }

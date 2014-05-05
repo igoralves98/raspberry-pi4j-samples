@@ -51,7 +51,7 @@ public class LogAnalysisFrame
   {
     this.setJMenuBar(menuBar);
     this.getContentPane().setLayout(new BorderLayout());
-    this.setSize(new Dimension(700, 275));
+    this.setSize(new Dimension(1000, 275));
     this.setTitle("Battery Data");
     menuFile.setText("File");
     menuFileExit.setText("Exit");

@@ -3,21 +3,15 @@ package adafruiti2c.sensor;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
-
 import com.pi4j.system.SystemInfo;
 
-import java.awt.Color;
-
 import java.io.IOException;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /*
- * Proximity sensor
+ * Light sensor
  */
 public class AdafruitTCS34725
 {
@@ -319,34 +313,6 @@ public class AdafruitTCS34725
     return result;
   }
   
-  private int readS8(int reg) throws Exception
-  {
-    // "Reads a signed byte from the I2C device"
-    int result = 0;
-    try
-    {
-      result = this.tcs34725.read(TCS34725_COMMAND_BIT | reg);
-      if (result > 127)
-        result -= 256;
-      if (verbose)
-        System.out.println("(S8) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | reg));
-    }
-    catch (Exception ex)
-    { ex.printStackTrace(); }
-    return result;
-  }
-  
-  private int readS16(int register) throws Exception
-  {
-    int hi = this.readS8(register);
-    int lo = this.readU8(register + 1);
-    int result = (hi << 8) + lo; // Big endian
-//  int result = (lo << 8) + hi; // Little endian
-    if (verbose)
-      System.out.println("(U16) I2C: Device " + toHex(TCS34725_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(TCS34725_COMMAND_BIT | register));
-    return result;
-  }
-
   private static String toHex(int i)
   {
     String s = Integer.toString(i, 16).toUpperCase();
