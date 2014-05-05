@@ -14,7 +14,7 @@ public class AdafruitVCNL4000
 {
   public final static int LITTLE_ENDIAN = 0;
   public final static int BIG_ENDIAN    = 1;
-  private final static int VCNL4000_ENDIANNESS = LITTLE_ENDIAN;
+  private final static int VCNL4000_ENDIANNESS = BIG_ENDIAN;
   /*
   Prompt> sudo i2cdetect -y 1
        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -39,10 +39,10 @@ public class AdafruitVCNL4000
   public final static int VCNL4000_SIGNALFREQ       = 0x89;
   public final static int VCNL4000_PROXINITYADJUST  = 0x8A;
 
-  public final static int VCNL4000_3M125   = 0;
-  public final static int VCNL4000_1M5625  = 1;
-  public final static int VCNL4000_781K25  = 2;
-  public final static int VCNL4000_390K625 = 3;
+  public final static int VCNL4000_3M125            = 0x00;
+  public final static int VCNL4000_1M5625           = 0x01;
+  public final static int VCNL4000_781K25           = 0x02;
+  public final static int VCNL4000_390K625          = 0x03;
 
   public final static int VCNL4000_MEASUREAMBIENT   = 0x10;
   public final static int VCNL4000_MEASUREPROXIMITY = 0x08;
@@ -73,7 +73,52 @@ public class AdafruitVCNL4000
       if (verbose)
         System.out.println("Connected to device. OK.");
       
-      vcnl4000.write(VCNL4000_PROXINITYADJUST, (byte)0x81);
+      vcnl4000.write(VCNL4000_IRLED, (byte)20); // 20 * 10mA = 200mA
+      try
+      {
+        int irLed = readU8(VCNL4000_IRLED);
+        System.out.println("IR LED Current = " + (irLed * 10) + " mA");
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      
+      try
+      {        
+//      vcnl4000.write(VCNL4000_SIGNALFREQ, (byte)VCNL4000_390K625);
+        int freq = readU8(VCNL4000_SIGNALFREQ);
+        switch (freq)
+        {
+          case VCNL4000_3M125:
+            System.out.println("Proximity measurement frequency = 3.125 MHz");
+            break;
+          case VCNL4000_1M5625:
+            System.out.println("Proximity measurement frequency = 1.5625 MHz");
+            break;
+          case VCNL4000_781K25:
+            System.out.println("Proximity measurement frequency = 781.25 KHz");
+            break;
+          case VCNL4000_390K625:
+            System.out.println("Proximity measurement frequency = 390.625 KHz");
+            break;
+        }
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      
+      vcnl4000.write(VCNL4000_PROXINITYADJUST, (byte)0x81); 
+      try 
+      {
+        int reg = readU8(VCNL4000_PROXINITYADJUST);
+        System.out.println("Proximity adjustment register = " + toHex(reg));
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
     }
     catch (IOException e)
     {
@@ -88,6 +133,7 @@ public class AdafruitVCNL4000
     try
     {
       result = this.vcnl4000.read(reg);
+//    try { Thread.sleep(0, 170000); } catch (Exception ex) { ex.printStackTrace(); } // 170 microseconds
       if (verbose)
         System.out.println("(U8) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
@@ -101,7 +147,6 @@ public class AdafruitVCNL4000
     int hi = this.readU8(register);
     int lo = this.readU8(register + 1);
     int result = (VCNL4000_ENDIANNESS == BIG_ENDIAN)? (hi << 8) + lo : (lo << 8) + hi; // Little endian for VCNL4000
-    
     if (verbose)
       System.out.println("(U16) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
     return result;
@@ -123,9 +168,34 @@ public class AdafruitVCNL4000
         prox = this.readU16(VCNL4000_PROXIMITYDATA);
       }
       else
-        waitfor(1);  // Wait 1ms
+        waitfor(10);  // Wait 10 ms
     }
     return prox;
+  }
+      
+  public final static int AMBIENT_INDEX   = 0;
+  public final static int PROXIMITY_INDEX = 1;
+  public int[] readAmbientProximity() throws Exception
+  {
+    int prox = 0;
+    int ambient = 0;
+    vcnl4000.write(VCNL4000_COMMAND, (byte)(VCNL4000_MEASUREPROXIMITY | VCNL4000_MEASUREAMBIENT));
+    boolean keepTrying = true;
+    while (keepTrying)
+    {
+      int cmd = this.readU8(VCNL4000_COMMAND);
+      if (verbose)
+        System.out.println("DBG: Proximity: " + (cmd & 0xFFFF) + ", " + cmd + " (" + VCNL4000_PROXIMITYREADY + ")");
+      if (((cmd & 0xff) & VCNL4000_PROXIMITYREADY) != 0 && ((cmd & 0xff) & VCNL4000_AMBIENTREADY) != 0)
+      {
+        keepTrying = false;
+        ambient = this.readU16(VCNL4000_AMBIENTDATA);
+        prox    = this.readU16(VCNL4000_PROXIMITYDATA);
+      }
+      else
+        waitfor(10);  // Wait 10 ms
+    }
+    return new int[] { ambient, prox };
   }
       
   private static String toHex(int i)
@@ -143,11 +213,17 @@ public class AdafruitVCNL4000
   
   private static boolean go = true;
   
+  private static int minProx    = Integer.MAX_VALUE;
+  private static int minAmbient = Integer.MAX_VALUE;
+  private static int maxProx    = Integer.MIN_VALUE;
+  private static int maxAmbient = Integer.MIN_VALUE;
+
   public static void main(String[] args)
   {
     AdafruitVCNL4000 sensor = new AdafruitVCNL4000();
-    int prox = 0;
-
+    int prox    = 0;
+    int ambient = 0;
+    
     // Bonus : CPU Temperature
     try
     {
@@ -169,18 +245,30 @@ public class AdafruitVCNL4000
                                            {
                                              go = false;
                                              System.out.println("\nBye");
+                                             System.out.println("Proximity between " + minProx + " and " + maxProx);
+                                             System.out.println("Ambient between " + minAmbient + " and " + maxAmbient);
                                            }
                                          });
     int i = 0;
-    while (go && i++ < 5)
+    while (go) //  && i++ < 5)
     {
-      try { prox = sensor.readProximity(); } 
+      try 
+      { 
+//      prox = sensor.readProximity(); 
+        int[] data = sensor.readAmbientProximity();
+        prox    = data[PROXIMITY_INDEX];
+        ambient = data[AMBIENT_INDEX];
+        maxProx = Math.max(prox, maxProx);
+        maxAmbient = Math.max(ambient, maxAmbient);
+        minProx = Math.min(prox, minProx);
+        minAmbient = Math.min(ambient, minAmbient);
+      } 
       catch (Exception ex) 
       { 
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
-      System.out.println("Proximity: " + prox); //  + " unit?");
+      System.out.println("Ambient:" + ambient + ", Proximity: " + prox); //  + " unit?");
       try { Thread.sleep(100L); } catch (InterruptedException ex) { System.err.println(ex.toString()); }
     }
   }
