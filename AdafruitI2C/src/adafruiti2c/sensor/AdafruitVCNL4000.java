@@ -128,12 +128,11 @@ public class AdafruitVCNL4000
   
   private int readU8(int reg) throws Exception
   {
-    // "Read an unsigned byte from the I2C device"
     int result = 0;
     try
     {
       result = this.vcnl4000.read(reg);
-//    try { Thread.sleep(0, 170000); } catch (Exception ex) { ex.printStackTrace(); } // 170 microseconds
+      try { Thread.sleep(0, 170000); } catch (Exception ex) { ex.printStackTrace(); } // 170 microseconds
       if (verbose)
         System.out.println("(U8) I2C: Device " + toHex(VCNL4000_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(reg));
     }
@@ -276,11 +275,16 @@ public class AdafruitVCNL4000
     {
       try 
       { 
-//      prox = sensor.readProximity(); 
-        ambient = sensor.readAmbient();
-//      int[] data = sensor.readAmbientProximity();
-//      prox    = data[PROXIMITY_INDEX];
-//      ambient = data[AMBIENT_INDEX];
+        if (false)
+          prox = sensor.readProximity(); 
+        else if (false)
+          ambient = sensor.readAmbient();
+        else if (true)
+        {
+          int[] data = sensor.readAmbientProximity();
+          prox    = data[PROXIMITY_INDEX];
+          ambient = data[AMBIENT_INDEX];
+        }
         maxProx = Math.max(prox, maxProx);
         maxAmbient = Math.max(ambient, maxAmbient);
         minProx = Math.min(prox, minProx);
@@ -291,7 +295,7 @@ public class AdafruitVCNL4000
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
-      System.out.println("Ambient:" + ambient); // + ", Proximity: " + prox); //  + " unit?");
+      System.out.println("Ambient:" + ambient + ", Proximity: " + prox); 
       try { Thread.sleep(100L); } catch (InterruptedException ex) { System.err.println(ex.toString()); }
     }
   }
