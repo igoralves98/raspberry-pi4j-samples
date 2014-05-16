@@ -11,6 +11,7 @@ public class NMEAReader
     throws InterruptedException, NumberFormatException
   {
     int br = Integer.parseInt(System.getProperty("baud.rate", "4800"));
+    String port = System.getProperty("port.name", Serial.DEFAULT_COM_PORT);
     if (args.length > 0)
     {
       try
@@ -44,8 +45,8 @@ public class NMEAReader
     Thread t = Thread.currentThread();
     try
     {
-      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + "]");
-      serial.open(Serial.DEFAULT_COM_PORT, br);
+      System.out.println("Opening port [" + port + "]");
+      serial.open(port, br);
 
       synchronized (t) { t.wait(); }
     }

@@ -73,11 +73,18 @@ public class DACSample
     1847, 1872, 1897, 1922, 1948, 1973, 1998, 2023  };
 
 
-  public static void main(String[] args) throws IOException
+  public static void main(String[] args)// throws IOException
   {
-    System.out.println("The output happens on the VOUT termional of the MCP4725.");
+    System.out.println("The output happens on the VOUT terminal of the MCP4725.");
     AdafruitMCP4725 dac = new AdafruitMCP4725();
-    for (int volt : DACLookupFullSine9Bit)
-      dac.setVoltage(volt);
+
+    for (int i=0; i<5; i++)
+    {
+      for (int volt : DACLookupFullSine9Bit)
+      {
+        dac.setVoltage(volt);
+        try { Thread.sleep(10L); } catch (InterruptedException ie) {}
+      }
+    }
   }
 }

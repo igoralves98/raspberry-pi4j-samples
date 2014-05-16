@@ -13,7 +13,7 @@ public class AdafruitMCP4725
   public final static int MCP4725_REG_WRITEDAC       = 0x40;
   public final static int MCP4725_REG_WRITEDACEEPROM = 0x60;
 
-  private static boolean verbose = false;
+  private static boolean verbose = true;
   
   private I2CBus bus;
   private I2CDevice mcp4725;
@@ -28,7 +28,7 @@ public class AdafruitMCP4725
     try
     {
       // Get i2c bus
-      bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends onthe RasPI version
+      bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends on the RasPI version
       if (verbose)
         System.out.println("Connected to bus. OK.");
 
@@ -44,11 +44,20 @@ public class AdafruitMCP4725
   }
   
   // Set the voltage, readable on the VOUT terminal
-  public void setVoltage(int voltage) throws IOException
+  public void setVoltage(int voltage) // throws IOException
   {
-    setVoltage(voltage, false);
+    try { setVoltage(voltage, false); }
+    catch (IOException ioe)
+    {
+      ioe.printStackTrace();
+    }
+    catch (NullPointerException npe)
+    {
+      npe.printStackTrace();
+    }
   }
-  public void setVoltage(int voltage, boolean persist) throws IOException
+  
+  public void setVoltage(int voltage, boolean persist) throws IOException, NullPointerException
   {
     voltage = Math.min(voltage, 4095);  // 4096 = 2^12
     voltage = Math.max(voltage, 0);
