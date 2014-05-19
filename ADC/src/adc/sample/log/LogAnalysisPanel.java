@@ -249,15 +249,22 @@ public class LogAnalysisPanel
     int x = mouseEvent.getPoint().x;
     int y = mouseEvent.getPoint().y;
     // Voltage
-    float voltspan = maxVolt - minVolt;
-    long timespan = maxDate.getTime() - minDate.getTime();
-    float voltage = minVolt + (voltspan * (float)(this.getHeight() - y) / (float)this.getHeight());
-    long minTime = minDate.getTime();
-    long time = minTime + (long)(timespan * ((float)x / (float)this.getWidth()));
-    Date date = new Date(time);
-    String mess = "<html><center><b>" + VOLT_FMT.format(voltage) + " V</b><br>" +
-                  DATE_FMT.format(date) + "</center></html>";
-//  System.out.println(mess);
-    this.setToolTipText(mess);
+    try
+    {
+      float voltspan = maxVolt - minVolt;
+      long timespan = maxDate.getTime() - minDate.getTime();
+      float voltage = minVolt + (voltspan * (float)(this.getHeight() - y) / (float)this.getHeight());
+      long minTime = minDate.getTime();
+      long time = minTime + (long)(timespan * ((float)x / (float)this.getWidth()));
+      Date date = new Date(time);
+      String mess = "<html><center><b>" + VOLT_FMT.format(voltage) + " V</b><br>" +
+                    DATE_FMT.format(date) + "</center></html>";
+  //  System.out.println(mess);
+      this.setToolTipText(mess);
+    }
+    catch (NullPointerException npe)
+    {
+      
+    }
   }
 }

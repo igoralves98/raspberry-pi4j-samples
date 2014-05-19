@@ -71,11 +71,13 @@ public class LogAnalysis
       else
       {
         nbl++;
+        if (nbl % 100 == 0)
+          System.out.println("Read " + nbl + " lines");
         String[] data = line.split(";");
         try
         {
           Date logDate  = SDF.parse(data[0]);
-          logDate = new Date(logDate.getTime() + (hourOffset * 3600 * 1000));
+          logDate = new Date(logDate.getTime() + (hourOffset * 3600 * 1000)); // TODO Make sure the gap is not too big (like > 1 day)
           int adc       = Integer.parseInt(data[1]);
           int volume    = Integer.parseInt(data[2]);
           float voltage = Float.parseFloat(data[3]) * voltageCoeff; 
@@ -124,8 +126,16 @@ public class LogAnalysis
         }
         catch (NumberFormatException nfe)
         {
-          System.err.println("For line [" + line + "], ");
-          nfe.printStackTrace();
+          System.err.println("For line [" + line + "], (" + nbl + ") " + nfe.toString());
+        }
+        catch (ParseException pe)
+        {
+          System.err.println("For line [" + line + "], (" + nbl + ") " + pe.toString());
+        }
+        catch (Exception ex)
+        {
+          System.err.println("For line [" + line + "], (" + nbl + ")");
+          ex.printStackTrace();
         }
       }
     }

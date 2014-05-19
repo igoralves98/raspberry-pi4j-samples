@@ -4,21 +4,15 @@ import adc.ADCContext;
 import adc.ADCListener;
 import adc.ADCObserver;
 
-import adc.utils.EscapeSeq;
-
 import java.io.BufferedWriter;
-
 import java.io.FileWriter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-
-import org.fusesource.jansi.AnsiConsole;
 
 public class BatteryMonitor
 {
@@ -40,10 +34,24 @@ public class BatteryMonitor
   public BatteryMonitor(int ch) throws Exception
   {
     channel = findChannel(ch);
+
+    if (tuning)
+    {
+      minADC = 0;
+      minVolt = 0f;
+      maxADC = tuningADC;
+      maxVolt = tuningVolt;
+    }
     final int deltaADC = maxADC - minADC;
     final float deltaVolt = maxVolt - minVolt;
     final float b = ((maxVolt * minADC) - (minVolt * maxADC)) / deltaADC;
-    final float a = (minVolt - b) / minADC;
+    final float a = (maxVolt - b) / maxADC;
+    if (debug)
+    {
+      System.out.println("Volt [" + minVolt + ", " + maxVolt + "]");
+      System.out.println("ADC  [" + minADC + ", " + maxADC + "]");
+      System.out.println("a=" + a+ ", b=" + b);
+    }
     System.out.println("Value range: ADC=0 => V=" + b + ", ADC=1023 => V=" + ((a * 1023) + b));
     obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).
     bw = new BufferedWriter(new FileWriter(logFileName));
@@ -108,7 +116,7 @@ public class BatteryMonitor
   
   private final static String DEBUG_PRM       = "-debug=";
   private final static String CALIBRATION_PRM = "-calibration";
-  private final static String CAL             = "-cal";
+  private final static String CAL_PRM         = "-cal";
   private final static String CHANNEL_PRM     = "-ch=";
   private final static String MIN_VALUE       = "-min=";
   private final static String MAX_VALUE       = "-max=";
@@ -143,7 +151,7 @@ public class BatteryMonitor
     {
       if (prm.startsWith(CHANNEL_PRM))
         channel = Integer.parseInt(prm.substring(CHANNEL_PRM.length()));
-      else if (prm.startsWith(CALIBRATION_PRM))
+      else if (prm.startsWith(CALIBRATION_PRM) || prm.startsWith(CAL_PRM))
         debug = true;
       else if (!debug && prm.startsWith(DEBUG_PRM))
         debug = ("y".equals(prm.substring(DEBUG_PRM.length())) || 
