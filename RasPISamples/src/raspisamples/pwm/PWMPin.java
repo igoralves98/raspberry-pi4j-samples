@@ -1,0 +1,91 @@
+package raspisamples.pwm;
+
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.PinState;
+
+public class PWMPin extends GPIOPinAdapter
+{
+  // 30 seems to be the maximum value. You can really see the led blinking beyond that.
+  private final static int CYCLE_WIDTH = 30; 
+
+  private final Thread mainThread;  
+  private final boolean debug = "true".equals(System.getProperty("debug", "false"));
+
+  public PWMPin(Pin p, String name, PinState originalState)
+  {
+    super(p, name, originalState);
+    mainThread = Thread.currentThread();
+  }
+  
+  private boolean emittingPWM = false;
+  private int pwmVolume = 0; // [0..CYCLE_WIDTH], percent / (100 / CYCLE_WIDTH);
+  
+  public void emitPWM(final int percent)
+  {
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be between 0 and 100");
+    if (debug)
+      System.out.println("Volume:" + percentToVolume(percent) + "/" + CYCLE_WIDTH);
+    Thread pwmThread = new Thread()
+      {
+        public void run()
+        {
+          emittingPWM = true;
+          pwmVolume = percentToVolume(percent);
+          while (emittingPWM)
+          {
+            if (pwmVolume > 0)
+              pin.pulse(pwmVolume, true); // set second argument to 'true' use a blocking call
+            pin.low();
+            waitFor(CYCLE_WIDTH - pwmVolume);        
+          }
+          System.out.println("Stopping PWM");
+          // Notify the ones waiting for this thread to end
+          synchronized (mainThread)
+          {
+            mainThread.notify();
+          }
+        }
+      };
+    pwmThread.start();
+  }
+  
+  private int percentToVolume(int percent)
+  {
+    return percent / (100 / CYCLE_WIDTH);
+  }
+  
+  public void adjustPWMVolume(int percent)
+  {
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be between 0 and 100");
+    pwmVolume = percentToVolume(percent);   
+  }
+  
+  public boolean isPWMing()
+  {
+    return emittingPWM;
+  }
+  
+  public void stopPWM()
+  {
+    emittingPWM = false;
+    synchronized (mainThread)
+    {
+      try { mainThread.wait(); } catch (InterruptedException ie) { System.out.println(ie.toString()); }
+    }
+    pin.low();
+  }
+
+  private void waitFor(long ms)
+  {
+    if (ms <= 0)
+      return;
+    try
+    {
+      Thread.sleep(ms);
+    }
+    catch (InterruptedException ie)
+    {
+      ie.printStackTrace();
+    }
+  }
+}

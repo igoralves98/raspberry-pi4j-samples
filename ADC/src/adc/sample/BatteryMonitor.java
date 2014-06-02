@@ -17,6 +17,7 @@ import java.util.TimeZone;
 public class BatteryMonitor
 {
   private static boolean debug = false;
+  private static boolean calib = false;
   private ADCObserver.MCP3008_input_channels channel = null;
   private final static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   private final static TimeZone HERE = TimeZone.getTimeZone("America/Los_Angeles");
@@ -63,7 +64,7 @@ public class BatteryMonitor
            if (inputChannel.equals(channel))
            {
              long now = System.currentTimeMillis();
-             if (Math.abs(now - lastLogTimeStamp) > 1000)
+             if (calib || Math.abs(now - lastLogTimeStamp) > 1000)
              {
                int volume = (int)(newValue / 10.23); // [0, 1023] ~ [0x0000, 0x03FF] ~ [0&0, 0&1111111111]
                if (Math.abs(volume - lastVolumeLogged) > 1) // 1 %
@@ -152,7 +153,10 @@ public class BatteryMonitor
       if (prm.startsWith(CHANNEL_PRM))
         channel = Integer.parseInt(prm.substring(CHANNEL_PRM.length()));
       else if (prm.startsWith(CALIBRATION_PRM) || prm.startsWith(CAL_PRM))
+      {
         debug = true;
+        calib = true;
+      }
       else if (!debug && prm.startsWith(DEBUG_PRM))
         debug = ("y".equals(prm.substring(DEBUG_PRM.length())) || 
                  "yes".equals(prm.substring(DEBUG_PRM.length())) || 

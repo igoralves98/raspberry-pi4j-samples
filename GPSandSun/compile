@@ -3,7 +3,7 @@ JAVAC_OPTIONS="-sourcepath ./src"
 JAVAC_OPTIONS="$JAVAC_OPTIONS -d ./classes"
 echo $JAVAC_OPTIONS
 CP=./classes
-PI4J_HOME=/home/pi/pi4j/pi4j-distribution/target/distro-contents
+# PI4J_HOME=/home/pi/pi4j/pi4j-distribution/target/distro-contents
 CP=$CP:$PI4J_HOME/lib/pi4j-core.jar
 CP=$CP:./lib/almanactools.jar
 CP=$CP:./lib/geomutil.jar

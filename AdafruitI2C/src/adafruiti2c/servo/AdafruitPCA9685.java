@@ -10,6 +10,8 @@ import java.io.IOException;
  */
 public class AdafruitPCA9685
 {
+  public final static int PCA9685_ADDRESS = 0x40; 
+
   public final static int SUBADR1       = 0x02;
   public final static int SUBADR2       = 0x03;
   public final static int SUBADR3       = 0x04;
@@ -31,7 +33,7 @@ public class AdafruitPCA9685
     
   public AdafruitPCA9685()
   {
-    this(0x40); // 0x40 obtained through sudo i2cdetect -y 1
+    this(PCA9685_ADDRESS); // 0x40 obtained through sudo i2cdetect -y 1
   }
   
   public AdafruitPCA9685(int address)
@@ -86,7 +88,13 @@ public class AdafruitPCA9685
       ioe.printStackTrace();
     }
   }
-      
+  
+  /**
+   *
+   * @param channel 0..15
+   * @param on      0..4095 (2^12 positions)
+   * @param off     0..4095 (2^12 positions)
+   */
   public void setPWM(int channel, int on, int off)
   {
     try
@@ -109,7 +117,7 @@ public class AdafruitPCA9685
   
   public void setServoPulse(int channel, int pulse)
   {
-    int pulseLength = 1000000; // 1,000,000 us per second
+    int pulseLength = 1000000; // 1,000,000 us per pulse. "us" is to be read "micro sec".
     pulseLength /= 60;         // 60 Hz
     if (verbose)
       System.out.println(pulseLength + " us per period");
