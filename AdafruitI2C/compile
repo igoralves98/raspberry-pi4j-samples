@@ -1,0 +1,15 @@
+#!/bin/bash
+JAVAC_OPTIONS="-sourcepath ./src"
+JAVAC_OPTIONS="$JAVAC_OPTIONS -d ./classes"
+echo $JAVAC_OPTIONS
+CP=./classes
+# PI4J_HOME=/home/pi/pi4j/pi4j-distribution/target/distro-contents
+CP=$CP:$PI4J_HOME/lib/pi4j-core.jar
+CP=$CP:../GPSandSun/lib/nmeaparser.jar
+# JAVAC_OPTIONS="-verbose $JAVAC_OPTIONS"
+JAVAC_OPTIONS="$JAVAC_OPTIONS -cp $CP"
+COMMAND="javac $JAVAC_OPTIONS ./src/adafruiti2c/sensor/*.java ./src/adafruiti2c/gui/*.java ./src/adafruiti2c/servo/*.java ./src/adafruiti2c/samples/*.java"
+echo Compiling: $COMMAND
+$COMMAND
+echo Done
+
