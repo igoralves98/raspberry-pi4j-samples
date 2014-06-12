@@ -22,7 +22,7 @@ public class PWMPin extends GPIOPinAdapter
   
   public void emitPWM(final int percent)
   {
-    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be between 0 and 100");
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
     if (debug)
       System.out.println("Volume:" + percentToVolume(percent) + "/" + CYCLE_WIDTH);
     Thread pwmThread = new Thread()
@@ -34,9 +34,9 @@ public class PWMPin extends GPIOPinAdapter
           while (emittingPWM)
           {
             if (pwmVolume > 0)
-              pin.pulse(pwmVolume, true); // set second argument to 'true' use a blocking call
+              pin.pulse(pwmVolume, true); // set second argument to 'true' makes a blocking call
             pin.low();
-            waitFor(CYCLE_WIDTH - pwmVolume);        
+            waitFor(CYCLE_WIDTH - pwmVolume);  // Wait for the rest of the cycle      
           }
           System.out.println("Stopping PWM");
           // Notify the ones waiting for this thread to end
@@ -49,14 +49,20 @@ public class PWMPin extends GPIOPinAdapter
     pwmThread.start();
   }
   
+  /**
+   * return a number in [0..CYCLE_WIDTH]
+   * @param percent in [0..100]
+   * @return
+   */
   private int percentToVolume(int percent)
   {
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
     return percent / (100 / CYCLE_WIDTH);
   }
   
   public void adjustPWMVolume(int percent)
   {
-    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be between 0 and 100");
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
     pwmVolume = percentToVolume(percent);   
   }
   
