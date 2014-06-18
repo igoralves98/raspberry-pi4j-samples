@@ -1,0 +1,21 @@
+#!/bin/bash
+echo Compiling everything
+cd AdafruitI2C
+./compile
+cd ..
+cd ADC
+./compile
+cd ..
+cd DAC
+./compile
+cd ..
+cd ./GPIO.01
+./compile
+cd ..
+cd GPSandSun
+./compile
+cd ..
+cd GPS.sun.servo
+./compile
+cd ..
+

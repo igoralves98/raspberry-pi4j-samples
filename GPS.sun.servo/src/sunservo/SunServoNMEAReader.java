@@ -1,6 +1,6 @@
 package sunservo;
 
-import adafruiti2c.AdafruitPCA9685;
+import adafruiti2c.servo.AdafruitPCA9685;
 
 import calculation.AstroComputer;
 import calculation.SightReductionUtil;

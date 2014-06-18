@@ -12,8 +12,9 @@ CP=$CP:./lib/geomutil.jar
 CP=$CP:./lib/nauticalalmanac.jar
 CP=$CP:./lib/nmeaparser.jar
 CP=$CP:./lib/jansi-1.9.jar
-JAVAC_OPTIONS="-verbose $JAVAC_OPTIONS -cp $CP"
-COMMAND="javac $JAVAC_OPTIONS ./src/sunservo/*.java"
+# JAVAC_OPTIONS="-verbose $JAVAC_OPTIONS"
+JAVAC_OPTIONS="$JAVAC_OPTIONS -cp $CP"
+COMMAND="javac $JAVAC_OPTIONS `find ./src -name '*.java' -print`"
 echo Compiling: $COMMAND
 $COMMAND
 echo Done

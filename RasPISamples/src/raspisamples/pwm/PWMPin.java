@@ -22,7 +22,7 @@ public class PWMPin extends GPIOPinAdapter
   
   public void emitPWM(final int percent)
   {
-    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100], not [" + percent + "]");
     if (debug)
       System.out.println("Volume:" + percentToVolume(percent) + "/" + CYCLE_WIDTH);
     Thread pwmThread = new Thread()
@@ -56,13 +56,13 @@ public class PWMPin extends GPIOPinAdapter
    */
   private int percentToVolume(int percent)
   {
-    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100], not [" + percent + "]");
     return percent / (100 / CYCLE_WIDTH);
   }
   
   public void adjustPWMVolume(int percent)
   {
-    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100]");
+    if (percent < 0 || percent > 100) throw new IllegalArgumentException("Percent MUST be in [0, 100], not [" + percent + "]");
     pwmVolume = percentToVolume(percent);   
   }
   
