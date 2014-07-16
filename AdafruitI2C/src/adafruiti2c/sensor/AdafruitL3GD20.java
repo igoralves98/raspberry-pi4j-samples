@@ -191,7 +191,7 @@ public class AdafruitL3GD20
   
   public void calibrateX() throws Exception
   {
-    System.out.println("Calibrating, please do not move the sensor...");
+    System.out.println("Calibrating X, please do not move the sensor...");
     double[] buff = new double[20];
     for (int i=0; i<20; i++)
     {
@@ -206,7 +206,7 @@ public class AdafruitL3GD20
   
   public void calibrateY() throws Exception
   {
-    System.out.println("Calibrating, please do not move the sensor...");
+    System.out.println("Calibrating Y, please do not move the sensor...");
     double[] buff = new double[20];
     for (int i=0; i<20; i++)
     {
@@ -221,7 +221,7 @@ public class AdafruitL3GD20
   
   public void calibrateZ() throws Exception
   {
-    System.out.println("Calibrating, please do not move the sensor...");
+    System.out.println("Calibrating Z, please do not move the sensor...");
     double[] buff = new double[20];
     for (int i=0; i<20; i++)
     {

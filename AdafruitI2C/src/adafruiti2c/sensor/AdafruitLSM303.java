@@ -1,5 +1,7 @@
 package adafruiti2c.sensor;
 
+import adafruiti2c.sensor.listener.AdafruitLSM303Listener;
+
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -54,6 +56,9 @@ public class AdafruitLSM303
   
   private final static NumberFormat Z_FMT = new DecimalFormat("000");
   private static boolean verbose = false;
+  
+  private long wait = 1000L;
+  private AdafruitLSM303Listener dataListener = null;
 
   public AdafruitLSM303()
   {
@@ -96,6 +101,11 @@ public class AdafruitLSM303
     }
   }
 
+  public void setDataListener(AdafruitLSM303Listener dataListener)
+  {
+    this.dataListener = dataListener;
+  }
+
   // Create a separate thread to read the sensors
   public void startReading()
   {
@@ -118,11 +128,21 @@ public class AdafruitLSM303
     new Thread(task).start();
   }
 
+  public void setWait(long wait)
+  {
+    this.wait = wait;
+  }
+  private boolean keepReading = true;
+
+  public void setKeepReading(boolean keepReading)
+  {
+    this.keepReading = keepReading;
+  }
 
   private void readingSensors()
     throws IOException
   {
-    while (true)
+    while (keepReading)
     {
       accelData = new byte[6];
       magData   = new byte[6];
@@ -168,19 +188,23 @@ public class AdafruitLSM303
         e.printStackTrace();
       }
 
-      System.out.println("accel (X: " + accelX + 
-                              ", Y: " + accelY + 
-                              ", Z: " + accelZ + 
-                         ") mag (X: " + magX + 
-                              ", Y: " + magY + 
-                              ", Z: " + magZ + 
-                              ", heading: " + Z_FMT.format(heading) + ")" + 
-                         (cpuTemp != Float.MIN_VALUE?" Cpu Temp:" + cpuTemp:"") + 
-                         (cpuVoltage != Float.MIN_VALUE?" Cpu Volt:" + cpuVoltage:""));
-
+      if (dataListener != null)
+        dataListener.dataDetected(accelX, accelY, accelZ, magX, magY, magZ, heading);
+      else
+      {
+        System.out.println("accel (X: " + accelX + 
+                                ", Y: " + accelY + 
+                                ", Z: " + accelZ + 
+                           ") mag (X: " + magX + 
+                                ", Y: " + magY + 
+                                ", Z: " + magZ + 
+                                ", heading: " + Z_FMT.format(heading) + ")" + 
+                           (cpuTemp != Float.MIN_VALUE?" Cpu Temp:" + cpuTemp:"") + 
+                           (cpuVoltage != Float.MIN_VALUE?" Cpu Volt:" + cpuVoltage:""));
+      }
       //Use the values as you want
       // ...
-      try { Thread.sleep(1000L); } catch (InterruptedException ie) { System.err.println(ie.getMessage()); }
+      try { Thread.sleep(this.wait); } catch (InterruptedException ie) { System.err.println(ie.getMessage()); }
     }
   }
 

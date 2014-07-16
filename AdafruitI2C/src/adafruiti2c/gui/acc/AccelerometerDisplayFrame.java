@@ -1,4 +1,8 @@
-package adafruiti2c.gui;
+package adafruiti2c.gui.acc;
+
+import adafruiti2c.gui.gyro.GyroDisplayPanel;
+
+import adafruiti2c.gui.gyro.GyroscopeUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,20 +14,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class GyroDisplayFrame
+public class AccelerometerDisplayFrame
   extends JFrame
 {
   private JMenuBar menuBar = new JMenuBar();
   private JMenu menuFile = new JMenu();
   private JMenuItem menuFileExit = new JMenuItem();
   
-  private GyroDisplayPanel displayPanel = null;
-  private transient GyroscopeUI caller;
+  private AccelerometerDisplayPanel displayPanel = null;
+  private transient AccelerometerUI caller;
   
-  public GyroDisplayFrame(GyroscopeUI parent)
+  public AccelerometerDisplayFrame(AccelerometerUI parent)
   {
     this.caller = parent;
-    displayPanel = new GyroDisplayPanel();
+    displayPanel = new AccelerometerDisplayPanel();
     try
     {
       jbInit();
@@ -39,8 +43,8 @@ public class GyroDisplayFrame
   {
     this.setJMenuBar(menuBar);
     this.getContentPane().setLayout(new BorderLayout());
-    this.setSize(new Dimension(400, 400));
-    this.setTitle("Gyroscope UI");
+    this.setSize(new Dimension(800, 400));
+    this.setTitle("Accelerometer UI");
     menuFile.setText("File");
     menuFileExit.setText("Exit");
     menuFileExit.addActionListener( new ActionListener() { public void actionPerformed( ActionEvent ae ) { fileExit_ActionPerformed( ae ); } } );

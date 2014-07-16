@@ -1,4 +1,4 @@
-package adafruiti2c.gui;
+package adafruiti2c.gui.gyro;
 
 
 import adafruiti2c.gui.utils.Point3D;

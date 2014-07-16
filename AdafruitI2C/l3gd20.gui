@@ -1,4 +1,4 @@
 #!/bin/bash
 CP=./classes
 CP=$CP:$PI4J_HOME/lib/pi4j-core.jar
-sudo java -cp $CP -Ddemo=false adafruiti2c.gui.GyroscopeUI
+sudo java -cp $CP -Ddemo=false adafruiti2c.gui.gyro.GyroscopeUI
