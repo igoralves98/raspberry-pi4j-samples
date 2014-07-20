@@ -1,7 +1,12 @@
 package raspisamples.wp;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.SoftPwm;
+import com.pi4j.wiringpi.Gpio;
 
 public class WiringPiSoftPWM3ColorLed
 {
@@ -9,9 +14,8 @@ public class WiringPiSoftPWM3ColorLed
   public static void main(String[] args)
     throws InterruptedException
   {
-
     // initialize wiringPi library
-    com.pi4j.wiringpi.Gpio.wiringPiSetup();
+    Gpio.wiringPiSetup();
 
     int pinAddress_00 = RaspiPin.GPIO_00.getAddress(); 
     int pinAddress_01 = RaspiPin.GPIO_01.getAddress(); 
@@ -25,39 +29,42 @@ public class WiringPiSoftPWM3ColorLed
     // continuous loop
 //  while (true)
     {
+      System.out.println("One");
       // fade LED to fully ON
       for (int i = 0; i <= 100; i++)
       {
         SoftPwm.softPwmWrite(pinAddress_00, i);
         Thread.sleep(5);
       }
-
+      System.out.println("Two");
       // fade LED to fully OFF
       for (int i = 100; i >= 0; i--)
       {
         SoftPwm.softPwmWrite(pinAddress_00, i);
         Thread.sleep(5);
       }
+      System.out.println("Three");
       // fade LED to fully ON
       for (int i = 0; i <= 100; i++)
       {
         SoftPwm.softPwmWrite(pinAddress_01, i);
         Thread.sleep(5);
       }
-
+      System.out.println("Four");
       // fade LED to fully OFF
       for (int i = 100; i >= 0; i--)
       {
         SoftPwm.softPwmWrite(pinAddress_01, i);
         Thread.sleep(5);
       }
+      System.out.println("Five");
       // fade LED to fully ON
       for (int i = 0; i <= 100; i++)
       {
         SoftPwm.softPwmWrite(pinAddress_02, i);
         Thread.sleep(5);
       }
-
+      System.out.println("Six");
       // fade LED to fully OFF
       for (int i = 100; i >= 0; i--)
       {
@@ -65,7 +72,7 @@ public class WiringPiSoftPWM3ColorLed
         Thread.sleep(5);
       }
     }
-    
+    System.out.println("Seven");
     // All spectrum
     for (int a = 0; a <= 100; a++)
     {
@@ -78,12 +85,12 @@ public class WiringPiSoftPWM3ColorLed
         for (int c = 0; c <= 100; c++)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
         for (int c = 100; c >= 0; c--)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
       }
       for (int b = 100; b >= 0; b--)
@@ -93,15 +100,16 @@ public class WiringPiSoftPWM3ColorLed
         for (int c = 0; c <= 100; c++)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
         for (int c = 100; c >= 0; c--)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
       }
     }
+    System.out.println("Eight");
     for (int a = 100; a >= 0; a--)
     {
       SoftPwm.softPwmWrite(pinAddress_00, a);
@@ -113,12 +121,12 @@ public class WiringPiSoftPWM3ColorLed
         for (int c = 0; c <= 100; c++)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
         for (int c = 100; c >= 0; c--)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
       }
       for (int b = 100; b >= 0; b--)
@@ -128,14 +136,15 @@ public class WiringPiSoftPWM3ColorLed
         for (int c = 0; c <= 100; c++)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
         for (int c = 100; c >= 0; c--)
         {
           SoftPwm.softPwmWrite(pinAddress_02, c);
-          Thread.sleep(5);
+          Thread.sleep(1);
         }
       }
     }
+    System.out.println("Done");     
   }
 }

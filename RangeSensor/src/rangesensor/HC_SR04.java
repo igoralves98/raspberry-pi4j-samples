@@ -19,11 +19,13 @@ public class HC_SR04
   private final static Format DF22 = new DecimalFormat("#0.00");
   private final static double SOUND_SPEED = 34300;           // in cm, 343 m/s
   private final static double DIST_FACT   = SOUND_SPEED / 2; // round trip
+  private final static int MIN_DIST = 5;
   
   public static void main(String[] args)
     throws InterruptedException
   {
     System.out.println("GPIO Control - Range Sensor HC-SR04.");
+    System.out.println("Will stop is distance is smaller than " + MIN_DIST + " cm");
 
     // create gpio controller
     final GpioController gpio = GpioFactory.getInstance();
@@ -45,12 +47,14 @@ public class HC_SR04
     Thread.sleep(2000);
 
     boolean go = true;
-    System.out.println("Looping until the distance is less than 10 cm");
+    System.out.println("Looping until the distance is less than " + MIN_DIST + " cm");
     while (go)
     {
       double start = 0d, end = 0d;
       trigPin.high();
-      try { Thread.sleep(0, 10000); } catch (Exception ex) { ex.printStackTrace(); } // 10 microsec to trigger the module  (8 ultrasound bursts at 40 kHz) 
+      // 10 microsec to trigger the module  (8 ultrasound bursts at 40 kHz) 
+      // https://www.dropbox.com/s/615w1321sg9epjj/hc-sr04-ultrasound-timing-diagram.png
+      try { Thread.sleep(0, 10000); } catch (Exception ex) { ex.printStackTrace(); } 
       trigPin.low();
       
       // Wait for the signal to return
@@ -60,13 +64,26 @@ public class HC_SR04
       while (echoPin.isHigh())
         end = System.nanoTime();
       
-      double pulseDuration = (end - start) / 1000000000d; // in seconds
-      double distance = pulseDuration * DIST_FACT;
-      System.out.println("Distance: " + DF22.format(distance) + " cm."); // + " (" + pulseDuration + " = " + end + " - " + start + ")");
-      if (distance < 10)
-        go = false;
+      if (end > 0 && start > 0)
+      {
+        double pulseDuration = (end - start) / 1000000000d; // in seconds
+        double distance = pulseDuration * DIST_FACT;
+        if (distance < 1000) // Less than 10 meters
+          System.out.println("Distance: " + DF22.format(distance) + " cm."); // + " (" + pulseDuration + " = " + end + " - " + start + ")");
+        if (distance > 0 && distance < MIN_DIST)
+          go = false;
+        else
+        {
+          if (distance < 0)
+            System.out.println("Dist:" + distance + ", start:" + start + ", end:" + end);
+          try { Thread.sleep(1000L); } catch (Exception ex) {}
+        }
+      }
       else
-        try { Thread.sleep(1000L); } catch (Exception ex) {}
+      {
+        System.out.println("Hiccup!");
+        try { Thread.sleep(2000L); } catch (Exception ex) {}
+      }
     }
     System.out.println("Done.");
     trigPin.low(); // Off
