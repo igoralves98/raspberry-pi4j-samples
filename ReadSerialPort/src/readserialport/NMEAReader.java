@@ -14,7 +14,7 @@ public class NMEAReader
   public static void main(String args[])
     throws InterruptedException, NumberFormatException
   {
-    int br = Integer.parseInt(System.getProperty("baud.rate", "4800"));
+    int br = Integer.parseInt(System.getProperty("baud.rate", "9600"));
     if (args.length > 0)
     {
       try
@@ -48,14 +48,16 @@ public class NMEAReader
     try
     {
       // open the default serial port provided on the GPIO header
-      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + "]");
+      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + ":" + Integer.toString(br) + "]");
       serial.open(Serial.DEFAULT_COM_PORT, br);
+      System.out.println("Port is opened.");
 
       // continuous loop to keep the program running until the user terminates the program
       while (true)
       {
         if (serial.isOpen())
         {
+          System.out.println("Writing to the serial port...");
           try
           {
             // write a formatted string to the serial transmit buffer

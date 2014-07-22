@@ -10,7 +10,7 @@ public class NMEAReader
   public static void main(String args[])
     throws InterruptedException, NumberFormatException
   {
-    int br = Integer.parseInt(System.getProperty("baud.rate", "4800"));
+    int br = Integer.parseInt(System.getProperty("baud.rate", "9600"));
     String port = System.getProperty("port.name", Serial.DEFAULT_COM_PORT);
     if (args.length > 0)
     {
@@ -38,7 +38,7 @@ public class NMEAReader
       public void dataReceived(SerialDataEvent event)
       {
         // print out the data received to the console
-        System.out.println("[" + event.getData() + "]"); // << and not println
+        System.out.println("[" + event.getData() + "]"); 
       }
     });
     
@@ -47,6 +47,7 @@ public class NMEAReader
     {
       System.out.println("Opening port [" + port + "]");
       serial.open(port, br);
+      System.out.println("Port is opened.");
 
       synchronized (t) { t.wait(); }
     }

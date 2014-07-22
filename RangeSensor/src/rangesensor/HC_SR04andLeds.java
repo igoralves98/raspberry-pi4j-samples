@@ -21,7 +21,7 @@ public class HC_SR04andLeds
   private final static Format DF22 = new DecimalFormat("#0.00");
   private final static double SOUND_SPEED = 34300;           // in cm, 343 m/s
   private final static double DIST_FACT   = SOUND_SPEED / 2; // round trip
-  private final static int MIN_DIST = 5;
+  private final static int MIN_DIST       = 5;
   
   private final static long BETWEEN_LOOPS = 500L;
   private final static long MAX_WAIT      = 500L;
