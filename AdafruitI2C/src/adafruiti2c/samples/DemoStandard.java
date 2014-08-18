@@ -2,9 +2,6 @@ package adafruiti2c.samples;
 
 import adafruiti2c.servo.AdafruitPCA9685;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 /*
  * Standard, all the way, clockwise, counterclockwise
  */
@@ -21,8 +18,8 @@ public class DemoStandard
     int freq = 60;
     servoBoard.setPWMFreq(freq); // Set frequency in Hz
     
-    final int CONTINUOUS_SERVO_CHANNEL = 14;
-    final int STANDARD_SERVO_CHANNEL   = 15;
+//  final int CONTINUOUS_SERVO_CHANNEL = 14;
+    final int STANDARD_SERVO_CHANNEL   = 13; // 15
     
     int servo = STANDARD_SERVO_CHANNEL;
     int servoMin = 122; 

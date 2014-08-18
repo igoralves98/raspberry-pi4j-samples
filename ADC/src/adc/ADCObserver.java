@@ -81,7 +81,7 @@ public class ADCObserver
       for (int i=0; i<adcChannel.length; i++)
       {
         int adc = readAdc(adcChannel[i]);
-        System.out.println("ADC:" + adc);
+     // System.out.println("ADC:" + adc);
         int postAdjust = Math.abs(adc - lastRead[i]);
         if (postAdjust > tolerance)
         {

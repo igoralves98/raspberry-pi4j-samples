@@ -7,6 +7,9 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.SoftPwm;
 
+/*
+ * PWM with WiringPi
+ */
 public class WiringPiSoftPWMExample
 {
   public static void main(String[] args)
