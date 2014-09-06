@@ -6,10 +6,17 @@
 *.cdi_javac
 .data/
 *.url
+*.jar
+*.cache
+*.log
+*.log.csv
+*.py
+*.png
 classes/
 /classes/*.properties
 classes/*
 doc/
+AdafruitI2C/src/misc
 PI4J.email/email.properties
 node_modules/
 RaspberryPI.doc/
