@@ -51,6 +51,7 @@ public class AdafruitBMP180
   public final static int BMP180_CAL_MB            = 0xBA;  // R   Calibration data (16 bits)
   public final static int BMP180_CAL_MC            = 0xBC;  // R   Calibration data (16 bits)
   public final static int BMP180_CAL_MD            = 0xBE;  // R   Calibration data (16 bits)
+  
   public final static int BMP180_CONTROL           = 0xF4;
   public final static int BMP180_TEMPDATA          = 0xF6;
   public final static int BMP180_PRESSUREDATA      = 0xF6;
@@ -161,7 +162,7 @@ public class AdafruitBMP180
 
   public void readCalibrationData() throws Exception
   {
-    // "Reads the calibration data from the IC"
+    // Reads the calibration data from the IC
     cal_AC1 = readS16(BMP180_CAL_AC1);   // INT16
     cal_AC2 = readS16(BMP180_CAL_AC2);   // INT16
     cal_AC3 = readS16(BMP180_CAL_AC3);   // INT16
@@ -179,7 +180,7 @@ public class AdafruitBMP180
         
   private void showCalibrationData()
   {
-    // "Displays the calibration values for debugging purposes"
+    // Displays the calibration values for debugging purposes
     System.out.println("DBG: AC1 = " + cal_AC1);
     System.out.println("DBG: AC2 = " + cal_AC2);
     System.out.println("DBG: AC3 = " + cal_AC3);
@@ -195,7 +196,7 @@ public class AdafruitBMP180
               
   public int readRawTemp() throws Exception
   {
-    // "Reads the raw (uncompensated) temperature from the sensor"
+    // Reads the raw (uncompensated) temperature from the sensor
     bmp180.write(BMP180_CONTROL, (byte)BMP180_READTEMPCMD);
     waitfor(5);  // Wait 5ms
     int raw = readU16(BMP180_TEMPDATA);
@@ -206,7 +207,7 @@ public class AdafruitBMP180
       
   public int readRawPressure() throws Exception
   {
-    // "Reads the raw (uncompensated) pressure level from the sensor"
+    // Reads the raw (uncompensated) pressure level from the sensor
     bmp180.write(BMP180_CONTROL, (byte)(BMP180_READPRESSURECMD + (this.mode << 6)));
     if (this.mode == BMP180_ULTRALOWPOWER)
       waitfor(5);
@@ -227,7 +228,7 @@ public class AdafruitBMP180
       
   public float readTemperature() throws Exception
   {
-    // "Gets the compensated temperature in degrees celcius"
+    // Gets the compensated temperature in degrees celcius
     int UT = 0;
     int X1 = 0;
     int X2 = 0;
@@ -247,7 +248,7 @@ public class AdafruitBMP180
 
   public float readPressure() throws Exception
   {
-    // "Gets the compensated pressure in pascal"
+    // Gets the compensated pressure in pascal
     int UT = 0;
     int UP = 0;
     int B3 = 0;

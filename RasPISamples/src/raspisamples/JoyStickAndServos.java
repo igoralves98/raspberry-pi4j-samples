@@ -7,7 +7,7 @@ import raspisamples.adc.JoyStickClient;
 import raspisamples.servo.StandardServo;
 
 /*
- * Joystick read with ADC(MCP3008)
+ * Joystick read with ADC (MCP3008)
  * 2 Servos (UP/LR)
  */
 public class JoyStickAndServos
@@ -17,8 +17,8 @@ public class JoyStickAndServos
   
   public static void main(String[] args)
   {
-    ss1 = new StandardServo(13); // 13 : Address on trhe board (1..15)
-    ss2 = new StandardServo(15); // 15 : Address on trhe board (1..15)
+    ss1 = new StandardServo(13); // 13 : Address on the board (1..15)
+    ss2 = new StandardServo(15); // 15 : Address on the board (1..15)
     
     ss1.stop();
     ss2.stop();
