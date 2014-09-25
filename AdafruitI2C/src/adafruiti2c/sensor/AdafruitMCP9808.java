@@ -61,7 +61,6 @@ public class AdafruitMCP9808
       mcp9808 = bus.getDevice(address);
       if (verbose)
         System.out.println("Connected to device. OK.");
-      try { Thread.sleep(500); } catch (Exception ex) {}
     }
     catch (IOException e)
     {
@@ -71,10 +70,10 @@ public class AdafruitMCP9808
   
   public int readU16BE(int register) throws Exception
   {
-    int nb = 2;
-    byte[] bb = new byte[2];
-    int nbr = this.mcp9808.read(register, bb, 0, nb);
-    if (nbr != 2)
+    final int TWO = 2;
+    byte[] bb = new byte[TWO];
+    int nbr = this.mcp9808.read(register, bb, 0, TWO);
+    if (nbr != TWO)
       throw new Exception("Cannot read 2 bytes from " + lpad(Integer.toHexString(register), "0", 2));
     if (verbose)
       System.out.println("I2C: 0x" + lpad(Integer.toHexString(bb[0]), "0", 2) + lpad(Integer.toHexString(bb[1]), "0", 2));
