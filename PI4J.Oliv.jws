@@ -29,6 +29,7 @@
       <hash><url n="URL" path="GPIO.01/GPIO.01.jpr"/></hash>
       <hash><url n="URL" path="GPS.sun.servo/GPS.sun.servo.jpr"/></hash>
       <hash><url n="URL" path="GPSandSun/GPSandSun.jpr"/></hash>
+      <hash><url n="URL" path="LelandOilDetector/LelandOilDetector.jpr"/></hash>
       <hash><url n="URL" path="PI4J.email/PI4J.email.jpr"/></hash>
       <hash><url n="URL" path="pilogger/pilogger/PILogger.jpr"/></hash>
       <hash><url n="URL" path="POVUtil.One/POVUtil.One.jpr"/></hash>
