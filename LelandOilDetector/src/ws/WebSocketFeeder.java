@@ -4,6 +4,12 @@ import adc.ADCContext;
 import adc.ADCListener;
 import adc.ADCObserver;
 
+import java.io.BufferedInputStream;
+
+import java.io.BufferedReader;
+
+import java.io.InputStreamReader;
+
 import java.net.URI;
 
 import org.java_websocket.client.WebSocketClient;
@@ -15,9 +21,10 @@ public class WebSocketFeeder
 {
   private final static boolean DEBUG = "true".equals(System.getProperty("debug", "false"));
   private ADCObserver.MCP3008_input_channels channel = null;
-  private boolean keepWorking = true;
-  private WebSocketClient webSocketClient = null;
+  private static boolean keepWorking = true;
+  private static WebSocketClient webSocketClient = null;
   private static RelayManager rm;
+  private static ADCObserver obs = null;
   
   public WebSocketFeeder(int ch) throws Exception
   {
@@ -36,7 +43,7 @@ public class WebSocketFeeder
     String wsUri = System.getProperty("ws.uri", "ws://localhost:9876/"); 
     
     initWebSocketConnection(wsUri);
-    final ADCObserver obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).
+    obs = new ADCObserver(channel); // Note: We could instantiate more than one observer (on several channels).
     ADCContext.getInstance().addListener(new ADCListener()
        {
          @Override
@@ -74,27 +81,6 @@ public class WebSocketFeeder
          }
        });
     obs.start();         
-    
-    Runtime.getRuntime().addShutdownHook(new Thread()
-       {
-         public void run()
-         {
-           System.out.println("Shutting down nicely.");
-           if (obs != null)
-             obs.stop();
-           keepWorking = false;
-           webSocketClient.close();
-           try 
-           { 
-             rm.set("00", "on"); 
-             rm.shutdown();
-           }
-           catch (Exception ex)
-           {
-             System.err.println(ex.toString());
-           }         
-         }
-       });    
   }
   
   private void initWebSocketConnection(String serverURI)
@@ -141,6 +127,33 @@ public class WebSocketFeeder
     int channel = 0;
     if (args.length > 0)
       channel = Integer.parseInt(args[0]);
+    System.out.println("Listrening to channel " + channel);
+    System.out.println("Adding shutdown hook");
+    Runtime.getRuntime().addShutdownHook(new Thread()
+       {
+         public void run()
+         {
+           System.out.println("Shutting down nicely.");
+           if (obs != null)
+           {
+             System.out.println("Stopping observer");
+             obs.stop();
+           }
+           keepWorking = false;
+           System.out.println("Closing WebSocket client");
+           webSocketClient.close();
+           try 
+           { 
+             System.out.println("Turning power off");
+             rm.set("00", "off"); 
+             rm.shutdown();
+           }
+           catch (Exception ex)
+           {
+             System.err.println(ex.toString());
+           }             
+         }
+       });    
     new WebSocketFeeder(channel);
   }
 
