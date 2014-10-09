@@ -127,8 +127,8 @@ public class WebSocketFeeder
     int channel = 0;
     if (args.length > 0)
       channel = Integer.parseInt(args[0]);
-    System.out.println("Listrening to channel " + channel);
-    System.out.println("Adding shutdown hook");
+    System.out.println("Listening to MCP3008 channel " + channel);
+//  System.out.println("Adding shutdown hook");
     Runtime.getRuntime().addShutdownHook(new Thread()
        {
          public void run()
@@ -136,22 +136,23 @@ public class WebSocketFeeder
            System.out.println("Shutting down nicely.");
            if (obs != null)
            {
-             System.out.println("Stopping observer");
+             System.out.println("Stopping observer...");
              obs.stop();
            }
            keepWorking = false;
-           System.out.println("Closing WebSocket client");
+           System.out.println("Closing WebSocket client...");
            webSocketClient.close();
            try 
            { 
-             System.out.println("Turning power off");
+             System.out.println("Turning power off...");
              rm.set("00", "off"); 
              rm.shutdown();
            }
            catch (Exception ex)
            {
              System.err.println(ex.toString());
-           }             
+           }  
+           System.out.println("Done.");
          }
        });    
     new WebSocketFeeder(channel);
