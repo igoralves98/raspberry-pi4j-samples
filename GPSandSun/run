@@ -1,5 +1,5 @@
 #!/bin/bash
-echo Read serial port
+echo Read serial port, parse the RMC String
 echo Usage $0 [BaudRate] \(default 4800\)
 echo Try 2400, 4800, 9600, 19200, 38400, 57600, 115200, ...
 CP=./classes
@@ -9,4 +9,8 @@ CP=$CP:./lib/geomutil.jar
 CP=$CP:./lib/nauticalalmanac.jar
 CP=$CP:./lib/nmeaparser.jar
 CP=$CP:./lib/coreutilities.jar
-sudo java -cp $CP nmea.CustomNMEAReader $*
+JAVA_OPTIONS=
+# Default serial port is /dev/ttyAMA0
+# JAVA_OPTIONS="$JAVA_OPTIONS -Dport.name=/dev/ttyUSB0"
+JAVA_OPTIONS="$JAVA_OPTIONS -Dverbose=true"
+sudo java -cp $CP $JAVA_OPTIONS nmea.CustomNMEAReader $*

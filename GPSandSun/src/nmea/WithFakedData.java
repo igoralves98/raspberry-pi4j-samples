@@ -1,4 +1,4 @@
-package readserialport;
+package nmea;
 
 import calculation.AstroComputer;
 
@@ -17,6 +17,10 @@ import ocss.nmea.parser.GeoPos;
 import ocss.nmea.parser.RMC;
 import ocss.nmea.parser.StringParsers;
 
+/**
+ * Parse the RMC string from a log file.
+ * No serial port involved
+ */
 public class WithFakedData
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");

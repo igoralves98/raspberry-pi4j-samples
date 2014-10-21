@@ -5,7 +5,11 @@ import com.pi4j.io.serial.SerialDataEvent;
 import com.pi4j.io.serial.SerialDataListener;
 import com.pi4j.io.serial.SerialFactory;
 
-public class NMEAReader
+/**
+ * Just reads the GPS data.
+ * No parsing, just raw data.
+ */
+public class GPSDataReader
 {
   public static void main(String args[])
     throws InterruptedException, NumberFormatException
@@ -30,7 +34,6 @@ public class NMEAReader
 
     // create an instance of the serial communications class
     final Serial serial = SerialFactory.createInstance();
-
     // create and register the serial data listener
     serial.addListener(new SerialDataListener()
     {

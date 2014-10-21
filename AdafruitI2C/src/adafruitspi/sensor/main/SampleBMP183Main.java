@@ -21,7 +21,7 @@ public class SampleBMP183Main
       System.out.println("Pressure   : " + P_FMT.format(press / 100.0) + " hPa");
       try { Thread.sleep(1000); } catch (Exception ex) {}
     }
-    bmp183.shutdownBMP183();
+    AdafruitBMP183.shutdownBMP183();
     System.out.println("Bye");
   }
 }

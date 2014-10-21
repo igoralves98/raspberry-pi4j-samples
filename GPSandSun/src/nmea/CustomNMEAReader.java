@@ -15,6 +15,10 @@ import ocss.nmea.parser.GeoPos;
 import ocss.nmea.parser.RMC;
 import ocss.nmea.parser.StringParsers;
 
+/**
+ * Reads the GPS Data, parse the RMC String
+ * Display astronomical data
+ */
 public class CustomNMEAReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
