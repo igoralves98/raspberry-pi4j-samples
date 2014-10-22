@@ -34,6 +34,7 @@ public class GPSDataReader
 
     // create an instance of the serial communications class
     final Serial serial = SerialFactory.createInstance();
+    
     // create and register the serial data listener
     serial.addListener(new SerialDataListener()
     {
@@ -41,22 +42,72 @@ public class GPSDataReader
       public void dataReceived(SerialDataEvent event)
       {
         // print out the data received to the console
-        System.out.println("[" + event.getData() + "]"); 
+        String data = event.getData();
+        System.out.println("Got Data (" + data.length() + " byte(s))");
+        if (data.startsWith("$"))
+          System.out.println(data);
+        else
+        {
+          String hexString = "";
+          char[] ca = data.toCharArray();
+          for (int i=0; i<ca.length; i++)
+            hexString += (lpad(Integer.toHexString(ca[i]), "0", 2) + " ");
+          System.out.println(hexString);
+        }
       }
     });
-    
-    Thread t = Thread.currentThread();
+        
+    final Thread t = Thread.currentThread();
+    Runtime.getRuntime().addShutdownHook(new Thread()
+                                         {
+                                           public void run()
+                                           {
+                                             System.out.println("\nShutting down...");
+                                             try
+                                             {
+                                               if (serial.isOpen())
+                                               {
+                                                 serial.close();
+                                                 System.out.println("Serial port closed");
+                                               }
+                                               synchronized (t)
+                                               {
+                                                 t.notify();
+                                                 System.out.println("Thread notified");
+                                               }
+                                             }
+                                             catch (Exception ex)
+                                             {
+                                               ex.printStackTrace();
+                                             }
+                                           }
+                                         });
     try
     {
       System.out.println("Opening port [" + port + "]");
-      serial.open(port, br);
-      System.out.println("Port is opened.");
-
+      boolean open = false;
+      while (!open)
+      {
+        serial.open(port, br); 
+        open = serial.isOpen();
+        System.out.println("Port is " + (open ? "" : "NOT ") + "opened.");
+        if (!open)
+          try { Thread.sleep(500L); } catch (Exception ex) {}
+      }
       synchronized (t) { t.wait(); }
+      System.out.println("Bye...");
     }
     catch (InterruptedException ie)
     {
       ie.printStackTrace();
     }
+  }
+  
+  private static String lpad(String str, String with, int len)
+  {
+    String s = str;
+    while (s.length() < len)
+      s = with + s;
+    return s;
   }
 }

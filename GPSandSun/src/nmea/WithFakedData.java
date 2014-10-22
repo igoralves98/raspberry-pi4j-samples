@@ -1,7 +1,6 @@
 package nmea;
 
 import calculation.AstroComputer;
-
 import calculation.SightReductionUtil;
 
 import java.io.BufferedReader;
@@ -10,7 +9,6 @@ import java.io.FileReader;
 import java.text.DecimalFormat;
 
 import java.util.Calendar;
-
 import java.util.TimeZone;
 
 import ocss.nmea.parser.GeoPos;

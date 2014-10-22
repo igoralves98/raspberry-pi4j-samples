@@ -46,17 +46,17 @@ public class CustomNMEASerialReader
           instance.fireDataRead(new NMEAEvent(this, event.getData()));
         }
       });
-      String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
+      String port = System.getProperty("port.name", Serial.DEFAULT_COM_PORT);
       if (System.getProperty("verbose", "false").equals("true")) 
         System.out.println("Opening port [" + port + "]");
       serial.open(port, baudRate);
+      // Reading on Serial Port
+      if (System.getProperty("verbose", "false").equals("true")) 
+        System.out.println("Port is " + (serial.isOpen() ? "" : "NOT ") + "open.");
     }
     catch (Exception ex)
     {
       ex.printStackTrace();
     }
-    // Reading on Serial Port
-    if (System.getProperty("verbose", "false").equals("true")) 
-      System.out.println("Port is open...");
   }
 }

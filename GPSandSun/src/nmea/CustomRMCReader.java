@@ -19,7 +19,7 @@ import ocss.nmea.parser.StringParsers;
  * Reads the GPS Data, parse the RMC String
  * Display astronomical data
  */
-public class CustomNMEAReader extends NMEAClient
+public class CustomRMCReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
   private final static DecimalFormat DFZ = new DecimalFormat("##0.00'\272'");
@@ -27,7 +27,7 @@ public class CustomNMEAReader extends NMEAClient
   private static GeoPos prevPosition = null;
   private static long   prevDateTime = -1L;
 
-  public CustomNMEAReader()
+  public CustomRMCReader()
   {
     super();
   }
@@ -39,7 +39,7 @@ public class CustomNMEAReader extends NMEAClient
     manageData(e.getContent().trim());
   }
 
-  private static CustomNMEAReader customClient = null;  
+  private static CustomRMCReader customClient = null;  
   
   private static void manageData(String sentence)
   {
@@ -49,7 +49,7 @@ public class CustomNMEAReader extends NMEAClient
       String id = sentence.substring(3, 6);
       if ("RMC".equals(id))
       {
-     // System.out.println(line);
+        System.out.println(sentence);
         RMC rmc = StringParsers.parseRMC(sentence);
      // System.out.println(rmc.toString());
         if (rmc != null && rmc.getRmcDate() != null && rmc.getGp() != null)
@@ -93,6 +93,8 @@ public class CustomNMEAReader extends NMEAClient
           }
         }
       }
+  //  else
+  //    System.out.println("Read [" + sentence + "]");
     }    
     else
       System.out.println("Invalid data [" + sentence + "]");
@@ -102,7 +104,7 @@ public class CustomNMEAReader extends NMEAClient
   {
     System.setProperty("deltaT", System.getProperty("deltaT", "67.2810")); // 2014-Jan-01
 
-    int br = 4800;
+    int br = 9600;
     System.out.println("CustomNMEAReader invoked with " + args.length + " Parameter(s).");
     for (String s : args)
     {
@@ -110,7 +112,7 @@ public class CustomNMEAReader extends NMEAClient
       try { br = Integer.parseInt(s); } catch (NumberFormatException nfe) {}
     }
     
-    customClient = new CustomNMEAReader();
+    customClient = new CustomRMCReader();
       
     Runtime.getRuntime().addShutdownHook(new Thread() 
       {
