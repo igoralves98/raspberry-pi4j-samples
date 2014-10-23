@@ -15,6 +15,10 @@ import ocss.nmea.parser.GeoPos;
 import ocss.nmea.parser.RMC;
 import ocss.nmea.parser.StringParsers;
 
+/**
+ * Reads the GPS Data, parse the RMC String
+ * Display astronomical data
+ */
 public class CustomNMEAReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
@@ -45,7 +49,7 @@ public class CustomNMEAReader extends NMEAClient
       String id = sentence.substring(3, 6);
       if ("RMC".equals(id))
       {
-     // System.out.println(line);
+        System.out.println(sentence);
         RMC rmc = StringParsers.parseRMC(sentence);
      // System.out.println(rmc.toString());
         if (rmc != null && rmc.getRmcDate() != null && rmc.getGp() != null)
@@ -89,6 +93,8 @@ public class CustomNMEAReader extends NMEAClient
           }
         }
       }
+      else
+        System.out.println("Read [" + sentence + "]");
     }    
     else
       System.out.println("Invalid data [" + sentence + "]");
@@ -98,7 +104,7 @@ public class CustomNMEAReader extends NMEAClient
   {
     System.setProperty("deltaT", System.getProperty("deltaT", "67.2810")); // 2014-Jan-01
 
-    int br = 4800;
+    int br = 9600;
     System.out.println("CustomNMEAReader invoked with " + args.length + " Parameter(s).");
     for (String s : args)
     {
