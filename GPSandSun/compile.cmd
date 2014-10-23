@@ -16,6 +16,6 @@ set CP=%CP%;.\lib\nauticalalmanac.jar
 set CP=%CP%;.\lib\nmeaparser.jar
 set JAVAC_OPTIONS=%JAVAC_OPTIONS% -cp %CP%
 echo Compiling
-javac %JAVAC_OPTIONS% .\src\nmea\*.java
+javac %JAVAC_OPTIONS% .\src\nmea\*.java .\src\readserialport\*.java
 echo Done
 @endlocal

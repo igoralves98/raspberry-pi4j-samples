@@ -19,7 +19,7 @@ import ocss.nmea.parser.StringParsers;
  * Reads the GPS Data, parse the RMC String
  * Display astronomical data
  */
-public class CustomRMCReader extends NMEAClient
+public class CustomNMEAReader extends NMEAClient
 {
   private final static DecimalFormat DFH = new DecimalFormat("#0.00'\272'");
   private final static DecimalFormat DFZ = new DecimalFormat("##0.00'\272'");
@@ -27,7 +27,7 @@ public class CustomRMCReader extends NMEAClient
   private static GeoPos prevPosition = null;
   private static long   prevDateTime = -1L;
 
-  public CustomRMCReader()
+  public CustomNMEAReader()
   {
     super();
   }
@@ -39,7 +39,7 @@ public class CustomRMCReader extends NMEAClient
     manageData(e.getContent().trim());
   }
 
-  private static CustomRMCReader customClient = null;  
+  private static CustomNMEAReader customClient = null;  
   
   private static void manageData(String sentence)
   {
@@ -93,8 +93,8 @@ public class CustomRMCReader extends NMEAClient
           }
         }
       }
-  //  else
-  //    System.out.println("Read [" + sentence + "]");
+      else
+        System.out.println("Read [" + sentence + "]");
     }    
     else
       System.out.println("Invalid data [" + sentence + "]");
@@ -112,7 +112,7 @@ public class CustomRMCReader extends NMEAClient
       try { br = Integer.parseInt(s); } catch (NumberFormatException nfe) {}
     }
     
-    customClient = new CustomRMCReader();
+    customClient = new CustomNMEAReader();
       
     Runtime.getRuntime().addShutdownHook(new Thread() 
       {
