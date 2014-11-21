@@ -13,4 +13,11 @@ JAVA_OPTIONS=
 # Default serial port is /dev/ttyAMA0
 # JAVA_OPTIONS="$JAVA_OPTIONS -Dport.name=/dev/ttyUSB0"
 JAVA_OPTIONS="$JAVA_OPTIONS -Dverbose=true"
+<<<<<<< HEAD
+DEBUG_OPTIONS=
+# DEBUG_OPTIONS="-client -agentlib:jdwp=transport=dt_socket,server=y,address=1044"
+echo ----------------------------------------------------------
+sudo java $DEBUG_OPTIONS -cp $CP $JAVA_OPTIONS readserialport.GPSDataReader $*
+=======
 sudo java -cp $CP $JAVA_OPTIONS readserialport.GPSDataReader $*
+>>>>>>> 7c09936fdac377f880d4ad8ffae6b0b7375a94db
