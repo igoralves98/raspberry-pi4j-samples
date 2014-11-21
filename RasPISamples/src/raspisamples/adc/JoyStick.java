@@ -15,6 +15,9 @@ public class JoyStick
   
   public JoyStick(JoyStickClient jsc) throws Exception
   {
+    System.out.println(">> Channel MCP3008 #0: Up-Down");
+    System.out.println(">> Channel MCP3008 #1: Left-Right");
+
     joyStickClient = jsc;
     channel = new ADCObserver.MCP3008_input_channels[] 
     {
@@ -30,6 +33,9 @@ public class JoyStick
          {
            int ch = inputChannel.ch();
            int volume = (int)(newValue / 10.23); // [0, 1023] ~ [0x0000, 0x03FF] ~ [0&0, 0&1111111111]
+           if ("true".equals(System.getProperty("verbose", "false")))
+             System.out.println("\tServo channel:" + ch + ", value " + newValue + ", vol. " + volume + " %.");
+           
            channelValues[ch] = volume;
            if (ch == channel[0].ch() && volume != prevUDValue)
              joyStickClient.setUD(volume);

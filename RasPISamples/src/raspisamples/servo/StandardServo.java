@@ -7,30 +7,44 @@ import adafruiti2c.servo.AdafruitPCA9685;
  */
 public class StandardServo
 {
-  private static void waitfor(long howMuch)
+  public static void waitfor(long howMuch)
   {
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
   }
 
   private int servo = -1;
-  private final static int SERVO_MIN = 122; 
-  private final static int SERVO_MAX = 615; 
-  private final static int DIFF = SERVO_MAX - SERVO_MIN;
+
+  private final static int DEFAULT_SERVO_MIN = 122; // Value for Min position (-90, unit is [0..1023])
+  private final static int DEFAULT_SERVO_MAX = 615; // Value for Max position (+90, unit is [0..1023])
+
+  private int servoMin = DEFAULT_SERVO_MIN; 
+  private int servoMax = DEFAULT_SERVO_MAX; 
+  private int diff = servoMax - servoMin;
 
   private AdafruitPCA9685 servoBoard = new AdafruitPCA9685();
 
   public StandardServo(int channel)
   {
+    this(channel, DEFAULT_SERVO_MIN, DEFAULT_SERVO_MAX);
+  }
+  
+  public StandardServo(int channel, int servoMin, int servoMax)
+  {
+    this.servoMin = servoMin;
+    this.servoMax = servoMax;
+    this.diff = servoMax - servoMin;
+    
     int freq = 60;
     servoBoard.setPWMFreq(freq); // Set frequency in Hz
     
     this.servo = channel;
-    System.out.println("Channel " + channel + " all set. Min:" + SERVO_MIN + ", Max:" + SERVO_MAX + ", diff:" + DIFF);    
+    System.out.println("Channel " + channel + " all set. Min:" + servoMin + ", Max:" + servoMax + ", diff:" + diff);    
+    
   }
   
   public void setAngle(float f)
   {
-    int pwm = degreeToPWM(SERVO_MIN, SERVO_MAX, f);
+    int pwm = degreeToPWM(servoMin, servoMax, f);
  // System.out.println(f + " degrees (" + pwm + ")");
     servoBoard.setPWM(servo, 0, pwm);    
   }
@@ -54,38 +68,51 @@ public class StandardServo
     return Math.round(min + ((deg + 90) * oneDeg));
   }   
   
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
-    StandardServo ss = new StandardServo(14);
+    int channel = 14;
+    if (args.length > 0)
+    {
+      try
+      {
+        channel = Integer.parseInt(args[0]);
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
+    System.out.println("Servo Channel " + channel);
+    StandardServo ss = new StandardServo(channel);
     try
     {
       ss.stop();
       waitfor(2000);
-      System.out.println("Let's go, 1 by 1");
-      for (int i=SERVO_MIN; i<=SERVO_MAX; i++)
+      System.out.println("Let's go, 1 by 1 (" + ss.servoMin + " to " + ss.servoMax + ")");
+      for (int i=ss.servoMin; i<=ss.servoMax; i++)
       {
-        System.out.println("i=" + i + ", " + (-90f + (((float)(i - SERVO_MIN) / (float)DIFF) * 180f)));
+        System.out.println("i=" + i + ", " + (-90f + (((float)(i - ss.servoMin) / (float)ss.diff) * 180f)));
         ss.setPWM(i);
         waitfor(10);
       } 
-      for (int i=SERVO_MAX; i>=SERVO_MIN; i--)
+      for (int i=ss.servoMax; i>=ss.servoMin; i--)
       {
-        System.out.println("i=" + i + ", " + (-90f + (((float)(i - SERVO_MIN) / (float)DIFF) * 180f)));
+        System.out.println("i=" + i + ", " + (-90f + (((float)(i - ss.servoMin) / (float)ss.diff) * 180f)));
         ss.setPWM(i);
         waitfor(10);
       } 
       ss.stop();
       waitfor(2000);
       System.out.println("Let's go, 1 deg by 1 deg");
-      for (int i=SERVO_MIN; i<=SERVO_MAX; i+=(DIFF / 180))
+      for (int i=ss.servoMin; i<=ss.servoMax; i+=(ss.diff / 180))
       {
-        System.out.println("i=" + i + ", " + Math.round(-90f + (((float)(i - SERVO_MIN) / (float)DIFF) * 180f)));
+        System.out.println("i=" + i + ", " + Math.round(-90f + (((float)(i - ss.servoMin) / (float)ss.diff) * 180f)));
         ss.setPWM(i);
         waitfor(10);
       } 
-      for (int i=SERVO_MAX; i>=SERVO_MIN; i-=(DIFF / 180))
+      for (int i=ss.servoMax; i>=ss.servoMin; i-=(ss.diff / 180))
       {
-        System.out.println("i=" + i + ", " + Math.round(-90f + (((float)(i - SERVO_MIN) / (float)DIFF) * 180f)));
+        System.out.println("i=" + i + ", " + Math.round(-90f + (((float)(i - ss.servoMin) / (float)ss.diff) * 180f)));
         ss.setPWM(i);
         waitfor(10);
       } 
@@ -95,6 +122,7 @@ public class StandardServo
       float[] degValues = { -10, 0, -90, 45, -30, 90, 10, 20, 30, 40, 50, 60, 70, 80, 90, 0 };
       for (float f : degValues)
       {
+        System.out.println("In degrees:" + f);
         ss.setAngle(f);
         waitfor(1500);
       }

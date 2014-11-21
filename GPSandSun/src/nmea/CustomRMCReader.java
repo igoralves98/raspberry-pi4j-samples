@@ -118,7 +118,7 @@ public class CustomRMCReader extends NMEAClient
       {
         public void run() 
         {
-          System.out.println ("Shutting down nicely.");
+          System.out.println ("\nShutting down nicely.");
           customClient.stopDataRead();
         }
       });    

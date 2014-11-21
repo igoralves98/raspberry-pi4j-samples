@@ -50,8 +50,7 @@ public class CustomGGAReader extends NMEAClient
         GeoPos pos = (GeoPos)al.get(1);
         Integer nbs = (Integer)al.get(2);
         Double alt = (Double)al.get(3);
-        System.out.println("\tUTC:" + utc.toString());
-        System.out.println("\tPos:" + pos.toString());
+        System.out.println("\tUTC:" + utc.toString() + "\tPos:" + pos.toString());
         System.out.println("\t" + nbs.intValue() + " Satellite(s) in use");
         System.out.println("\tAltitude:" + alt);
         System.out.println("------------------");
@@ -79,7 +78,7 @@ public class CustomGGAReader extends NMEAClient
       {
         public void run() 
         {
-          System.out.println ("Shutting down nicely.");
+          System.out.println ("\nShutting down nicely.");
           customClient.stopDataRead();
         }
       });    
