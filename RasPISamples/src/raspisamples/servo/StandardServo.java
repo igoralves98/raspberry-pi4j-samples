@@ -68,6 +68,12 @@ public class StandardServo
     return Math.round(min + ((deg + 90) * oneDeg));
   }   
   
+  /**
+   * To test the servo - namely, the min & max values.
+   * 
+   * @param args
+   * @throws Exception
+   */
   public static void main(String[] args) throws Exception
   {
     int channel = 14;
