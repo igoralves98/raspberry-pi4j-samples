@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import raspisamples.servo.StandardServo;
 
 /*
- * Driven by keyboard entries.
+ * Driven by WerbSocket server
+ * See in node/server.js
+ * 
  * 2 Servos (UP/LR)
  */
 public class PanTiltWebSocket

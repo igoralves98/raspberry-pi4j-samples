@@ -41,11 +41,10 @@ var connection;
       try {
         var leapmotion = JSON.parse(json.data.text);
         var valueRoll  = leapmotion.roll;
-        var valuePitch = leapmotion.pitch;
-        var valueYaw   = leapmotion.yaw;
+   //   var valuePitch = leapmotion.pitch;
+        var valueYaw   = -leapmotion.yaw;
   
-        displayRoll.setValue(valueRoll);
-        displayPitch.setValue(valuePitch);
+        displayPitch.setValue(valueRoll);
         displayYaw.setValue(valueYaw);
       }
       catch (err) 

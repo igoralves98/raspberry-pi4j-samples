@@ -44,9 +44,9 @@ var connection;
         var valuePitch = leapmotion.pitch;
         var valueYaw   = leapmotion.yaw;
   
-        displayRoll.setValue(valueRoll);
-        displayPitch.setValue(valuePitch);
-        displayYaw.setValue(valueYaw);
+        angularSpeedAroundZ = valueYaw * 0.01; // yaw
+        angularSpeedAroundY = valueRoll * 0.01; // roll
+        angularSpeedAroundX = valuePitch * 0.01; // pitch
       }
       catch (err) 
       {

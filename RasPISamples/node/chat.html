@@ -73,7 +73,7 @@
   var setConfig = function()
   {
     var config, enforceTransport, debugLevel;
-    var calledBy = document.location.toString();
+    calledBy = document.location.toString();
     if (calledBy.indexOf('?') > -1)
     {
       var queryString = calledBy.substring(calledBy.indexOf('?') + 1);
