@@ -86,6 +86,7 @@ public class HC_SR04
       }
     }
     System.out.println("Done.");
+    System.
     trigPin.low(); // Off
 
     gpio.shutdown();
