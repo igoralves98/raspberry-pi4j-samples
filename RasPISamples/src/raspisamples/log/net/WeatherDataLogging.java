@@ -2,6 +2,8 @@ package raspisamples.log.net;
 
 import adafruiti2c.sensor.AdafruitBMP180;
 
+import adafruiti2c.sensor.AdafruitHTU21DF;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -13,12 +15,17 @@ import org.json.JSONObject;
 
 import raspisamples.util.HTTPClient;
 
-public class BMP180Logging
+/**
+ * Log weather data with php/MySQL over the net
+ */
+public class WeatherDataLogging
 {
   private final static String LOGGER_URL = "http://donpedro.lediouris.net/php/raspi/insert.php"; // ?board=OlivRPi1&sensor=BMP180&type=TEMPERATURE&data=24
-  private final static String SENSOR_ID   = "BMP180";
+  private final static String BMP_SENSOR_ID = "BMP180";
+  private final static String HUM_SENSOR_ID = "HTU21D-F";
   private final static String TEMPERATURE = "TEMPERATURE";
   private final static String PRESSURE    = "PRESSURE";
+  private final static String HUMIDITY    = "HUMIDITY";
 
   private static String boardID = "OlivRPi1";
   private static long waitTime  = 10000L;
@@ -61,7 +68,7 @@ public class BMP180Logging
       else if (HELP_PRM.equals(args[i]))
       {
         System.out.println("Usage is:");
-        System.out.println("  java raspisamples.log.net.BMP180Logging -board <BoardID> -sess <Session ID> -wait <time-in-sec> -help ");
+        System.out.println("  java raspisamples.log.net.WeatherDataLogging -board <BoardID> -sess <Session ID> -wait <time-in-sec> -help ");
         System.out.println("  <BoardID> is your board ID (default is OlivRPi1)");
         System.out.println("  <Session ID> identifies your logging session (default current date YYYY-MM-DD)");
         System.out.println("  <time-in-sec> is the amount of seconds between logs (default is 10)");
@@ -80,10 +87,26 @@ public class BMP180Logging
     System.out.println("Logging data for [" + boardID + "], every " + Long.toString(waitTime / 1000) + " s.");
     
     final NumberFormat NF = new DecimalFormat("##00.00");
-    AdafruitBMP180 sensor = new AdafruitBMP180();
+    AdafruitBMP180 bmpSensor = new AdafruitBMP180();
     float press = 0;
     float temp  = 0;
     double alt  = 0;
+    AdafruitHTU21DF humSensor = new AdafruitHTU21DF();
+    float hum  = 0;
+    
+    try
+    {
+      if (!humSensor.begin())
+      {
+        System.out.println("Sensor not found!");        
+        System.exit(1);
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+      System.exit(1);
+    }
 
     Runtime.getRuntime().addShutdownHook(new Thread()
                                          {
@@ -95,39 +118,52 @@ public class BMP180Logging
 
     while (true)
     {
-      try { press = sensor.readPressure(); } 
+      try { press = bmpSensor.readPressure(); } 
       catch (Exception ex) 
       { 
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
-      sensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
-      try { alt = sensor.readAltitude(); } 
+      bmpSensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
+      try { alt = bmpSensor.readAltitude(); } 
       catch (Exception ex) 
       { 
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
-      try { temp = sensor.readTemperature(); } 
+      try { temp = bmpSensor.readTemperature(); } 
       catch (Exception ex) 
       { 
         System.err.println(ex.getMessage()); 
         ex.printStackTrace();
       }
+      try { hum = humSensor.readHumidity(); } 
+      catch (Exception ex) 
+      { 
+        System.err.println(ex.getMessage()); 
+        ex.printStackTrace();
+      }
+
       System.out.println("At " + new Date().toString());
       System.out.println("Temperature: " + NF.format(temp) + " C");
       System.out.println("Pressure   : " + NF.format(press / 100) + " hPa");
       System.out.println("Altitude   : " + NF.format(alt) + " m");
+      System.out.println("Humidity   : " + NF.format(hum) + " %");
       
       // Log here
       try
       {
-        String url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + SENSOR_ID + "&type=" + TEMPERATURE + "&data=" + NF.format(temp);
+        String url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + TEMPERATURE + "&data=" + NF.format(temp);
         String response = HTTPClient.getContent(url);
         JSONObject json = new JSONObject(response);
         System.out.println("Returned\n" + json.toString(2));
         try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
-        url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + SENSOR_ID + "&type=" + PRESSURE + "&data=" + NF.format(press / 100);
+        url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + PRESSURE + "&data=" + NF.format(press / 100);
+        response = HTTPClient.getContent(url);
+        json = new JSONObject(response);
+        System.out.println("Returned\n" + json.toString(2));
+        try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
+        url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + HUM_SENSOR_ID + "&type=" + HUMIDITY + "&data=" + NF.format(hum);
         response = HTTPClient.getContent(url);
         json = new JSONObject(response);
         System.out.println("Returned\n" + json.toString(2));
