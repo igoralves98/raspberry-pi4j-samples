@@ -23,6 +23,8 @@ public class ADCObserver
   private static Pin spiMosi = RaspiPin.GPIO_05; // Pin #24, data out. MOSI: Master Out Slave In
   private static Pin spiCs   = RaspiPin.GPIO_06; // Pin #25, Chip Select
  
+  private Thread parentToNotify = null;
+  
   public static enum MCP3008_input_channels
   {
     CH0(0),
@@ -65,6 +67,16 @@ public class ADCObserver
   
   public void start()
   {
+    start(5);
+  }
+  /**
+   * @param tol Tolerance. Broadcast the fireValueChanged event when the absolute value 
+   *            of the difference between the last and the current value is greater or equal to this value.
+   *            This is the value coming from the ADC, 0..1023.
+   *            Default is 5
+   */
+  public void start(int tol)
+  {
     GpioController gpio = GpioFactory.getInstance();
     mosiOutput       = gpio.provisionDigitalOutputPin(spiMosi, "MOSI", PinState.LOW);
     clockOutput      = gpio.provisionDigitalOutputPin(spiClk,  "CLK",  PinState.LOW);
@@ -75,13 +87,13 @@ public class ADCObserver
     int lastRead[] = new int[adcChannel.length];
     for (int i=0; i<lastRead.length; i++)
       lastRead[i] = 0;
-    int tolerance = 5;
+    int tolerance = tol; 
     while (go)
     {
       for (int i=0; i<adcChannel.length; i++)
       {
         int adc = readAdc(adcChannel[i]);
-     // System.out.println("ADC:" + adc);
+  //    System.out.println(">>> DEBUG >>> ADC:" + adc);
         int postAdjust = Math.abs(adc - lastRead[i]);
         if (postAdjust > tolerance)
         {
@@ -91,13 +103,26 @@ public class ADCObserver
       }
       try { Thread.sleep(100L); } catch (InterruptedException ie) { ie.printStackTrace(); }
     }
-    System.out.println("Shutting down...");
+    System.out.println("Shutting down the GPIO ports...");
     gpio.shutdown();
+    if (parentToNotify != null)
+    {
+      synchronized (parentToNotify)
+      {
+        parentToNotify.notify();
+      }
+    }
   }   
   
   public void stop()
   {
+    stop(null);
+  }
+  
+  public void stop(Thread toNotify)
+  {
     go = false;  
+    parentToNotify = toNotify;
   }
   
   private int readAdc(MCP3008_input_channels channel)
