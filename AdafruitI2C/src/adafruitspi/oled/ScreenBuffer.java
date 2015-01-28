@@ -4,12 +4,17 @@ import adafruitspi.oled.img.ImgInterface;
 import adafruitspi.oled.utils.CharacterMatrixes;
 
 import java.awt.Point;
+import java.awt.Polygon;
 
 public class ScreenBuffer
 {
-  private int w = 128, h = 32;
-  private int[] screenBuffer = null;
-  private char[][] screenMatrix = null;
+  private int w = 128, 
+              h =  32;
+  // This is the buffer that will be pushed on the device
+  private int[] screenBuffer    = null;
+  // This represents the led array (128x32). 'X' means on, ' ' means off.
+  // The dumpScreen method displays this one.
+  private char[][] screenMatrix = null; 
   
   public ScreenBuffer(int w, int h)
   {
@@ -64,7 +69,7 @@ public class ScreenBuffer
   public void text(String txt, int xPx, int yPx)
   {
     int xProgress = xPx;
-    for (int i=0; i<txt.length(); i++) // For each character of the string to display
+    for (int i=0; i<txt.length(); i++)           // For each character of the string to display
     {
       String c = new String(new char[] { txt.charAt(i) });
       if (CharacterMatrixes.characters.containsKey(c))
@@ -73,7 +78,7 @@ public class ScreenBuffer
         for (int x=0; x<matrix[0].length(); x++) // Each COLUMN of the matrix
         {
           char[] verticalBitmap = new char[CharacterMatrixes.FONT_SIZE];
-          for (int y=0; y<matrix.length; y++) // Each LINE of the matrix
+          for (int y=0; y<matrix.length; y++)    // Each LINE of the matrix
             verticalBitmap[y] = matrix[y].charAt(x);
           // Write in the scren matrix
        // screenMatrix[line][col]
@@ -91,14 +96,19 @@ public class ScreenBuffer
         System.out.println("Character not found for the OLED [" + c + "]");
       }
     }
-    // Display
-//    for (int l=0; l<this.h; l++)
-//    {
-//      System.out.println(new String(screenMatrix[l]));
-//    }
   }
 
-  // TODO Shapes (polygon, arc, oval)
+  /**
+   * For debug...
+   */
+  public void dumpScreen()
+  {
+    for (int l=0; l<this.h; l++)
+    {
+      System.out.println(new String(screenMatrix[l]));
+    }
+  }
+  
   public void plot(int x, int y)
   {
     if (x >= 0 && x < this.w && y >= 0 && y < this.h)
@@ -115,7 +125,10 @@ public class ScreenBuffer
     int deltaX = (tox - fromx);
     int deltaY = (toy - fromy);
     if (deltaX == 0 && deltaY == 0)
+    {
+      screenMatrix[fromy][fromx] = 'X';
       return;
+    }
     if (deltaX == 0)
     {
       for (int y=Math.min(fromy, toy); y<=Math.max(toy, fromy); y++)
@@ -132,7 +145,7 @@ public class ScreenBuffer
           screenMatrix[fromy][x] = 'X';
       }
     }
-    else // if (Math.abs(deltaX) > Math.abs(deltaY))
+    else if (Math.abs(deltaX) > Math.abs(deltaY)) // [-45, +45]
     {
       if (deltaX < 0)
       {
@@ -157,6 +170,41 @@ public class ScreenBuffer
         }
       }
     }
+    else if (Math.abs(deltaX) < Math.abs(deltaY)) // > 45, < -45
+    {
+      if (deltaY < 0)
+      {
+        int X = fromx;
+        int Y = fromy;
+        fromx = tox;
+        tox = X;
+        fromy = toy;
+        toy = Y;
+        deltaX = (tox - fromx);
+        deltaY = (toy - fromy);
+      }
+      double coeffDir = (double)deltaX / (double)deltaY;
+      //    if (fromx < tox)
+      {
+        for (int y=0; y<=deltaY; y++)
+        {
+          int x = fromx + (int)(Math.round(y * coeffDir));
+          int _y = y + fromy;
+          if (_y >= 0 && _y < this.h && x >= 0 && x < this.w)
+            screenMatrix[_y][x] = 'X';
+        }
+      }    
+    }
+  }
+  
+  public void shape(Polygon polygon, boolean closed)
+  {
+    int[] x = polygon.xpoints;
+    int[] y = polygon.ypoints;
+    for (int i=1; i<polygon.npoints; i++)
+      line(x[i-1], y[i-1], x[i], y[i]);
+    if (closed)
+      line(x[0], y[0], x[polygon.npoints - 1], y[polygon.npoints - 1]);
   }
   
   public void rectangle(int tlX, int tlY, int brX, int brY)
@@ -211,6 +259,21 @@ public class ScreenBuffer
         }      
       }
     }
+  }
+  
+  public int strlen(String s)
+  {
+    int len = 0;
+    for (int i=0; i<s.length(); i++) // For each character of the string to display
+    {
+      String c = new String(new char[] { s.charAt(i) });
+      if (CharacterMatrixes.characters.containsKey(c))
+      {
+        String[] matrix = CharacterMatrixes.characters.get(c);
+        len += matrix[0].length();
+      }
+    }
+    return len;
   }
   
   private static String lpad(String str, String with, int len)

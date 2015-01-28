@@ -4,13 +4,12 @@ import adafruitspi.oled.ScreenBuffer;
 import adafruitspi.oled.img.ImgInterface;
 import adafruitspi.oled.img.Java32x32;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Polygon;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,29 +18,22 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-/**
- * Image Builder/Renderer
- * Usage:
- *   java povutil.two.ImageBuilder [-col [30]] [-file <path>/povfile.c]
- *
- * You can click on the grid to trun the leds on or off
- * You can use the keyboard to enter predefined characters (including backspace).
- *
- * The generated code represents the "image" variable of the povfile.c.
- * See mypov.c for example.
- */
+@SuppressWarnings("oracle.jdeveloper.java.serialversionuid-field-missing")
 public class ImageBuilder
   extends java.awt.Frame
 {
+  private ImageBuilder instance = this;
   private LEDPanel ledPanel;
   private JPanel bottomPanel;
-  private JButton generateButton;
-  private JButton clearButton;
+  private JCheckBox gridCheckBox;
+  private JButton againButton;
+  
+  private transient ScreenBuffer sb;
   
   private static int nbCols = -1;
-  private static String fileName = "";
 
   private static int[] buffer = new int[512];
   static 
@@ -2110,6 +2102,7 @@ public class ImageBuilder
     buffer3[510] = 0;
     buffer3[511] = 0;
   }
+  
   /** Creates new form ImageBuilder */
   public ImageBuilder()
   {
@@ -2117,35 +2110,19 @@ public class ImageBuilder
     this.setSize(new Dimension(1000, 300));
   }
 
-  /** This method is called from within the constructor to
+  /** 
+   * This method is called from within the constructor to
    * initialize the form.
    */
   private void initComponents()
   {
     if (nbCols == -1)
-    {
-      if (fileName.trim().length() == 0)
-      {
-        ledPanel = new LEDPanel();
-      }
-      else
-      {
-        try
-        { 
-          boolean[][] leds = makeOneImage(fileName);
-          ledPanel = new LEDPanel(leds.length);
-          ledPanel.setImage(leds);
-        }
-        catch (Exception ex)
-        {
-          ex.printStackTrace();
-          System.exit(1);
-        }
-      }
-    }
+      ledPanel = new LEDPanel();
     else
       ledPanel = new LEDPanel(nbCols);
 
+    ledPanel.setWithGrid(false);
+    
     setPreferredSize(new java.awt.Dimension(1000, 600));
     setTitle("OLED Screen Buffer");
     addWindowListener(new java.awt.event.WindowAdapter()
@@ -2156,54 +2133,49 @@ public class ImageBuilder
       }
     });
     add(ledPanel, java.awt.BorderLayout.CENTER);
+    
+    bottomPanel = new JPanel();
+    gridCheckBox = new JCheckBox("With Grid");
+    gridCheckBox.setSelected(false);
+    bottomPanel.add(gridCheckBox, null);
+    gridCheckBox.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent)
+      {
+        ledPanel.setWithGrid(gridCheckBox.isSelected());
+        ledPanel.repaint();
+      }
+    });
+    againButton = new JButton("Play again");
+    bottomPanel.add(againButton, null);
+    againButton.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent)
+      {
+        Thread go = new Thread()
+          {
+            public void run()
+            {
+              instance.doYourJob();    
+            }
+          };
+        go.start();
+      }
+    });
+    
+    add(bottomPanel, java.awt.BorderLayout.SOUTH);
     pack();
   }
 
-  private final static char ONE = '1';
-  
-  private static boolean[][] makeOneImage(String fileName) throws Exception
-  {
-    List<String> image = new ArrayList<String>();
-    
-    System.out.println("-- " + fileName + " --");
-    BufferedReader br = new BufferedReader(new FileReader(fileName));
-    String line = "";
-    boolean go = true;
-    while (go)
-    {
-      line = br.readLine();
-      if (line == null)
-        go = false;
-      else
-      {
-        line = line.trim();
-        String marker = "B8(";
-        if (line.startsWith(marker))
-        {
-          String imgData = line.substring(line.indexOf(marker) + marker.length(), line.indexOf(")"));
-          image.add(imgData); // imgData: column of leds
-        }
-      }
-    }
-    br.close();
-    boolean[][] imageLeds = null;
-    if (image.size() > 0)
-    {
-      System.out.println("Generating " + image.size() + " column(s) of leds");
-      imageLeds = new boolean[image.size()][8];
-      for (int c=0; c<image.size(); c++)
-      {
-        String ledColumn = image.get(c);
-//      System.out.println(ledColumn);
-        for (int r=0; r<8; r++)
-          imageLeds[c][7 - r] = (ONE == ledColumn.charAt(r));        
-      }
-    }
-    
-    return imageLeds;
-  }
-
-  private void makeLedMatrix(int[] screenbuffer)
+  /**
+   * Simulator. Takes the screenbuffer expected by the real device and displays it on
+   * a led array (2 dims).
+   * 
+   * @param screenbuffer as expected by the device.
+   */
+  private void setBuffer(int[] screenbuffer)
   {
     // This displays the buffer top to bottom, instead of left to right
     char[][] screenMatrix = new char[32][128];
@@ -2226,29 +2198,36 @@ public class ImageBuilder
         matrix[j][31 - i] = (screenMatrix[i][j] == 'X' ? true : false);
     }    
     ledPanel.setLedOnOff(matrix);
-    // Display
-//    for (int l=screenMatrix.length - 1; l>=0; l--)
-//    {
-//      System.out.println(new String(screenMatrix[l]));
-//    }
+  }
+  
+  private void display()
+  {
+    ledPanel.repaint();
   }
 
+  @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public void doYourJob()
   {
+    ImageBuilder oled = instance;
+    againButton.setEnabled(false);
+//  instance.repaint();
+
     if (false)
-      makeLedMatrix(buffer); // Static buffer, for tests
+      oled.setBuffer(buffer); // Static buffer, for tests
     if (false)
-      makeLedMatrix(buffer1); // Static buffer, for font (part 1)
+      oled.setBuffer(buffer1); // Static buffer, for font (part 1)
     if (false)
-      makeLedMatrix(buffer2); // Static buffer, for font (part 2)
+      oled.setBuffer(buffer2); // Static buffer, for font (part 2)
     if (false)
-      makeLedMatrix(buffer3); // Static buffer, for font (part 3)
+      oled.setBuffer(buffer3); // Static buffer, for font (part 3)
     
     if (true)
     {
-      ScreenBuffer sb = new ScreenBuffer(128, 32);
-      //      sb.text("abc?", 1,  8);
-      //      sb.text("def!", 9, 20);
+      if (sb == null)
+      {
+        sb = new ScreenBuffer(128, 32);
+        sb.clear();
+      }
       /* 
     ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4
     5 6 7 8 9 ; < = > ? @ A B C D E F G H I
@@ -2256,19 +2235,19 @@ public class ImageBuilder
     ^ _ a b c d e f g h i j k l m n o p q r
     s t u v w x y z { | }
        */
-      if (false)
+      
+      if (true)
       {
-        sb.text("ScreenBuffer", 2, 9);
+        sb.text("ScreenBuffer",      2,  9);
         sb.text("128 x 32 for OLED", 2, 19);
-        sb.text("I speak Java!", 2, 29);
-      //  sb.line(0, 19, 131, 19);
-      //  sb.line(0, 32, 125, 19);
-        makeLedMatrix(sb.getScreenBuffer());
-        ledPanel.repaint();
-  
+        sb.text("I speak Java!",     2, 29);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+//      sb.dumpScreen();
         try { Thread.sleep(2000); } catch (Exception ex) {}
       }
-      if (false)
+      
+      if (true)
       {
         String[] txt1 = new String[] {
             "!\"#$%&'()*+,-./01234",
@@ -2288,12 +2267,14 @@ public class ImageBuilder
           String[] sa = one ? txt1 : txt2;
           for (int i=0; i<sa.length; i++)
             sb.text(sa[i], 0, 10 + (i * 10));
-          makeLedMatrix(sb.getScreenBuffer());
-          ledPanel.repaint();
+          oled.setBuffer(sb.getScreenBuffer());
+          oled.display();
           one = !one;
           try { Thread.sleep(2000); } catch (Exception ex) {}
         }
       }
+      
+      // Image + text, marquee
       if (true)
       {
         sb.clear();
@@ -2301,8 +2282,8 @@ public class ImageBuilder
         sb.image(img, 0, 0);
         sb.text("I speak Java!", 36, 20);
       
-        makeLedMatrix(sb.getScreenBuffer());
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
         try { Thread.sleep(2000); } catch (Exception ex) {}
   
         for (int x=0; x<128; x++)
@@ -2310,85 +2291,259 @@ public class ImageBuilder
           sb.image(img, 0 - x, 0);
           sb.text("I speak Java!.....", 36 - x, 20);
         
-          makeLedMatrix(sb.getScreenBuffer());
-          ledPanel.repaint();
-          try { Thread.sleep(150 - x); } catch (Exception ex) {}
+          oled.setBuffer(sb.getScreenBuffer());
+          oled.display();
+          long s = (long)(150 - (1.5 * x));
+          try { Thread.sleep(s > 0 ? s : 0); } catch (Exception ex) {}
         }
       }
+      
       // Circles
-      if (false)
+      if (true)
       {
         sb.clear();
         sb.circle(64, 16, 15);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.circle(74, 16, 10);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.circle(80, 16,  5);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}          
       }
+      
       // Lines
       if (true)
       {
         sb.clear();
         sb.line(1, 1, 126, 30);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.line(126, 1, 1, 30);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.line(1, 25, 120, 10);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.line(10, 5, 10, 30);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
         
         sb.line(1, 5, 120, 5);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}          
       }
+      
       // Rectangle
       if (true)
       {
         sb.clear();
         sb.rectangle(5, 10, 100, 25);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
 
         sb.rectangle(15, 3, 50, 30);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
         try { Thread.sleep(1000); } catch (Exception ex) {}
       }
+      
       // Arc
       if (true)
       {
         sb.clear();
         sb.arc(64, 16, 10, 20, 90);
         sb.plot(64, 16);
-        makeLedMatrix(sb.getScreenBuffer());          
-        ledPanel.repaint();
-  //    try { Thread.sleep(1000); } catch (Exception ex) {}
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
+        try { Thread.sleep(1000); } catch (Exception ex) {}
       }
       
-      System.out.println("Done!");
+      // Shape
+      if (true)
+      {
+        sb.clear();
+        int[] x = new int[] { 64, 73, 50, 78, 55 };
+        int[] y = new int[] {  1, 30, 12, 12, 30 };
+        Polygon p = new Polygon(x, y, 5);
+        sb.shape(p, true);
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      
+      // Centered text
+      if (true)
+      {
+        sb.clear();
+        String txt = "Centered";
+        int len = sb.strlen(txt);
+        sb.text(txt, 64 - (len/2), 16);
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+     // sb.clear();
+        txt = "A much longer string.";
+        len = sb.strlen(txt);
+        sb.text(txt, 64 - (len/2), 26);
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      
+      // Vertical marquee
+      if (true)
+      {
+        String[] txt = new String[] {
+          "Centered",
+          "This is line one",
+          "More text goes here",
+          "Some crap follows", 
+          "We're reaching the end",
+          "* The End *"
+        };
+        int len = 0;
+        for (int t=0; t<80; t++)
+        {
+          sb.clear();
+          for (int i=0; i<txt.length; i++)
+          {
+            len = sb.strlen(txt[i]);
+            sb.text(txt[i], 64 - (len/2), (10 * (i+1)) - t);
+            oled.setBuffer(sb.getScreenBuffer());          
+            oled.display();
+          }
+          try { Thread.sleep(100); } catch (Exception ex) {}
+        }
+//      sb.dumpScreen();
+        
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      
+      if (true)
+      {
+        // Text Snake...
+        String snake = "This text is displayed like a snake, waving across the screen...";
+        char[] ca = snake.toCharArray();
+        int strlen = sb.strlen(snake);
+     // int i = 0;
+        for (int i=0; i<strlen + 2; i++)
+        {
+          sb.clear();
+          for (int c=0; c<ca.length; c++)
+          {
+            int strOffset = 0;
+            if (c > 0)
+            {
+              String tmp = new String(ca, 0, c);
+        //    System.out.println(tmp);
+              strOffset = sb.strlen(tmp) + 2;
+            }
+            double virtualAngle = Math.PI * (((c - i) % 32) / 32d);
+            int x = strOffset - i,
+                y = 26 + (int)(16 * Math.sin(virtualAngle)); 
+//          System.out.println("Displaying " + ca[c] + " at " + x + ", " + y + ", i=" + i + ", strOffset=" + strOffset);
+            sb.text(new String(new char[] { ca[c] }), x, y);             
+          }
+          oled.setBuffer(sb.getScreenBuffer());          
+          oled.display();
+          try { Thread.sleep(75); } catch (Exception ex) {}
+        }        
+      }
+      
+      // Curve      
+      if (true)
+      {
+        sb.clear();
+        // Axis
+        sb.line(0, 16, 128, 16);
+        sb.line(2, 0, 2, 32);
+        
+        Point prev = null;
+        for (int x=0; x<130; x++)
+        {
+          double amplitude = 6 * Math.exp((double)(130 - x) / (13d * 7.5d)); 
+    //    System.out.println("X:" + x + ", ampl: " + (amplitude));
+          int y = 16 - (int)(amplitude * Math.cos(Math.toRadians(360 * x / 16d)));
+          sb.plot(x + 2, y);
+          if (prev != null)
+            sb.line(prev.x, prev.y, x+2, y);
+          prev = new Point(x+2, y);
+        }
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();        
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      
+      // Progressing Curve      
+      if (true)
+      {
+        sb.clear();
+        // Axis
+        sb.line(0, 16, 128, 16);
+        sb.line(2, 0, 2, 32);
+        
+        Point prev = null;
+        for (int x=0; x<130; x++)
+        {
+          double amplitude = 6 * Math.exp((double)(130 - x) / (13d * 7.5d)); 
+      //  System.out.println("X:" + x + ", ampl: " + (amplitude));
+          int y = 16 - (int)(amplitude * Math.cos(Math.toRadians(360 * x / 16d)));
+          sb.plot(x + 2, y);
+          if (prev != null)
+            sb.line(prev.x, prev.y, x+2, y);
+          prev = new Point(x+2, y);
+          oled.setBuffer(sb.getScreenBuffer());          
+          oled.display();        
+          try { Thread.sleep(75); } catch (Exception ex) {}
+        }
+        oled.setBuffer(sb.getScreenBuffer());          
+        oled.display();        
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+
+      // Bouncing      
+      if (true)
+      {
+        sb.clear();
+        for (int x=0; x<130; x++)
+        {
+          sb.clear();
+          double amplitude = 6 * Math.exp((double)(130 - x) / (13d * 7.5d)); 
+      //  System.out.println("X:" + x + ", ampl: " + (amplitude));
+          int y = 32 - (int)(amplitude * Math.abs(Math.cos(Math.toRadians(180 * x / 10d))));
+          // 4 dots
+          sb.plot(x,   y);
+          sb.plot(x+1, y);
+          sb.plot(x+1, y+1);
+          sb.plot(x,   y+1);
+
+          oled.setBuffer(sb.getScreenBuffer());          
+          oled.display();        
+          try { Thread.sleep(75); } catch (Exception ex) {}
+        }
+    //  oled.setBuffer(sb.getScreenBuffer());          
+    //  oled.display();        
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      againButton.setEnabled(true);
+
+      System.out.println("...Done!");
     }
   }
   
@@ -2401,7 +2556,7 @@ public class ImageBuilder
   }
 
   /** Exit the Application */
-  private void exitForm(java.awt.event.WindowEvent evt) 
+  private void exitForm(@SuppressWarnings("oracle.jdeveloper.java.unused-parameter") java.awt.event.WindowEvent evt) 
   {
     System.exit(0);
   }
@@ -2430,8 +2585,6 @@ public class ImageBuilder
       {
         if ("-col".equals(args[i]))
           nbCols = Integer.parseInt(args[i+1]);
-        if ("-file".equals(args[i]))
-          fileName = args[i+1];
       }
     }
 

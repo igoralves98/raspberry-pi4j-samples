@@ -6,7 +6,7 @@ import java.util.Map;
 public class CharacterMatrixes
 {
   // All characters MUST be 10 pixels high, 
-  // all lines have the same length
+  // for one character, all lines have the same length (variable from one character to another)
   public final static int FONT_SIZE = 10;
   public final static Map<String, String[]> characters = new HashMap<String, String[]>();
   static

@@ -1,7 +1,7 @@
 Oil Detector prototyping
 ========================
 The MCP3008 has its channel 0 connected.
-The relay uses the GPIO pin #00
+The relay uses the GPIO pin #00 (relay 1, 2 is unused)
 
 To run:
 Start the node server on the RasPI:

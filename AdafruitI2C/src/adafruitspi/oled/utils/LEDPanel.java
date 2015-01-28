@@ -2,16 +2,14 @@ package adafruitspi.oled.utils;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+@SuppressWarnings("oracle.jdeveloper.java.serialversionuid-field-missing")
 public class LEDPanel
   extends javax.swing.JPanel
 {
   private Color ledColor = Color.red;
   private int origin = 0;
+  private boolean withGrid = false;
 
   private final static int NB_LINES =  32;
   private static int NB_COLS        = 128;
@@ -39,6 +37,11 @@ public class LEDPanel
     NB_COLS = nbCols;
     initLeds();
     initComponents();
+  }
+
+  public void setWithGrid(boolean withGrid)
+  {
+    this.withGrid = withGrid;
   }
 
   private void initLeds()
@@ -107,12 +110,14 @@ public class LEDPanel
     gr.setColor(Color.black);
     gr.fillRect(0, 0, this.getWidth(), this.getHeight());
     // Grid
-    gr.setColor(Color.gray);
-    for (int c=0; c<NB_COLS; c++)
-      gr.drawLine(c * this.getWidth() / NB_COLS, 0, c * this.getWidth() / NB_COLS, this.getHeight());
-    for (int r=0; r<NB_LINES; r++)
-      gr.drawLine(0, r * this.getHeight() / NB_LINES, this.getWidth(), r * this.getHeight() / NB_LINES);
-
+    if (withGrid)
+    {
+      gr.setColor(Color.gray);
+      for (int c=0; c<NB_COLS; c++)
+        gr.drawLine(c * this.getWidth() / NB_COLS, 0, c * this.getWidth() / NB_COLS, this.getHeight());
+      for (int r=0; r<NB_LINES; r++)
+        gr.drawLine(0, r * this.getHeight() / NB_LINES, this.getWidth(), r * this.getHeight() / NB_LINES);
+    }
     gr.setColor(ledColor);
     for (int r=0; r<NB_LINES; r++)
     {
