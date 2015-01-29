@@ -24,6 +24,7 @@ public class KeyboardController
 
   /* 
    * Seen from the TOP of the keypad
+   * https://www.adafruit.com/products/1824
    *   ___________________________
    *     |  |  |  |  |  |  |  |
    *     x  25 24 23 18 22 17 4
@@ -71,7 +72,7 @@ public class KeyboardController
         if (this.gpio.isLow(rowButton[i]))
         {
           row = i;
-//        break;
+          break;
         }
       }
       if (row != -1)
@@ -88,7 +89,7 @@ public class KeyboardController
           if (this.gpio.isHigh(colButton[i]))
           {
             col = i;        
-//          break;
+            break;
           }
         }
         if (col != -1)
