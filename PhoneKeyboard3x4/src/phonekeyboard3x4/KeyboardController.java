@@ -27,13 +27,13 @@ public class KeyboardController
    * https://www.adafruit.com/products/1824
    *   ___________________________
    *     |  |  |  |  |  |  |  |
-   *     x  25 24 23 18 22 17 4
+   *     x  25 24 23 18 22 17 4  <- Names on the cobbler
    */
   
-  //                                              18                23                24                25
-  private Pin[] kpRow = new Pin[] { RaspiPin.GPIO_01, RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06 };
-  //                                               4                17                22
-  private Pin[] kpCol = new Pin[] { RaspiPin.GPIO_07, RaspiPin.GPIO_00, RaspiPin.GPIO_03 };
+  // Names on the cobbler:                        18                23                24                25 
+  private Pin[] kpRow = new Pin[] { RaspiPin.GPIO_01, RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06 }; // Wiring PI/PI4J
+  // Names on the cobbler:                         4                17                22
+  private Pin[] kpCol = new Pin[] { RaspiPin.GPIO_07, RaspiPin.GPIO_00, RaspiPin.GPIO_03 };                   // Wiring PI/PI4J
 
   public KeyboardController()
   {
