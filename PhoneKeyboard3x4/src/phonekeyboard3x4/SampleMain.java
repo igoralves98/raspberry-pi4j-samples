@@ -2,6 +2,7 @@ package phonekeyboard3x4;
 
 public class SampleMain
 {
+  @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public static void main(String[] args)
   {
     System.out.println("Hit the same key twice to exit");

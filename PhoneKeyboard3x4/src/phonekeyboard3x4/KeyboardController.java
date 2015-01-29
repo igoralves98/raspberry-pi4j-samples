@@ -14,7 +14,7 @@ public class KeyboardController
   private GpioPinDigitalMultipurpose[] rowButton = null;
   private GpioPinDigitalMultipurpose[] colButton = null;
   
-  private char[][] keypad = new char[][] 
+  private final static char[][] keypad = new char[][] 
   {
     { '1', '2', '3' },
     { '4', '5', '6' },
@@ -23,13 +23,24 @@ public class KeyboardController
   };
 
   /* 
-   * Seen from the TOP of the keypad
+   * Seen from the TOP of the keypad, the 8 pins
    * https://www.adafruit.com/products/1824
-   *   ___________________________
+   *         3       2      1    <- The keys you see
+   *  +---------------------------+
+   *  |___________________________|
    *     |  |  |  |  |  |  |  |
-   *     x  25 24 23 18 22 17 4  <- Names on the cobbler
+   *     x  25 24 23 18 22 17 4  <- Pin names on the cobbler
+   *        |  |  |  |  |  |  |
+   *        |  |  |  |  |  |  Col [1,4,7,*]
+   *        |  |  |  |  |  Col [2,5,8,0]
+   *        |  |  |  |  Col [3,6,9,#]
+   *        |  |  |  Row [1,2,3]
+   *        |  |  Row [4,5,6]
+   *        |  Row [7,8,9]
+   *        Row [*,0,#]
    */
   
+  // TODO parameterize those 2 arrays (cusomizable)
   // Names on the cobbler:                        18                23                24                25 
   private Pin[] kpRow = new Pin[] { RaspiPin.GPIO_01, RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06 }; // Wiring PI/PI4J
   // Names on the cobbler:                         4                17                22
