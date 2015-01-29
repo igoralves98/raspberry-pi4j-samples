@@ -44,7 +44,8 @@ public class KeyboardController
     colButton = new GpioPinDigitalMultipurpose[kpCol.length];
     for (int i=0; i<kpCol.length; i++)
       colButton[i] = this.gpio.provisionDigitalMultipurposePin(kpCol[i], PinMode.DIGITAL_INPUT);
-    System.out.println("All pins provisioned, keypad ready.");
+    if ("y".equalsIgnoreCase(System.getProperty("verbose", "N")))
+      System.out.println("All pins provisioned, keypad ready.");
   }
   
   public char getKey()
