@@ -2226,14 +2226,14 @@ public class ImageBuilder
       if (sb == null)
       {
         sb = new ScreenBuffer(128, 32);
-        sb.clear();
+        sb.clear(ScreenBuffer.BLACK_ON_WHITE);
       }
 
       if (true)
       {
-        sb.text("ScreenBuffer",      2,  9);
-        sb.text("128 x 32 for OLED", 2, 19);
-        sb.text("I speak Java!",     2, 29);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.BLACK_ON_WHITE);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.BLACK_ON_WHITE);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.BLACK_ON_WHITE);
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();
 //      sb.dumpScreen();
@@ -2270,15 +2270,16 @@ public class ImageBuilder
       // Image + text, marquee
       if (true)
       {
-        sb.clear();
+        sb.clear(ScreenBuffer.BLACK_ON_WHITE);
         ImgInterface img = new Java32x32(); 
-        sb.image(img, 0, 0);
-        sb.text("I speak Java!", 36, 20);
+        sb.image(img, 0, 0, ScreenBuffer.BLACK_ON_WHITE);
+        sb.text("I speak Java!", 36, 20, ScreenBuffer.BLACK_ON_WHITE);
       
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();
         try { Thread.sleep(2000); } catch (Exception ex) {}
-  
+        
+        sb.clear();
         for (int x=0; x<128; x++)
         {
           sb.image(img, 0 - x, 0);
