@@ -1,32 +1,31 @@
 package raspisamples;
 
 import adafruitspi.oled.AdafruitSSD1306;
-
 import adafruitspi.oled.ScreenBuffer;
-
 import com.pi4j.io.gpio.RaspiPin;
-
 import phonekeyboard3x4.KeyboardController;
 
+/*
+ * A phone keypad, and a 128x32 oled screen
+ */
 public class OLEDScreenAndKeypad
 {
   private KeyboardController kbc;
   private AdafruitSSD1306 oled;
   private ScreenBuffer sb;
   
+  // This one overrides the default pins for the OLED
   public OLEDScreenAndKeypad()
   {
     kbc = new KeyboardController();
-
+    // Override the default pins        Clock             MOSI              CS                RST               DC
     oled = new AdafruitSSD1306(RaspiPin.GPIO_12, RaspiPin.GPIO_13, RaspiPin.GPIO_14, RaspiPin.GPIO_15, RaspiPin.GPIO_16);
     oled.begin();
     oled.clear();
 
     sb = new ScreenBuffer(128, 32);
-    sb.clear();
-
-    oled.setBuffer(sb.getScreenBuffer());
-    oled.display();
+    
+    reset();
   }
   
   public void display(String txt)
@@ -43,7 +42,7 @@ public class OLEDScreenAndKeypad
     while (go)
     {
       char c = kbc.getKey();    
-      System.out.println("At " + System.currentTimeMillis() + ", Char: " + c);
+//    System.out.println("At " + System.currentTimeMillis() + ", Char: " + c);
       if (c == '#')
         go = false;
       else if (c == '*')
@@ -61,15 +60,25 @@ public class OLEDScreenAndKeypad
     System.out.println("Bye");
     kbc.shutdown();
     try { Thread.sleep(1000L); } catch (Exception ex) {}
-    reset();
+    clear();
+    oled.shutdown();
   }
 
   public void reset()
   {
     sb.clear();
     oled.clear();
+    sb.text("* = Reset, # = Exit.", 2, 8);
     oled.setBuffer(sb.getScreenBuffer());
     oled.display();    
+  }
+  
+  public void clear()
+  {
+    sb.clear();
+    oled.clear();
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();       
   }
   
   public static void main(String[] args)

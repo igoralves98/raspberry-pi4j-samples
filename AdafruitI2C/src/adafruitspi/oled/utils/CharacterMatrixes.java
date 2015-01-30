@@ -109,6 +109,17 @@ public class CharacterMatrixes
                                        "      ",
                                        "      " } );
 
+    characters.put(":", new String[] { "    ",
+                                       "    ",
+                                       "    ",
+                                       "    ",
+                                       " XX ",
+                                       "    ",
+                                       " XX ",
+                                       "    ",
+                                       "    ",
+                                       "    " } );
+
     characters.put("@", new String[] { "       ",
                                        "       ",
                                        "  XXX  ",

@@ -25,11 +25,13 @@ public class KeyboardController
   /* 
    * Seen from the TOP of the keypad, the 8 pins
    * https://www.adafruit.com/products/1824
-   *         3       2      1    <- The keys you see
-   *  +---------------------------+
-   *  |___________________________|
+   *     +-----+ +-----+ +-----+
+   *     |  3  | |  2  | |  1  |   <- The keys you see
+   *  +--+-----+-+-----+-+-----+--+
+   *  |          T  O  P          |
+   * -+--+--+--+--+--+--+--+--+---+-
    *     |  |  |  |  |  |  |  |
-   *     x  25 24 23 18 22 17 4  <- Pin names on the cobbler
+   *     x  25 24 23 18 22 17 4    <- Pin names on the cobbler
    *        |  |  |  |  |  |  |
    *        |  |  |  |  |  |  Col [1,4,7,*]
    *        |  |  |  |  |  Col [2,5,8,0]
@@ -40,10 +42,10 @@ public class KeyboardController
    *        Row [*,0,#]
    */
   
-  // TODO parameterize those 2 arrays (cusomizable)
-  // Names on the cobbler:                        18                23                24                25 
+  // TODO parameterize those 2 arrays (customizable)
+  // Names on the cobbler ->                      18                23                24                25 
   private Pin[] kpRow = new Pin[] { RaspiPin.GPIO_01, RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06 }; // Wiring PI/PI4J
-  // Names on the cobbler:                         4                17                22
+  // Names on the cobbler ->                       4                17                22
   private Pin[] kpCol = new Pin[] { RaspiPin.GPIO_07, RaspiPin.GPIO_00, RaspiPin.GPIO_03 };                   // Wiring PI/PI4J
 
   public KeyboardController()
@@ -108,7 +110,7 @@ public class KeyboardController
         {
           c = keypad[row][col];
           reset();
-     //   System.out.println("  >>> getKey: [" + row + ", " + col + "] = " + c);
+     //   System.out.println(" >>> getKey: [" + row + ", " + col + "] = " + c);
         }
         else
           reset();

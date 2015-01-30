@@ -8,6 +8,8 @@ import java.awt.Polygon;
 
 public class ScreenBuffer
 {
+  private final static int WIDTH = 128, HEIGHT = 32; // Default values
+  
   private int w = 128, 
               h =  32;
   // This is the buffer that will be pushed on the device
@@ -15,6 +17,11 @@ public class ScreenBuffer
   // This represents the led array (128x32). 'X' means on, ' ' means off.
   // The dumpScreen method displays this one.
   private char[][] screenMatrix = null; 
+  
+  public ScreenBuffer()
+  {
+    this(WIDTH, HEIGHT);
+  }
   
   public ScreenBuffer(int w, int h)
   {
