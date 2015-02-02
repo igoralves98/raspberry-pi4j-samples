@@ -2226,21 +2226,64 @@ public class ImageBuilder
       if (sb == null)
       {
         sb = new ScreenBuffer(128, 32);
-        sb.clear(ScreenBuffer.BLACK_ON_WHITE);
+        sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
       }
 
       if (true)
       {
-        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.BLACK_ON_WHITE);
-        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.BLACK_ON_WHITE);
-        sb.text("I speak Java!",     2, 29, ScreenBuffer.BLACK_ON_WHITE);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.BLACK_ON_WHITE);
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();
 //      sb.dumpScreen();
         try { Thread.sleep(2000); } catch (Exception ex) {}
+
+        // Blinking
+        sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+        try { Thread.sleep(50); } catch (Exception ex) {}
+        
+        sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+        try { Thread.sleep(50); } catch (Exception ex) {}
+        
+        sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+        try { Thread.sleep(50); } catch (Exception ex) {}
+        
+        sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+        try { Thread.sleep(50); } catch (Exception ex) {}
+
+        sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("ScreenBuffer",      2,  9, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("128 x 32 for OLED", 2, 19, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        sb.text("I speak Java!",     2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
+        oled.setBuffer(sb.getScreenBuffer());
+        oled.display();
+        try { Thread.sleep(2000); } catch (Exception ex) {}
+        
+        // End blinking    
       }
       
-      if (true)
+      if (false)
       {
         String[] txt1 = new String[] {
             "!\":#$%&'()*+,-./01234",
@@ -2268,12 +2311,12 @@ public class ImageBuilder
       }
       
       // Image + text, marquee
-      if (true)
+      if (false)
       {
-        sb.clear(ScreenBuffer.BLACK_ON_WHITE);
+        sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
         ImgInterface img = new Java32x32(); 
-        sb.image(img, 0, 0, ScreenBuffer.BLACK_ON_WHITE);
-        sb.text("I speak Java!", 36, 20, ScreenBuffer.BLACK_ON_WHITE);
+        sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
+        sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
       
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();
@@ -2293,7 +2336,7 @@ public class ImageBuilder
       }
       
       // Circles
-      if (true)
+      if (false)
       {
         sb.clear();
         sb.circle(64, 16, 15);
@@ -2313,7 +2356,7 @@ public class ImageBuilder
       }
       
       // Lines
-      if (true)
+      if (false)
       {
         sb.clear();
         sb.line(1, 1, 126, 30);
@@ -2343,7 +2386,7 @@ public class ImageBuilder
       }
       
       // Rectangle
-      if (true)
+      if (false)
       {
         sb.clear();
         sb.rectangle(5, 10, 100, 25);
@@ -2357,8 +2400,22 @@ public class ImageBuilder
         try { Thread.sleep(1000); } catch (Exception ex) {}
       }
       
-      // Arc
+      // Nested rectangles
       if (true)
+      {
+        sb.clear();
+        for (int i=0; i<8; i++)
+        {
+          sb.rectangle(1 + (i*2), 1 + (i*2), 127 - (i*2), 31 - (i*2));
+          oled.setBuffer(sb.getScreenBuffer());          
+          oled.display();
+          try { Thread.sleep(100); } catch (Exception ex) {}
+        }
+        try { Thread.sleep(1000); } catch (Exception ex) {}
+      }
+      
+      // Arc
+      if (false)
       {
         sb.clear();
         sb.arc(64, 16, 10, 20, 90);

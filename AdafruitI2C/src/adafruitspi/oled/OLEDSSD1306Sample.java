@@ -3,6 +3,8 @@ package adafruitspi.oled;
 import adafruitspi.oled.img.ImgInterface;
 import adafruitspi.oled.img.Java32x32;
 
+import com.pi4j.io.gpio.RaspiPin;
+
 import java.awt.Point;
 import java.awt.Polygon;
 
@@ -11,13 +13,15 @@ public class OLEDSSD1306Sample
   @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public static void main(String[] args)
   {
-    AdafruitSSD1306 oled = new AdafruitSSD1306();
+    AdafruitSSD1306 oled = null; // new AdafruitSSD1306(); // Default pins (look in the AdafruitSSD1306 code)
+    // Override the default pins        Clock             MOSI              CS                RST               DC
+    oled = new AdafruitSSD1306(RaspiPin.GPIO_12, RaspiPin.GPIO_13, RaspiPin.GPIO_14, RaspiPin.GPIO_15, RaspiPin.GPIO_16);
 
     oled.begin();
     oled.clear();
 //  oled.display();
     ScreenBuffer sb = new ScreenBuffer(128, 32);
-    sb.clear();
+    sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
     
     if (false)
     {
@@ -28,14 +32,46 @@ public class OLEDSSD1306Sample
     }
     
     ImgInterface img = new Java32x32();
-    sb.image(img, 0, 0);
-    sb.text("I speak Java!", 36, 20);
+    sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
+    sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
 
     oled.setBuffer(sb.getScreenBuffer());
     oled.display();
 
-    try { Thread.sleep(5000); } catch (Exception ex) {}
+    try { Thread.sleep(2000); } catch (Exception ex) {}
+    // Blinking
+    sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
+    sb.image(img, 0, 0, ScreenBuffer.Mode.WHITE_ON_BLACK);
+    sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.WHITE_ON_BLACK);
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();
+    try { Thread.sleep(500); } catch (Exception ex) {}
+    
+    sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
+    sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
+    sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();
+    try { Thread.sleep(500); } catch (Exception ex) {}
+    
+    sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
+    sb.image(img, 0, 0, ScreenBuffer.Mode.WHITE_ON_BLACK);
+    sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.WHITE_ON_BLACK);
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();
+    try { Thread.sleep(500); } catch (Exception ex) {}
+    
+    sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
+    sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
+    sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();
+    try { Thread.sleep(500); } catch (Exception ex) {}
 
+    // End blinking    
+    sb.clear();
+    oled.setBuffer(sb.getScreenBuffer());
+    oled.display();
     // Marquee
     for (int i=0; i<128; i++)
     {
@@ -102,6 +138,16 @@ public class OLEDSSD1306Sample
     sb.rectangle(15, 3, 50, 30);
     oled.setBuffer(sb.getScreenBuffer());          
     oled.display();
+    try { Thread.sleep(1000); } catch (Exception ex) {}
+
+    sb.clear();
+    for (int i=0; i<8; i++)
+    {
+      sb.rectangle(1 + (i*2), 1 + (i*2), 127 - (i*2), 31 - (i*2));
+      oled.setBuffer(sb.getScreenBuffer());          
+      oled.display();
+  //  try { Thread.sleep(100); } catch (Exception ex) {}
+    }
     try { Thread.sleep(1000); } catch (Exception ex) {}
 
     // Arc & plot

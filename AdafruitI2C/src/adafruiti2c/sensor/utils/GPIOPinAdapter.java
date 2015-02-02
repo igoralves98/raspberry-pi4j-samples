@@ -10,7 +10,13 @@ import com.pi4j.io.gpio.PinMode;
 import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.PinState;
 
+import com.pi4j.io.gpio.event.GpioPinListener;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class GPIOPinAdapter implements GpioPinDigitalOutput
@@ -294,4 +300,72 @@ public class GPIOPinAdapter implements GpioPinDigitalOutput
   {
     pin.setShutdownOptions(unexport, state, resistance, mode);
   }
+  /* For the last release of PI4J
+  @Override
+  public Future<?> pulse(long duration, PinState pulseState, boolean blocking, Callable<Void> callback)
+  {
+    return pin.pulse(duration, pulseState, blocking, callback);
+  }
+
+  @Override
+  public Future<?> pulse(long duration, Callable<Void> callback)
+  {
+    return pin.pulse(duration, callback);
+  }
+
+  @Override
+  public Future<?> pulse(long duration, boolean blocking, Callable<Void> callback)
+  {
+    return pin.pulse(duration, blocking, callback);
+  }
+
+  @Override
+  public Future<?> pulse(long duration, PinState pulseState, Callable<Void> callback)
+  {
+    return pin.pulse(duration, pulseState, callback);
+  }
+
+  @Override
+  public Collection<GpioPinListener> getListeners()
+  {
+    // TODO Implement this method
+    return Collections.emptySet();
+  }
+
+  @Override
+  public void addListener(GpioPinListener... listener)
+  {
+    pin.addListener(listener);
+  }
+
+  @Override
+  public void addListener(List<? extends GpioPinListener> listeners)
+  {
+    pin.addListener(listeners);
+  }
+
+  @Override
+  public boolean hasListener(GpioPinListener... listener)
+  {
+    return pin.hasListener(listener);
+  }
+
+  @Override
+  public void removeListener(GpioPinListener... listener)
+  {
+    pin.removeListener(listener);
+  }
+
+  @Override
+  public void removeListener(List<? extends GpioPinListener> listeners)
+  {
+    pin.removeListener(listeners);
+  }
+
+  @Override
+  public void removeAllListeners()
+  {
+    pin.removeAllListeners();
+  }
+  */
 }

@@ -52,7 +52,7 @@ public class AdafruitSSD1306
   public final static int SSD1306_RIGHT_HORIZONTAL_SCROLL              = 0x26;
   public final static int SSD1306_LEFT_HORIZONTAL_SCROLL               = 0x27;
   public final static int SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL = 0x29;
-  public final static int SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL = 0x2A;
+  public final static int SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL  = 0x2A;
 
   //private final static int SPI_PORT   =  0;
   private final static int SPI_DEVICE = Spi.CHANNEL_0; // 0

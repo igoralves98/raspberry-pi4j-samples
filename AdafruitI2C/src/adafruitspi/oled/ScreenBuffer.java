@@ -10,8 +10,11 @@ public class ScreenBuffer
 {
   private final static int WIDTH = 128, HEIGHT = 32; // Default values
   
-  public final static int WHITE_ON_BLACK = 0;
-  public final static int BLACK_ON_WHITE = 1;
+  public enum Mode
+    {
+      WHITE_ON_BLACK,
+      BLACK_ON_WHITE
+    };
   
   private int w = 128, 
               h =  32;
@@ -37,17 +40,17 @@ public class ScreenBuffer
   
   public void clear()
   {
-    clear(WHITE_ON_BLACK);
+    clear(Mode.WHITE_ON_BLACK);
   }
-  public void clear(int mode)
+  public void clear(Mode mode)
   {
     for (int i=0; i<this.h; i++)
     {
       for (int j=0; j<this.w; j++)
-        screenMatrix[i][j] = (mode == WHITE_ON_BLACK ? ' ' : 'X');
+        screenMatrix[i][j] = (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X');
     }
     for (int i=0; i<this.screenBuffer.length; i++)
-      this.screenBuffer[i] = (mode == WHITE_ON_BLACK ? 0 : 1);
+      this.screenBuffer[i] = (mode == Mode.WHITE_ON_BLACK ? 0 : 1);
   }
   
   /**
@@ -82,9 +85,9 @@ public class ScreenBuffer
    */
   public void text(String txt, int xPx, int yPx)
   {
-    text(txt, xPx, yPx, WHITE_ON_BLACK);
+    text(txt, xPx, yPx, Mode.WHITE_ON_BLACK);
   }
-  public void text(String txt, int xPx, int yPx, int mode)
+  public void text(String txt, int xPx, int yPx, Mode mode)
   {
     int xProgress = xPx;
     for (int i=0; i<txt.length(); i++)           // For each character of the string to display
@@ -104,7 +107,7 @@ public class ScreenBuffer
           {
             int l = (y + yPx - (CharacterMatrixes.FONT_SIZE - 1));
             if (l >= 0 && l < this.h && xProgress >= 0 && xProgress < this.w)
-              screenMatrix[l][xProgress] = (mode == WHITE_ON_BLACK ? verticalBitmap[y] : invert(verticalBitmap[y]));
+              screenMatrix[l][xProgress] = (mode == Mode.WHITE_ON_BLACK ? verticalBitmap[y] : invert(verticalBitmap[y]));
           }
           xProgress++;
         }
@@ -133,35 +136,35 @@ public class ScreenBuffer
   
   public void plot(int x, int y)
   {
-    plot(x, y, WHITE_ON_BLACK);
+    plot(x, y, Mode.WHITE_ON_BLACK);
   }
-  public void plot(int x, int y, int mode)
+  public void plot(int x, int y, Mode mode)
   {
     if (x >= 0 && x < this.w && y >= 0 && y < this.h)
-      screenMatrix[y][x] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+      screenMatrix[y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
   }
 
   public void unplot(int x, int y)
   {
-    unplot(x, y, WHITE_ON_BLACK);
+    unplot(x, y, Mode.WHITE_ON_BLACK);
   }
-  public void unplot(int x, int y, int mode)
+  public void unplot(int x, int y, Mode mode)
   {
     if (x >= 0 && x < this.w && y >= 0 && y < this.h)
-      screenMatrix[y][x] = (mode == WHITE_ON_BLACK ? ' ' : 'X');
+      screenMatrix[y][x] = (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X');
   }
 
   public void line(int fromx, int fromy, int tox, int toy)
   {
-    line(fromx, fromy, tox, toy, WHITE_ON_BLACK);
+    line(fromx, fromy, tox, toy, Mode.WHITE_ON_BLACK);
   }
-  public void line(int fromx, int fromy, int tox, int toy, int mode)
+  public void line(int fromx, int fromy, int tox, int toy, Mode mode)
   {
     int deltaX = (tox - fromx);
     int deltaY = (toy - fromy);
     if (deltaX == 0 && deltaY == 0)
     {
-      screenMatrix[fromy][fromx] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+      screenMatrix[fromy][fromx] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
       return;
     }
     if (deltaX == 0)
@@ -169,7 +172,7 @@ public class ScreenBuffer
       for (int y=Math.min(fromy, toy); y<=Math.max(toy, fromy); y++)
       {
         if (fromx >= 0 && fromx < this.w && y >= 0 && y < this.h)
-          screenMatrix[y][fromx] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+          screenMatrix[y][fromx] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
       }
     }
     else if (deltaY == 0)
@@ -177,7 +180,7 @@ public class ScreenBuffer
       for (int x=Math.min(fromx, tox); x<=Math.max(tox, fromx); x++)
       {
         if (x >= 0 && x < this.w && fromy >= 0 && fromy < this.h)
-          screenMatrix[fromy][x] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+          screenMatrix[fromy][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
       }
     }
     else if (Math.abs(deltaX) > Math.abs(deltaY)) // [-45, +45]
@@ -201,7 +204,7 @@ public class ScreenBuffer
           int y = fromy + (int)(Math.round(x * coeffDir));
           int _x = x + fromx;
           if (_x >= 0 && _x < this.w && y >= 0 && y < this.h)
-            screenMatrix[y][_x] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+            screenMatrix[y][_x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
         }
       }
     }
@@ -226,7 +229,7 @@ public class ScreenBuffer
           int x = fromx + (int)(Math.round(y * coeffDir));
           int _y = y + fromy;
           if (_y >= 0 && _y < this.h && x >= 0 && x < this.w)
-            screenMatrix[_y][x] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+            screenMatrix[_y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
         }
       }    
     }
@@ -234,9 +237,9 @@ public class ScreenBuffer
   
   public void shape(Polygon polygon, boolean closed)
   {
-    shape(polygon, closed, WHITE_ON_BLACK);
+    shape(polygon, closed, Mode.WHITE_ON_BLACK);
   }
-  public void shape(Polygon polygon, boolean closed, int mode)
+  public void shape(Polygon polygon, boolean closed, Mode mode)
   {
     int[] x = polygon.xpoints;
     int[] y = polygon.ypoints;
@@ -248,9 +251,9 @@ public class ScreenBuffer
   
   public void rectangle(int tlX, int tlY, int brX, int brY)
   {
-    rectangle(tlX, tlY, brX, brY, WHITE_ON_BLACK);
+    rectangle(tlX, tlY, brX, brY, Mode.WHITE_ON_BLACK);
   }
-  public void rectangle(int tlX, int tlY, int brX, int brY, int mode)
+  public void rectangle(int tlX, int tlY, int brX, int brY, Mode mode)
   {
     line(tlX, tlY, tlX, brY, mode); 
     line(tlX, brY, brX, brY, mode); 
@@ -260,18 +263,18 @@ public class ScreenBuffer
   
   public void circle(int centerX, int centerY, int radius)
   {
-    circle(centerX, centerY, radius, WHITE_ON_BLACK);
+    circle(centerX, centerY, radius, Mode.WHITE_ON_BLACK);
   }
-  public void circle(int centerX, int centerY, int radius, int mode)
+  public void circle(int centerX, int centerY, int radius, Mode mode)
   {
     arc(centerX, centerY, radius, 0, 360, mode);
   }
   
   public void arc(int centerX, int centerY, int radius, int fromDeg, int toDeg)
   {
-    arc(centerX, centerY, radius, fromDeg, toDeg, WHITE_ON_BLACK);
+    arc(centerX, centerY, radius, fromDeg, toDeg, Mode.WHITE_ON_BLACK);
   }
-  public void arc(int centerX, int centerY, int radius, int fromDeg, int toDeg, int mode)
+  public void arc(int centerX, int centerY, int radius, int fromDeg, int toDeg, Mode mode)
   {
     Point prevPt = null;
     for (int i=fromDeg; i<=toDeg; i++)
@@ -281,7 +284,7 @@ public class ScreenBuffer
       Point pt = new Point(x, y);
       if (x >= 0 && x < this.w && y >= 0 && y < this.h)
       {
-        screenMatrix[y][x] = (mode == WHITE_ON_BLACK ? 'X' : ' ');
+        screenMatrix[y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
         prevPt = pt;
       } 
       else
@@ -292,9 +295,9 @@ public class ScreenBuffer
   
   public void image(ImgInterface img, int topLeftX, int topLeftY)
   {
-    image(img, topLeftX, topLeftY, WHITE_ON_BLACK);
+    image(img, topLeftX, topLeftY, Mode.WHITE_ON_BLACK);
   }
-  public void image(ImgInterface img, int topLeftX, int topLeftY, int mode)
+  public void image(ImgInterface img, int topLeftX, int topLeftY, Mode mode)
   {
     int w = img.getW();
     int h = img.getH(); // Assume h % 8 = 0
@@ -303,7 +306,7 @@ public class ScreenBuffer
     {
       for (int row=0; row<(h / 8); row++)
       {
-        String bitMapCol = lpad(Integer.toBinaryString(imgBuf[col + (w * row)]), "0", 8).replace('0', (mode == WHITE_ON_BLACK ? ' ' : 'X')).replace('1', (mode == WHITE_ON_BLACK ? 'X' : ' '));
+        String bitMapCol = lpad(Integer.toBinaryString(imgBuf[col + (w * row)]), "0", 8).replace('0', (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X')).replace('1', (mode == Mode.WHITE_ON_BLACK ? 'X' : ' '));
         // Write in the scren matrix
         // screenMatrix[line][col]
         for (int y=0; y<8; y++)

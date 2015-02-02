@@ -59,13 +59,17 @@ public class AdafruitHTU21DF
   public boolean begin()
     throws Exception
   {
-    reset();
-
-    htu21df.write((byte) HTU21DF_READREG);
-    int r = htu21df.read();
-    if (verbose)
-      System.out.println("DBG: Begin: 0x" + lpad(Integer.toHexString(r), "0", 2));
-
+    try { reset(); } catch (Exception ex) { System.err.println("Reset:" + ex.toString()); }
+    int r = 0;
+    try
+    {
+      htu21df.write((byte) HTU21DF_READREG);
+      r = htu21df.read();
+      if (verbose)
+        System.out.println("DBG: Begin: 0x" + lpad(Integer.toHexString(r), "0", 2));
+    }
+    catch (Exception ex)
+    { System.err.println("Begin:" + ex.toString()); }
     return (r == 0x02);
   }
 
@@ -73,10 +77,16 @@ public class AdafruitHTU21DF
     throws Exception
   {
     //  htu21df.write(HTU21DF_ADDRESS, (byte)HTU21DF_RESET);
-    htu21df.write((byte) HTU21DF_RESET);
-    if (verbose)
-      System.out.println("DBG: Reset OK");
-    waitfor(15); // Wait 15ms
+    try
+    {
+      htu21df.write((byte) HTU21DF_RESET);
+      if (verbose)
+        System.out.println("DBG: Reset OK");
+    }
+    finally
+    {
+      waitfor(15); // Wait 15ms
+    }
   }
 
   public float readTemperature()
