@@ -300,7 +300,7 @@ public class GPIOPinAdapter implements GpioPinDigitalOutput
   {
     pin.setShutdownOptions(unexport, state, resistance, mode);
   }
-  /* For the last release of PI4J
+  /* For the last release of PI4J (2015) 
   @Override
   public Future<?> pulse(long duration, PinState pulseState, boolean blocking, Callable<Void> callback)
   {
@@ -367,5 +367,5 @@ public class GPIOPinAdapter implements GpioPinDigitalOutput
   {
     pin.removeAllListeners();
   }
-  */
+   */
 }

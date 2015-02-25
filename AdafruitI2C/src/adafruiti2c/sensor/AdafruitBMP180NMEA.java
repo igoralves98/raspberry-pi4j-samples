@@ -27,7 +27,7 @@ public class AdafruitBMP180NMEA extends AdafruitBMP180
     System.out.println("CPU Part          :  " + SystemInfo.getCpuPart());
     System.out.println("CPU Temperature   :  " + SystemInfo.getCpuTemperature());
     System.out.println("CPU Core Voltage  :  " + SystemInfo.getCpuVoltage());
-    System.out.println("MIPS              :  " + SystemInfo.getBogoMIPS());
+//  System.out.println("MIPS              :  " + SystemInfo.getBogoMIPS());
     try { System.out.println("Processor         :  " + SystemInfo.getProcessor()); } catch (Exception ex) { System.out.println("Processor: Oops."); }
     System.out.println("Hardware Revision :  " + SystemInfo.getRevision());
     System.out.println("Is Hard Float ABI :  " + SystemInfo.isHardFloatAbi());

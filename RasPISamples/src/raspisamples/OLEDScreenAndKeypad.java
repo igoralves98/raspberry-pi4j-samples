@@ -18,7 +18,7 @@ public class OLEDScreenAndKeypad
   public OLEDScreenAndKeypad()
   {
     kbc = new KeyboardController();
-    // Override the default pins        Clock             MOSI              CS                RST               DC
+    // Override the default pins        Clock             MOSI (data)       CS                RST               DC
     oled = new AdafruitSSD1306(RaspiPin.GPIO_12, RaspiPin.GPIO_13, RaspiPin.GPIO_14, RaspiPin.GPIO_15, RaspiPin.GPIO_16);
     oled.begin();
     oled.clear();
@@ -34,7 +34,8 @@ public class OLEDScreenAndKeypad
     oled.setBuffer(sb.getScreenBuffer());
     oled.display();
   }
-  
+
+  @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public void userInput()
   {
     StringBuffer charBuff = new StringBuffer();

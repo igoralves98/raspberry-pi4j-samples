@@ -40,7 +40,13 @@ public class WeatherDataLogging
   private final static String WAIT_PRM  = "-wait";
   private final static String SESS_PRM  = "-sess";
   private final static String HELP_PRM  = "-help";
+
+  private final static String NO_BMP180  = "-nobmp180";
+  private final static String NO_HTU21DF = "-nohtu21df";
   
+  private static boolean withBMP180  = true;
+  private static boolean withHTU21DF = true;
+
   protected static void waitfor(long howMuch)
   {
     try { Thread.sleep(howMuch); } catch (InterruptedException ie) { ie.printStackTrace(); }
@@ -52,6 +58,10 @@ public class WeatherDataLogging
     {
       if (BOARD_PRM.equals(args[i]))
         boardID = args[i + 1];
+      else if (NO_BMP180.equals(args[i]))
+        withBMP180 = false;
+      else if (NO_HTU21DF.equals(args[i]))
+        withHTU21DF = false;
       else if (WAIT_PRM.equals(args[i]))
       {
         try
@@ -87,25 +97,51 @@ public class WeatherDataLogging
     System.out.println("Logging data for [" + boardID + "], every " + Long.toString(waitTime / 1000) + " s.");
     
     final NumberFormat NF = new DecimalFormat("##00.00");
-    AdafruitBMP180 bmpSensor = new AdafruitBMP180();
+
     float press = 0;
     float temp  = 0;
     double alt  = 0;
-    AdafruitHTU21DF humSensor = new AdafruitHTU21DF();
     float hum  = 0;
-    
-    try
+    AdafruitHTU21DF humSensor = null;
+    AdafruitBMP180 bmpSensor = null;
+
+    if (withBMP180)
     {
-      if (!humSensor.begin())
+      try
       {
-        System.out.println("Sensor not found!");        
-        System.exit(1);
+        bmpSensor = new AdafruitBMP180();
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
       }
     }
-    catch (Exception ex)
+    if (withHTU21DF)
     {
-      ex.printStackTrace();
-      System.exit(1);
+      try
+      {
+        humSensor = new AdafruitHTU21DF();
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+    if (humSensor != null)
+    {
+      try
+      {
+        if (!humSensor.begin())
+        {
+          System.out.println("Sensor not found!");        
+          System.exit(1);
+        }
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+        System.exit(1);
+      }
     }
 
     Runtime.getRuntime().addShutdownHook(new Thread()
@@ -116,34 +152,40 @@ public class WeatherDataLogging
                                            }
                                          });
 
-    while (true)
+    while (true) // forever loop
     {
-      try { press = bmpSensor.readPressure(); } 
-      catch (Exception ex) 
-      { 
-        System.err.println(ex.getMessage()); 
-        ex.printStackTrace();
+      // Read/Measure here
+      if (bmpSensor != null)
+      {
+        try { press = bmpSensor.readPressure(); } 
+        catch (Exception ex) 
+        { 
+          System.err.println(ex.getMessage()); 
+          ex.printStackTrace();
+        }
+        bmpSensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
+        try { alt = bmpSensor.readAltitude(); } 
+        catch (Exception ex) 
+        { 
+          System.err.println(ex.getMessage()); 
+          ex.printStackTrace();
+        }
+        try { temp = bmpSensor.readTemperature(); } 
+        catch (Exception ex) 
+        { 
+          System.err.println(ex.getMessage()); 
+          ex.printStackTrace();
+        }
       }
-      bmpSensor.setStandardSeaLevelPressure((int)press); // As we ARE at the sea level (in San Francisco).
-      try { alt = bmpSensor.readAltitude(); } 
-      catch (Exception ex) 
-      { 
-        System.err.println(ex.getMessage()); 
-        ex.printStackTrace();
+      if (humSensor != null)
+      {
+        try { hum = humSensor.readHumidity(); } 
+        catch (Exception ex) 
+        { 
+          System.err.println(ex.getMessage()); 
+          ex.printStackTrace();
+        }
       }
-      try { temp = bmpSensor.readTemperature(); } 
-      catch (Exception ex) 
-      { 
-        System.err.println(ex.getMessage()); 
-        ex.printStackTrace();
-      }
-      try { hum = humSensor.readHumidity(); } 
-      catch (Exception ex) 
-      { 
-        System.err.println(ex.getMessage()); 
-        ex.printStackTrace();
-      }
-
       System.out.println("At " + new Date().toString());
       System.out.println("Temperature: " + NF.format(temp) + " C");
       System.out.println("Pressure   : " + NF.format(press / 100) + " hPa");
@@ -153,20 +195,26 @@ public class WeatherDataLogging
       // Log here
       try
       {
-        String url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + TEMPERATURE + "&data=" + NF.format(temp);
-        String response = HTTPClient.getContent(url);
-        JSONObject json = new JSONObject(response);
-        System.out.println("Returned\n" + json.toString(2));
-        try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
-        url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + PRESSURE + "&data=" + NF.format(press / 100);
-        response = HTTPClient.getContent(url);
-        json = new JSONObject(response);
-        System.out.println("Returned\n" + json.toString(2));
-        try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
-        url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + HUM_SENSOR_ID + "&type=" + HUMIDITY + "&data=" + NF.format(hum);
-        response = HTTPClient.getContent(url);
-        json = new JSONObject(response);
-        System.out.println("Returned\n" + json.toString(2));
+        if (bmpSensor != null)
+        {
+          String url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + TEMPERATURE + "&data=" + NF.format(temp);
+          String response = HTTPClient.getContent(url);
+          JSONObject json = new JSONObject(response);
+          System.out.println("Returned\n" + json.toString(2));
+          try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
+          url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + BMP_SENSOR_ID + "&type=" + PRESSURE + "&data=" + NF.format(press / 100);
+          response = HTTPClient.getContent(url);
+          json = new JSONObject(response);
+          System.out.println("Returned\n" + json.toString(2));
+          try { Thread.sleep(1000); } catch (Exception ex) { ex.printStackTrace(); } // To avoid duplicate PK
+        }
+        if (humSensor != null)
+        {
+          String url = LOGGER_URL + "?board=" + boardID + "&session=" + sessionID + "&sensor=" + HUM_SENSOR_ID + "&type=" + HUMIDITY + "&data=" + NF.format(hum);
+          String response = HTTPClient.getContent(url);
+          JSONObject json = new JSONObject(response);
+          System.out.println("Returned\n" + json.toString(2));
+        }
       }
       catch (Exception ex)
       {

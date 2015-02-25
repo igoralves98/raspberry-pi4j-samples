@@ -13,6 +13,7 @@ public class SerialReader
   public static void main(String args[])
     throws InterruptedException, NumberFormatException
   {
+    String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
     int br = Integer.parseInt(System.getProperty("baud.rate", "9600"));
     if (args.length > 0)
     {
@@ -47,8 +48,8 @@ public class SerialReader
     try
     {
       // open the default serial port provided on the GPIO header
-      System.out.println("Opening port [" + Serial.DEFAULT_COM_PORT + ":" + Integer.toString(br) + "]");
-      serial.open(Serial.DEFAULT_COM_PORT, br);
+      System.out.println("Opening port [" + port + ":" + Integer.toString(br) + "]");
+      serial.open(port, br);
       System.out.println("Port is opened.");
 
       // continuous loop to keep the program running until the user terminates the program
