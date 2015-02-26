@@ -57,12 +57,12 @@ public class AdafruitHMC5883L
   }
 
   // Complement to 2
-  private short readWord_2C(int adr) throws IOException
+  private short readWord_2C(int reg) throws IOException
   {
     short w = 0;
     
-    byte high = (byte)(hcm5883l.read(adr) & 0xFF);
-    byte low  = (byte)(hcm5883l.read(adr + 1) & 0xFF);
+    byte high = (byte)(hcm5883l.read(reg) & 0xFF);
+    byte low  = (byte)(hcm5883l.read(reg + 1) & 0xFF);
     
     w = (short)(((high << 8) + low) & 0xFFFF); // Little endian
     
