@@ -126,7 +126,7 @@ public class AdafruitMPL115A2
     float[] result = new float[] { 0f, 0f };
     
     byte[] w = new byte[] { (byte)MPL115A2_REGISTER_STARTCONVERSION, (byte)0x00 };
-    mpl115a2.write(w, 0, 2);
+    mpl115a2.write(w, 0, 2); // BeginTrans, write 2 bytes, EndTrans.
     
     waitfor(5);  // Wait a bit for the conversion to complete (takes 3ms max)
 
@@ -134,8 +134,6 @@ public class AdafruitMPL115A2
     
     byte[] buf = new byte[4];
     mpl115a2.read(buf, 0, 4);
-//    for (int i=0; i<buf.length; i++) 
-//      buf[i] = (byte)mpl115a2.read();
        
     if (verbose)
     {
