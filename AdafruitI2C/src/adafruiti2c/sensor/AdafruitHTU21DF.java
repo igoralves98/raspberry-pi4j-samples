@@ -89,6 +89,12 @@ public class AdafruitHTU21DF
     }
   }
 
+  public void close()
+  {
+    try { this.bus.close(); }
+    catch (IOException ioe) { ioe.printStackTrace(); }    
+  }
+  
   public float readTemperature()
     throws Exception
   {

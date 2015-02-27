@@ -52,7 +52,7 @@ public class AdafruitHMC5883L
     }
     catch (IOException e)
     {
-      System.err.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -80,7 +80,7 @@ public class AdafruitHMC5883L
    * @return Heading in Radians
    * @throws IOException
    */
-  private double readHeading() throws IOException
+  public double readHeading() throws IOException
   {
     double heading = 0f;
     
@@ -106,6 +106,12 @@ public class AdafruitHMC5883L
     return heading;
   }
   
+  public void close()
+  {
+    try { this.bus.close(); }
+    catch (IOException ioe) { ioe.printStackTrace(); }    
+  }
+  
   protected static void waitfor(long howMuch)
   {
     try
@@ -124,7 +130,7 @@ public class AdafruitHMC5883L
     AdafruitHMC5883L sensor = new AdafruitHMC5883L();
     double hdg = 0;
 
-    int nbLoop = 1;
+    int nbLoop = 1; // Default
     try
     {
       if (args.length > 0)
@@ -146,11 +152,12 @@ public class AdafruitHMC5883L
         System.err.println(ex.getMessage());
         ex.printStackTrace();
       }
-      System.out.println("Heading: " + NF.format(Math.toDegrees(hdg)) + " deg.");
+      System.out.println(Integer.toString(i+1) + "/" + Integer.toString(nbLoop) + ", heading: " + NF.format(Math.toDegrees(hdg)) + " deg.");
       
-      waitfor(1000);
+      if (i < (nbLoop - 1))
+        waitfor(1000);
     }
-    try { sensor.bus.close(); }
-    catch (IOException ioe) { ioe.printStackTrace(); }
+    System.out.println("Bye.");
+    sensor.close();
   }
 }

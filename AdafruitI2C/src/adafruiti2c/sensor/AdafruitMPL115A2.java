@@ -61,7 +61,7 @@ public class AdafruitMPL115A2
     }
     catch (IOException e)
     {
-      System.err.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -121,7 +121,7 @@ public class AdafruitMPL115A2
   public final static int PRESSURE_IDX    = 0;
   public final static int TEMPERATURE_IDX = 1;
 
-  private float[] measure() throws IOException
+  public float[] measure() throws IOException
   {
     float[] result = new float[] { 0f, 0f };
     
@@ -175,6 +175,12 @@ public class AdafruitMPL115A2
     return press;
   }
 
+  public void close()
+  {
+    try { this.bus.close(); }
+    catch (IOException ioe) { ioe.printStackTrace(); }    
+  }
+  
   protected static void waitfor(long howMuch)
   {
     try
@@ -232,7 +238,6 @@ public class AdafruitMPL115A2
       
       waitfor(1000);
     }
-    try { sensor.bus.close(); }
-    catch (IOException ioe) { ioe.printStackTrace(); }
+    sensor.close(); 
   }
 }
