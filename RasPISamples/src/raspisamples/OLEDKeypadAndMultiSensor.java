@@ -5,11 +5,22 @@ import adafruiti2c.sensor.AdafruitMPL115A2;
 
 import adafruitspi.oled.AdafruitSSD1306;
 import adafruitspi.oled.ScreenBuffer;
+
+import arduino.raspberrypi.SerialReader;
+
 import com.pi4j.io.gpio.RaspiPin;
+
+import com.pi4j.io.serial.Serial;
+import com.pi4j.io.serial.SerialDataEvent;
+import com.pi4j.io.serial.SerialDataListener;
+import com.pi4j.io.serial.SerialFactory;
+import com.pi4j.io.serial.SerialPortException;
 
 import java.io.IOException;
 
 import java.text.DecimalFormat;
+
+import java.util.Date;
 
 import phonekeyboard3x4.KeyboardController;
 
@@ -18,6 +29,7 @@ import phonekeyboard3x4.KeyboardController;
  * 
  * Plus HMC5883L & MPL115A2
  * (triple-axis compass, and temp + pressure)
+ * and an Arduino Uno
  */
 public class OLEDKeypadAndMultiSensor
 {
@@ -124,6 +136,53 @@ public class OLEDKeypadAndMultiSensor
     hdgThread.start();
     
     reset();
+    
+    // Serial part (for the Arduino)
+    String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
+    int br = Integer.parseInt(System.getProperty("baud.rate", "9600"));
+    
+    System.out.println("Serial Communication.");
+    System.out.println(" ... connect using settings: " + Integer.toString(br) +  ", N, 8, 1.");
+    System.out.println(" ... data received on serial port should be displayed below.");
+
+    // create an instance of the serial communications class
+    final Serial serial = SerialFactory.createInstance();
+
+    // create and register the serial data listener
+    serial.addListener(new SerialDataListener()
+    {
+      @Override
+      public void dataReceived(SerialDataEvent event)
+      {
+        // print out the data received to the oled display
+        String payload = event.getData();
+        if (SerialReader.validCheckSum(payload, false))
+        {
+//        System.out.print("Arduino said:" + payload);
+          // Payload like $OSMSG,LR,178*65
+          String content = payload.substring(7, payload.indexOf("*"));
+          String[] sa = content.split(",");
+          String strVal = sa[1];
+//        System.out.println("Val:" + strVal);
+          displayLR(strVal + "   ");
+        }
+//      else
+//        System.out.println("\tOops! Invalid String [" + payload + "]");
+      }
+    });
+
+    try
+    {
+      // open the default serial port provided on the GPIO header
+      System.out.println("Opening port [" + port + ":" + Integer.toString(br) + "]");
+      serial.open(port, br);
+      System.out.println("Port is opened.");
+    }
+    catch (SerialPortException ex)
+    {
+      System.out.println(" ==>> SERIAL SETUP FAILED : " + ex.getMessage());
+      return;
+    }    
   }
   
   // User input
@@ -131,7 +190,7 @@ public class OLEDKeypadAndMultiSensor
   {
     synchronized (sb)
     {
-      sb.text(txt, 2, 8);
+      sb.text(txt, 2, 10);
       oled.setBuffer(sb.getScreenBuffer());
       oled.display();
     }
@@ -143,7 +202,19 @@ public class OLEDKeypadAndMultiSensor
     synchronized (sb)
     {
       String txt = "HDG:" + HDG_FMT.format(Math.toDegrees(hdg));
-      sb.text(txt, 2, 18);
+      sb.text(txt, 2, 20);
+      oled.setBuffer(sb.getScreenBuffer());
+      oled.display();
+    }
+  }
+  
+  public synchronized void displayLR(String s)
+  {
+  //  System.out.println("HDG:" + Math.toDegrees(hdg) + " deg");
+    synchronized (sb)
+    {
+      String txt = "LR:" + s;
+      sb.text(txt, 64, 20);
       oled.setBuffer(sb.getScreenBuffer());
       oled.display();
     }
@@ -155,7 +226,7 @@ public class OLEDKeypadAndMultiSensor
     synchronized (sb)
     {
       String txt = "Baro:" + PR_FMT.format(press * 10) + " hPa, T:" + TEMP_FMT.format(temp) + " C";
-      sb.text(txt, 2, 28);
+      sb.text(txt, 2, 30);
       oled.setBuffer(sb.getScreenBuffer());
       oled.display();
     }
@@ -190,6 +261,7 @@ public class OLEDKeypadAndMultiSensor
     try { Thread.sleep(1000L); } catch (Exception ex) {}
     clear();
     oled.shutdown();
+    System.exit(0);
   }
 
   public void reset()
@@ -200,7 +272,7 @@ public class OLEDKeypadAndMultiSensor
       {
         sb.clear();
         oled.clear();
-        sb.text("# = Exit.", 2, 8);
+        sb.text("# = Exit, * = Reset.", 2, 10);
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();   
     //  clear();   
@@ -221,7 +293,7 @@ public class OLEDKeypadAndMultiSensor
   
   public static void main(String[] args)
   {
-    System.out.println("Hit # to exit");
+    System.out.println("Hit # on the keypad to exit");
     OLEDKeypadAndMultiSensor ui = new OLEDKeypadAndMultiSensor();
     ui.userInput();
   }

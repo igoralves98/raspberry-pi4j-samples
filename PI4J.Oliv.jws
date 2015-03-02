@@ -25,6 +25,7 @@
       <hash><url n="URL" path="../AVR/JAvrProg/JAvrProg.jpr"/></hash>
       <hash><url n="URL" path="AdafruitI2C/AdafruitI2C.jpr"/></hash>
       <hash><url n="URL" path="ADC/ADC.jpr"/></hash>
+      <hash><url n="URL" path="Arduino.RaspberryPI/Arduino.RaspberryPI.jpr"/></hash>
       <hash><url n="URL" path="Camera/Camera.jpr"/></hash>
       <hash><url n="URL" path="DAC/DAC.jpr"/></hash>
       <hash><url n="URL" path="GPIO.01/GPIO.01.jpr"/></hash>
