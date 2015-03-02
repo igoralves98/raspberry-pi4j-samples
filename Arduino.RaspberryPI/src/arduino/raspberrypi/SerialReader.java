@@ -6,8 +6,6 @@ import com.pi4j.io.serial.SerialDataListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.SerialPortException;
 
-import java.util.Date;
-
 public class SerialReader
 {
   // NMEA Style
@@ -78,7 +76,7 @@ public class SerialReader
     String content = payload.substring(7, payload.indexOf("*"));
     String[] sa = content.split(",");
     String strVal = sa[1];
-    System.out.println("Val:" + strVal);
+    System.out.println("\tVal:" + strVal);
   }
   
   public static void main(String args[])
