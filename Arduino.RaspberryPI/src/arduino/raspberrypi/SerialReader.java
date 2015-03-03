@@ -125,11 +125,10 @@ public class SerialReader
       serial.open(port, br);
       System.out.println("Port is opened.");
 
-      // continuous loop to keep the program running until the user terminates the program
-      while (true)
+      Thread me = Thread.currentThread();
+      synchronized (me)
       {
-        // wait 1 second before continuing
-        Thread.sleep(1000);
+        me.wait();
       }
     }
     catch (SerialPortException ex)

@@ -6,6 +6,9 @@ import com.pi4j.io.serial.SerialDataListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.SerialPortException;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import java.util.Date;
 
 public class SerialReaderWriter
@@ -127,46 +130,39 @@ public class SerialReaderWriter
       serial.open(port, br);
       System.out.println("Port is opened.");
 
-      // continuous loop to keep the program running until the user terminates the program
-      while (true)
-      {
-        boolean writeToArduino = false;
-        if (writeToArduino)
+      Thread userInputThread = new Thread()
         {
-          if (serial.isOpen())
+          public void run()
           {
-            System.out.println("Writing to the serial port...");
-            try
+            while (true)
             {
-              // write a formatted string to the serial transmit buffer
-              serial.write("CURRENT TIME: %s", new Date().toString());
-    
-              // write a individual bytes to the serial transmit buffer
-              serial.write((byte) 13);
-              serial.write((byte) 10);
-    
-              // write a simple string to the serial transmit buffer
-              serial.write("Second Line");
-    
-              // write a individual characters to the serial transmit buffer
-              serial.write('\r');
-              serial.write('\n');
-    
-              // write a string terminating with CR+LF to the serial transmit buffer
-              serial.writeln("Third Line");
-            }
-            catch (IllegalStateException ex)
-            {
-              ex.printStackTrace();
+              String userInput = "";
+              userInput = userInput("So? > ");
+              if (serial.isOpen())
+              {
+                System.out.println("Writing to the serial port...");
+                try
+                {
+                  serial.write(userInput);
+                }
+                catch (IllegalStateException ex)
+                {
+                  ex.printStackTrace();
+                }
+              }
+              else
+              {
+                System.out.println("Not open yet...");
+              }
             }
           }
-          else
-          {
-            System.out.println("Not open yet...");
-          }
-        }
-        // wait 1 second before continuing
-        Thread.sleep(1000);
+        };
+      userInputThread.start();
+      
+      Thread me = Thread.currentThread();
+      synchronized (me)
+      {
+        me.wait();
       }
     }
     catch (SerialPortException ex)
@@ -175,4 +171,31 @@ public class SerialReaderWriter
       return;
     }
   }
+  
+  private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+
+  public static String userInput(String prompt)
+  {
+    String retString = "";
+    System.err.print(prompt);
+    try
+    {
+      retString = stdin.readLine();
+    }
+    catch(Exception e)
+    {
+      System.out.println(e);
+      String s;
+      try
+      {
+        s = userInput("<Oooch/>");
+      }
+      catch(Exception exception) 
+      {
+        exception.printStackTrace();
+      }
+    }
+    return retString;
+  }
+
 }

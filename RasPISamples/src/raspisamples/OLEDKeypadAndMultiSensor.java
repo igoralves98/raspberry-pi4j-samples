@@ -29,7 +29,10 @@ import phonekeyboard3x4.KeyboardController;
  * 
  * Plus HMC5883L & MPL115A2
  * (triple-axis compass, and temp + pressure)
- * and an Arduino Uno
+ * and an Arduino Uno on a serial (USB) port (that reads an analog light sensor)
+ * 
+ * Several threads are using the oled screen.
+ * Synchronization (thread-safety) is important.
  */
 public class OLEDKeypadAndMultiSensor
 {
@@ -50,7 +53,7 @@ public class OLEDKeypadAndMultiSensor
   public OLEDKeypadAndMultiSensor()
   {
     kbc = new KeyboardController();
-    //                                              Override the default pins
+    //                                          Override the default pins
     oled = new AdafruitSSD1306(RaspiPin.GPIO_12, // Clock
                                RaspiPin.GPIO_13, // MOSI (data) 
                                RaspiPin.GPIO_14, // CS
@@ -141,10 +144,7 @@ public class OLEDKeypadAndMultiSensor
     String port = System.getProperty("serial.port", Serial.DEFAULT_COM_PORT);
     int br = Integer.parseInt(System.getProperty("baud.rate", "9600"));
     
-    System.out.println("Serial Communication.");
-    System.out.println(" ... connect using settings: " + Integer.toString(br) +  ", N, 8, 1.");
-    System.out.println(" ... data received on serial port should be displayed below.");
-
+    System.out.println("Initializing serial Communication.");
     // create an instance of the serial communications class
     final Serial serial = SerialFactory.createInstance();
 
@@ -164,7 +164,7 @@ public class OLEDKeypadAndMultiSensor
           String[] sa = content.split(",");
           String strVal = sa[1];
 //        System.out.println("Val:" + strVal);
-          displayLR(strVal + "   ");
+          displayLR(strVal + "   "); // On the oled
         }
 //      else
 //        System.out.println("\tOops! Invalid String [" + payload + "]");
@@ -176,7 +176,7 @@ public class OLEDKeypadAndMultiSensor
       // open the default serial port provided on the GPIO header
       System.out.println("Opening port [" + port + ":" + Integer.toString(br) + "]");
       serial.open(port, br);
-      System.out.println("Port is opened.");
+      System.out.println(" ... connected using settings: " + Integer.toString(br) +  ", N, 8, 1.");
     }
     catch (SerialPortException ex)
     {
@@ -185,7 +185,6 @@ public class OLEDKeypadAndMultiSensor
     }    
   }
   
-  // User input
   public synchronized void display(String txt) 
   {
     synchronized (sb)
@@ -232,6 +231,9 @@ public class OLEDKeypadAndMultiSensor
     }
   }
 
+  /*
+   * Reads user input from the keypad
+   */
   @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public void userInput()
   {
@@ -242,7 +244,7 @@ public class OLEDKeypadAndMultiSensor
       char c = kbc.getKey();    
 //    System.out.println("At " + System.currentTimeMillis() + ", Char: " + c);
       if (c == '#')
-        go = false;
+        go = false; // key '#' means exit
       else if (c == '*')
       {
         charBuff = new StringBuffer();
@@ -258,7 +260,7 @@ public class OLEDKeypadAndMultiSensor
     System.out.println("Bye");
     kbc.shutdown();
     keepReading = false;
-    try { Thread.sleep(1000L); } catch (Exception ex) {}
+    try { Thread.sleep(1000L); } catch (Exception ex) {} // Wait for the threads to end properly
     clear();
     oled.shutdown();
     System.exit(0);
