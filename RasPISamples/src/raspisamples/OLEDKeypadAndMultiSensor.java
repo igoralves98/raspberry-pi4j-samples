@@ -8,6 +8,10 @@ import adafruitspi.oled.ScreenBuffer;
 
 import arduino.raspberrypi.SerialReader;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 import com.pi4j.io.serial.Serial;
@@ -20,8 +24,6 @@ import java.io.IOException;
 
 import java.text.DecimalFormat;
 
-import java.util.Date;
-
 import phonekeyboard3x4.KeyboardController;
 
 /*
@@ -30,6 +32,8 @@ import phonekeyboard3x4.KeyboardController;
  * Plus HMC5883L & MPL115A2
  * (triple-axis compass, and temp + pressure)
  * and an Arduino Uno on a serial (USB) port (that reads an analog light sensor)
+ * 
+ * and a relay
  * 
  * Several threads are using the oled screen.
  * Synchronization (thread-safety) is important.
@@ -43,15 +47,38 @@ public class OLEDKeypadAndMultiSensor
   private AdafruitMPL115A2 ptSensor;
   private AdafruitHMC5883L magnetometer;
   
+  private OneRelayManager rm;
+  
   private final DecimalFormat HDG_FMT  = new DecimalFormat("000");
   private final DecimalFormat PR_FMT   = new DecimalFormat("#000.0");
   private final DecimalFormat TEMP_FMT = new DecimalFormat("##00.0");
   
   private boolean keepReading = true;
   
+  private static int relayThreshold = 50;
+  
   // This one overrides the default pins for the OLED
+  @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public OLEDKeypadAndMultiSensor()
   {
+    try 
+    { 
+      rm = new OneRelayManager(); 
+      rm.set("off"); // off by default
+      System.out.println("Takatak, pin is " + rm.getStatus());
+      // To make sure it works:
+      try { Thread.sleep(250); } catch (InterruptedException ie) { ie.printStackTrace(); }
+      rm.set("on");
+      try { Thread.sleep(250); } catch (InterruptedException ie) { ie.printStackTrace(); }
+      rm.set("off");
+      System.out.println("Takatak - Off");
+    }
+    catch (Exception ex)
+    {
+      System.err.println("You're not on the PI, hey?");
+      ex.printStackTrace();
+    }
+
     kbc = new KeyboardController();
     //                                          Override the default pins
     oled = new AdafruitSSD1306(RaspiPin.GPIO_12, // Clock
@@ -165,6 +192,39 @@ public class OLEDKeypadAndMultiSensor
           String strVal = sa[1];
 //        System.out.println("Val:" + strVal);
           displayLR(strVal + "   "); // On the oled
+          
+          int volume = relayThreshold; // Default
+          try { volume = Integer.parseInt(sa[1]); } catch (NumberFormatException nfe) { nfe.printStackTrace(); }
+          System.out.println("Volume:" + volume);
+          // Turn relay on below the threshold
+          if (volume < relayThreshold)
+          {
+            String status = rm.getStatus();
+        //  System.out.println("Relay is:" + status);
+            if ("off".equals(status))
+            {
+              System.out.println("Turning relay on!");
+              try { rm.set("on"); }
+              catch (Exception ex)
+              {
+                System.err.println(ex.toString());
+              }
+            }
+          }
+          else
+          {
+            String status = rm.getStatus();
+            //  System.out.println("Relay is:" + status);
+            if ("on".equals(status))
+            {
+              System.out.println("Turning relay off!");
+              try { rm.set("off"); }
+              catch (Exception ex)
+              {
+                System.err.println(ex.toString());
+              }
+            }
+          }
         }
 //      else
 //        System.out.println("\tOops! Invalid String [" + payload + "]");
@@ -263,6 +323,8 @@ public class OLEDKeypadAndMultiSensor
     try { Thread.sleep(1000L); } catch (Exception ex) {} // Wait for the threads to end properly
     clear();
     oled.shutdown();
+    rm.set("off");
+    rm.shutdown();
     System.exit(0);
   }
 
@@ -295,8 +357,58 @@ public class OLEDKeypadAndMultiSensor
   
   public static void main(String[] args)
   {
+    if (args.length > 0)
+    {
+      try 
+      {
+        relayThreshold = Integer.parseInt(args[0]);
+      }
+      catch (NumberFormatException nfe)
+      {
+        nfe.printStackTrace();
+        System.err.println("Using default value for threshold:" + relayThreshold);
+      }
+    }
+    System.out.println("Relay threshold is " + relayThreshold);
     System.out.println("Hit # on the keypad to exit");
     OLEDKeypadAndMultiSensor ui = new OLEDKeypadAndMultiSensor();
     ui.userInput();
   }
+  
+  private class OneRelayManager
+  {
+    private final GpioController gpio = GpioFactory.getInstance();
+    private final GpioPinDigitalOutput pin; 
+    
+    public OneRelayManager()
+    {
+      System.out.println("GPIO Control - pin 13/#27... started.");
+
+      // For a relay it seems that HIGH means NC (Normally Closed)...
+      // GPIO_27, pin #13, Wiring/PI4J:GPIO_02
+      pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "Relay", PinState.HIGH);
+    }
+
+    public void set(String status)
+    {
+      if ("on".equals(status))
+        pin.low();
+      else
+        pin.high();
+    }
+    
+    public String getStatus()
+    {
+      String status = "unknown";
+
+      status = pin.isHigh() ? "off" : "on";
+      return status;
+    }
+    
+    public void shutdown()
+    {
+      gpio.shutdown();
+    }
+  }
+
 }
