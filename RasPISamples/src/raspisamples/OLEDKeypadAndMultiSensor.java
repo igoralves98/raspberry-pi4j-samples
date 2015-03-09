@@ -24,13 +24,17 @@ import java.io.IOException;
 
 import java.text.DecimalFormat;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import phonekeyboard3x4.KeyboardController;
 
 /*
  * A phone keypad, and a 128x32 oled screen
  * 
- * Plus HMC5883L & MPL115A2
- * (triple-axis compass, and temp + pressure)
+ * Plus HMC5883L (triple-axis compass)
+ *    & MPL115A2 (temp + pressure)
+ * 
  * and an Arduino Uno on a serial (USB) port (that reads an analog light sensor)
  * 
  * and a relay
@@ -61,16 +65,17 @@ public class OLEDKeypadAndMultiSensor
   @SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
   public OLEDKeypadAndMultiSensor()
   {
+    // Relay
     try 
     { 
       rm = new OneRelayManager(); 
       rm.set("off"); // off by default
       System.out.println("Takatak, pin is " + rm.getStatus());
       // To make sure it works:
-      try { Thread.sleep(250); } catch (InterruptedException ie) { ie.printStackTrace(); }
-      rm.set("on");
-      try { Thread.sleep(250); } catch (InterruptedException ie) { ie.printStackTrace(); }
-      rm.set("off");
+      waitfor(250); rm.set("on");
+      waitfor(250); rm.set("off");
+      waitfor(250); rm.set("on");
+      waitfor(250); rm.set("off");
       System.out.println("Takatak - Off");
     }
     catch (Exception ex)
@@ -79,6 +84,7 @@ public class OLEDKeypadAndMultiSensor
       ex.printStackTrace();
     }
 
+    // Keypad and OLED Screen
     kbc = new KeyboardController();
     //                                          Override the default pins
     oled = new AdafruitSSD1306(RaspiPin.GPIO_12, // Clock
@@ -92,6 +98,7 @@ public class OLEDKeypadAndMultiSensor
 //  sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
     clear();
     
+    // Sensors
     ptSensor = new AdafruitMPL115A2();
     try
     {
@@ -104,7 +111,7 @@ public class OLEDKeypadAndMultiSensor
     }
     magnetometer = new AdafruitHMC5883L();
     
-    // First readings
+    // First sensor readings
     try
     {
       double hdg = magnetometer.readHeading();
@@ -118,8 +125,9 @@ public class OLEDKeypadAndMultiSensor
       ioe.printStackTrace();
     }
     // Wait...
-    try { Thread.sleep(2000L); } catch (Exception ex) {}
+    waitfor(2000);
   
+    // Start sensor threads
     Thread ptThread = new Thread()
       {
         public void run()
@@ -245,6 +253,11 @@ public class OLEDKeypadAndMultiSensor
     }    
   }
   
+  private static void waitfor(long l)
+  {
+    try { Thread.sleep(l); } catch (InterruptedException ie) { ie.printStackTrace(); }
+  }
+  
   public synchronized void display(String txt) 
   {
     synchronized (sb)
@@ -291,6 +304,8 @@ public class OLEDKeypadAndMultiSensor
     }
   }
 
+  private Pattern p = Pattern.compile("^(\\d+)#"); // Pattern for the threshold 123#
+
   /*
    * Reads user input from the keypad
    */
@@ -303,24 +318,49 @@ public class OLEDKeypadAndMultiSensor
     {
       char c = kbc.getKey();    
 //    System.out.println("At " + System.currentTimeMillis() + ", Char: " + c);
-      if (c == '#')
-        go = false; // key '#' means exit
-      else if (c == '*')
+       
+      if (c == '*') // key '*' means reset
       {
         charBuff = new StringBuffer();
         reset();
       }
       else
         charBuff.append(c);
-      display(charBuff.toString());
-      try { Thread.sleep(200L); } catch (Exception ex) {}
+      String user = charBuff.toString();
+      display(user);
+      // Semantic...
+      if ("##".equals(user)) // ## : Exit
+        go = false;
+      else
+      {
+        Matcher m = p.matcher(user); // New threshold
+        if (m.matches())
+        {
+          String newThresholdStr = m.group(1);
+          try 
+          {
+            int newThreshold = Integer.parseInt(newThresholdStr);
+            System.out.println("*** Setting new Threshold to " + newThreshold);
+            relayThreshold = newThreshold;
+            charBuff = new StringBuffer();
+            reset();          
+          }
+          catch (NumberFormatException nfe)
+          {
+            nfe.printStackTrace();
+          }
+        }
+      }
+      waitfor(200); // 200ms between keys
     }
     reset();
     display("Bye-bye");
-    System.out.println("Bye");
+    System.out.println("...Bye");
     kbc.shutdown();
     keepReading = false;
-    try { Thread.sleep(1000L); } catch (Exception ex) {} // Wait for the threads to end properly
+    waitfor(1000); // Wait for the threads to end properly
+    
+    // Final cleanup.
     clear();
     oled.shutdown();
     rm.set("off");
@@ -336,7 +376,7 @@ public class OLEDKeypadAndMultiSensor
       {
         sb.clear();
         oled.clear();
-        sb.text("# = Exit, * = Reset.", 2, 10);
+        sb.text("## = Exit, * = Reset.", 2, 10);
         oled.setBuffer(sb.getScreenBuffer());
         oled.display();   
     //  clear();   
@@ -370,7 +410,7 @@ public class OLEDKeypadAndMultiSensor
       }
     }
     System.out.println("Relay threshold is " + relayThreshold);
-    System.out.println("Hit # on the keypad to exit");
+    System.out.println("Hit ## on the keypad to exit");
     OLEDKeypadAndMultiSensor ui = new OLEDKeypadAndMultiSensor();
     ui.userInput();
   }

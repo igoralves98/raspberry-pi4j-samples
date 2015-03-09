@@ -9,12 +9,10 @@ import com.pi4j.io.serial.SerialPortException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import java.util.Date;
-
 public class SerialReaderWriter
 {
   // NMEA Style
-  public static int calculateCheckSum(String str)
+  private static int calculateCheckSum(String str)
   {
     int cs = 0;
     char[] ca = str.toCharArray();
@@ -27,7 +25,7 @@ public class SerialReaderWriter
   }
   
   // NMEA Style
-  public static boolean validCheckSum(String data, boolean verb)
+  private static boolean validCheckSum(String data, boolean verb)
   {
     String sentence = data.trim();
     boolean b = false;    
@@ -49,39 +47,10 @@ public class SerialReaderWriter
     return b;
   }
 
-  private final static String generateNMEAString(String payload, String prefix, String id)
+  private static boolean verbose = true;
+  private static boolean getVerbose()
   {
-    if (prefix == null || prefix.length() != 2)
-      throw new IllegalArgumentException("Bad prefix [" + prefix + "], must be 2 character long.");
-    if (id == null || id.length() != 3)
-      throw new IllegalArgumentException("Bad ID [" + id + "], must be 3 character long.");
-    String nmea = prefix + id + "," + payload;
-    int cs = calculateCheckSum(nmea);
-    String cks = Integer.toString(cs, 16).toUpperCase();
-    if (cks.length() < 2)
-      cks = "0" + cks;
-    nmea += ("*" + cks);
-    return "$" + nmea;
-  }
-  
-  public static void main_4tests(String[] args)
-  {
-    String payload = "This is some bullshit.";
-    String prefix = "OS";
-    String id     = "MSG";
-    String sentence = generateNMEAString(payload, prefix, id);
-    System.out.println(">>> Sentence [" + sentence + "] is " + (validCheckSum(sentence, false)?"":"NOT ") + "valid");
-    
-    sentence = generateNMEAString("3,Message from Arduino", prefix, id);
-    System.out.println(sentence);
-    sentence = "$OSMSG,3,Message from Arduino*61";
-    System.out.println(">>> Sentence [" + sentence + "] is " + (validCheckSum(sentence, false)?"":"NOT ") + "valid");
-    
-    payload = "$OSMSG,LR,178*65";
-    String content = payload.substring(7, payload.indexOf("*"));
-    String[] sa = content.split(",");
-    String strVal = sa[1];
-    System.out.println("Val:" + strVal);
+    return verbose;
   }
   
   public static void main(String args[])
@@ -116,65 +85,87 @@ public class SerialReaderWriter
       {
         // print out the data received to the console
         String payload = event.getData();
-        if (validCheckSum(payload, false))
-          System.out.print("Arduino said:" + payload);
-        else
-          System.out.println("\tOops! Invalid String [" + payload + "]");
+        if (getVerbose())
+        {
+          if (validCheckSum(payload, false))
+            System.out.print("Arduino said:" + payload);
+          else
+            System.out.println("\tOops! Invalid String [" + payload + "]");
+        }
       }
     });
 
     try
     {
-      // open the default serial port provided on the GPIO header
+      System.out.println("Hit 'Q' to quit.");
+      System.out.println("Hit 'V' to toggle verbose on/off.");
+      System.out.println("Hit [return] when ready to start.");
+      userInput("");
+
       System.out.println("Opening port [" + port + ":" + Integer.toString(br) + "]");
       serial.open(port, br);
       System.out.println("Port is opened.");
 
+      final Thread me = Thread.currentThread();
       Thread userInputThread = new Thread()
         {
           public void run()
           {
-            while (true)
+            boolean loop = true;
+            while (loop)
             {
               String userInput = "";
               userInput = userInput("So? > ");
-              if (serial.isOpen())
-              {
-                System.out.println("Writing to the serial port...");
-                try
-                {
-                  serial.write(userInput);
-                }
-                catch (IllegalStateException ex)
-                {
-                  ex.printStackTrace();
-                }
-              }
+              if ("Q".equalsIgnoreCase(userInput))
+                loop = false;
+              else if ("V".equalsIgnoreCase(userInput))
+                verbose = !verbose;
               else
-              {
-                System.out.println("Not open yet...");
+              { 
+                if (serial.isOpen())
+                {
+                  System.out.println("\tWriting [" + userInput + "] to the serial port...");
+                  try
+                  {
+                    serial.write(userInput);
+                  }
+                  catch (IllegalStateException ex)
+                  {
+                    ex.printStackTrace();
+                  }
+                }
+                else
+                {
+                  System.out.println("Not open yet...");
+                }
               }
+            }
+            synchronized (me)
+            {
+              me.notify();
             }
           }
         };
       userInputThread.start();
       
-      Thread me = Thread.currentThread();
       synchronized (me)
       {
         me.wait();
       }
+      System.out.println("Bye!");
+      serial.close();
     }
     catch (SerialPortException ex)
     {
       System.out.println(" ==>> SERIAL SETUP FAILED : " + ex.getMessage());
       return;
     }
+    System.exit(0);
   }
   
   private static final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
-  public static String userInput(String prompt)
+  private static String userInput(String prompt)
   {
     String retString = "";
     System.err.print(prompt);
