@@ -46,12 +46,9 @@ var connection;
   
         displayPitch.setValue(valueRoll);
         displayYaw.setValue(valueYaw);
-      }
-      catch (err) 
-      {
+      } catch (err) {
         console.log("Err:" + err + " for " + json.data.text);        
-      }
-      
+      }      
     } else {
       displayMessage('Hmm..., I\'ve never seen JSON like this: ' + json);
     }
@@ -63,10 +60,10 @@ var connection;
    * something is wrong.
    */
   setInterval(function() {
-                if (connection.readyState !== 1) {
-                  displayMessage('Unable to communicate with the WebSocket server. Try again.');
-                }
-              }, 3000); // Ping every 3 sec
+        if (connection.readyState !== 1) {
+          displayMessage('Unable to communicate with the WebSocket server. Try again.');
+        }
+      }, 3000); // Ping every 3 sec
 
 })();
 
@@ -78,7 +75,7 @@ var sendMessage = function(msg) {
   connection.send(msg);
 };
  
-var displayMessage = function(mess){
+var displayMessage = function(mess) {
   var messList = statusFld.innerHTML;
   messList = (((messList !== undefined && messList.length) > 0 ? messList + '<br>' : '') + mess);
   statusFld.innerHTML = messList;

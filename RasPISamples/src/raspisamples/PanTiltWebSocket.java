@@ -8,10 +8,15 @@ import org.json.JSONObject;
 import raspisamples.servo.StandardServo;
 
 /*
- * Driven by WerbSocket server
+ * Driven by WesbSocket server
  * See in node/server.js
  * 
  * 2 Servos (UP/LR)
+ * 
+ * Web interface available, see in node/servo.pilot.html
+ * 
+ * Start the WebSocket node server,
+ * Start the script named pantilt.ws
  */
 public class PanTiltWebSocket
 {
@@ -61,15 +66,22 @@ public class PanTiltWebSocket
         @Override
         public void onMessage(String string)
         {
-    //    System.out.println("WS On Message:" + string);
+          if ("true".equals(System.getProperty("verbose", "false")))
+            System.out.println("WS On Message:" + string);
           JSONObject message = new JSONObject(string);
-          JSONObject leapmotion = new JSONObject(message.getJSONObject("data").getString("text"));
-          int roll  = leapmotion.getInt("roll");    
-          int pitch = leapmotion.getInt("pitch");    
-          int yaw   = leapmotion.getInt("yaw");    
+          JSONObject motion = new JSONObject(message.getJSONObject("data").getString("text"));
+          float roll  = 0f; // (float)motion.getDouble("roll");    
+          float pitch = 0f; // (float)motion.getDouble("pitch");    
+          float yaw   = 0f; // (float)motion.getDouble("yaw");    
+          boolean withYaw = true, withRoll = true;
+          try { roll  = (float)motion.getDouble("roll");  } catch (Exception ex) { withRoll = false; }
+          try { pitch = (float)motion.getDouble("pitch"); } catch (Exception ex) {}   
+          try { yaw   = (float)motion.getDouble("yaw");   } catch (Exception ex) { withYaw = false; }
           System.out.println("Roll:" + roll + ", pitch:" + pitch + ", yaw:" + yaw);
-          ssLR.setAngle(yaw);
-          ssUD.setAngle(-roll); // Actually pitch...
+          if (withYaw)
+            ssLR.setAngle(yaw);
+          if (withRoll)
+            ssUD.setAngle(-roll); // Actually pitch...
         }
 
         @Override
@@ -105,5 +117,4 @@ public class PanTiltWebSocket
     ssLR.stop();
     System.out.println("Bye");
   }
-  
 }

@@ -12,6 +12,8 @@
 *.log.csv
 *.py
 *.png
+*.iml
+gen/
 classes/
 /classes/*.properties
 classes/*
