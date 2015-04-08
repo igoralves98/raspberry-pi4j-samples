@@ -6,16 +6,18 @@ import adc.ADCObserver;
 
 import java.io.FileOutputStream;
 
-import oracle.generic.ws.client.ClientFacade;
-import oracle.generic.ws.client.ServerListenerAdapter;
-import oracle.generic.ws.client.ServerListenerInterface;
+import java.net.URI;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ServerHandshake;
 
 public class WebSocketFeeder
 {
   private final static boolean DEBUG = false;
   private ADCObserver.MCP3008_input_channels channel = null;
   private boolean keepWorking = true;
-  private ClientFacade webSocketClient = null;
+  private WebSocketClient webSocketClient = null;
   
   public WebSocketFeeder(int ch) throws Exception
   {
@@ -50,15 +52,14 @@ public class WebSocketFeeder
            if (obs != null)
              obs.stop();
            keepWorking = false;
-           webSocketClient.bye();
+           webSocketClient.close();
          }
        });    
   }
   
   private void initWebSocketConnection(String serverURI)
   {
-    String[] targetedTransports = new String[] {"WebSocket", 
-                                                "XMLHttpRequest"};
+    /*
     ServerListenerInterface serverListener = new ServerListenerAdapter()
     {
       @Override
@@ -149,13 +150,35 @@ public class WebSocketFeeder
           System.out.println("WS-HS received as client");
       }      
     };
-    
+    */
     try
     {
-      webSocketClient = new ClientFacade(serverURI, 
-                                targetedTransports, 
-                                serverListener);
-      keepWorking = webSocketClient.init();
+      webSocketClient = new WebSocketClient(new URI(serverURI), (Draft) null)
+        {
+        @Override
+        public void onOpen(ServerHandshake serverHandshake)
+        {
+          // TODO Implement this method
+        }
+
+        @Override
+        public void onMessage(String string)
+        {
+          // TODO Implement this method
+        }
+
+        @Override
+        public void onClose(int i, String string, boolean b)
+        {
+          // TODO Implement this method
+        }
+
+        @Override
+        public void onError(Exception exception)
+        {
+          // TODO Implement this method
+        }
+      };
     }
     catch (Exception ex)
     {

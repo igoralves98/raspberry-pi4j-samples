@@ -22,7 +22,6 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/ResourceBundlesContentSet"/>
    </list>
    <list n="listOfChildren">
-      <hash><url n="URL" path="../AVR/JAvrProg/JAvrProg.jpr"/></hash>
       <hash><url n="URL" path="AdafruitI2C/AdafruitI2C.jpr"/></hash>
       <hash><url n="URL" path="ADC/ADC.jpr"/></hash>
       <hash><url n="URL" path="Arduino.RaspberryPI/Arduino.RaspberryPI.jpr"/></hash>
@@ -34,7 +33,6 @@
       <hash><url n="URL" path="LelandOilDetector/LelandOilDetector.jpr"/></hash>
       <hash><url n="URL" path="PhoneKeyboard3x4/PhoneKeyboard3x4.jpr"/></hash>
       <hash><url n="URL" path="PI4J.email/PI4J.email.jpr"/></hash>
-      <hash><url n="URL" path="pilogger/pilogger/PILogger.jpr"/></hash>
       <hash><url n="URL" path="POVUtil.One/POVUtil.One.jpr"/></hash>
       <hash><url n="URL" path="RangeSensor/RangeSensor.jpr"/></hash>
       <hash><url n="URL" path="RasPISamples/RasPISamples.jpr"/></hash>
